@@ -15,5 +15,5 @@ html = html.replace(/<link rel="stylesheet" crossorigin href="\.\/(assets\/[^"]+
 });
 
 if (/src="\.\/assets|href="\.\/assets/.test(html)) throw new Error('Some assets were not inlined');
-writeFileSync('guitar-theory.html', html);
-console.log('Wrote guitar-theory.html');
+writeFileSync('progressions.html', html);
+console.log('Wrote progressions.html');

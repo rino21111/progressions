@@ -1,6 +1,6 @@
-# Guitar Theory Lab
+# progressions
 
-See README.md for layout and commands. After every change run `npm test` and `npm run build` (the build regenerates `guitar-theory.html`, the single-file version for opening straight from Finder). Pushing to `main` deploys the site to GitHub Pages (https://rino21111.github.io/guitar-theory/), so only push when asked.
+See README.md for layout and commands. After every change run `npm test` and `npm run build` (the build regenerates `progressions.html`, the single-file version for opening straight from Finder). Pushing to `main` deploys the site to GitHub Pages (https://rino21111.github.io/progressions/), so only push when asked.
 
 ## Design principles
 

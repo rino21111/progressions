@@ -1,4 +1,4 @@
-# Guitar Theory Lab
+# progressions
 
 An interactive site for learning guitar theory by playing with it.
 
@@ -9,7 +9,7 @@ An interactive site for learning guitar theory by playing with it.
 
 ## Quick start
 
-Open `guitar-theory.html` in your browser. It's the whole site in one file, so it works without installing anything.
+Open `progressions.html` in your browser. It's the whole site in one file, so it works without installing anything.
 
 ## Working on the code
 
@@ -19,7 +19,7 @@ You need Node.js 18 or newer.
 npm install
 npm run dev      # local dev server with live reload, usually http://localhost:5173
 npm test         # theory engine tests
-npm run build    # type-check, build to dist/, and regenerate guitar-theory.html
+npm run build    # type-check, build to dist/, and regenerate progressions.html
 ```
 
 ## How it's organised
@@ -57,7 +57,7 @@ tests/             vitest tests for the theory engine, play patterns and sample 
 
 ## Sounds
 
-The guitar is played from real recorded notes (every third semitone, retuned in between) for the Steel, Nylon and Electric tones. They live in `src/samples/` and are built into `guitar-theory.html`, so it works offline. `node scripts/fetch-samples.mjs` downloads them again if needed.
+The guitar is played from real recorded notes (every third semitone, retuned in between) for the Steel, Nylon and Electric tones. They live in `src/samples/` and are built into `progressions.html`, so it works offline. `node scripts/fetch-samples.mjs` downloads them again if needed.
 
 ## Credits
 

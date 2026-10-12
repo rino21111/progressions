@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   base: './',
   build: {
-    // Inline the guitar samples (about 17 KB each) as data URIs, so guitar-theory.html
+    // Inline the guitar samples (about 17 KB each) as data URIs, so progressions.html
     // works on its own from Finder with no internet connection.
     assetsInlineLimit: 64 * 1024,
   },

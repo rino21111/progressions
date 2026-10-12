@@ -111,7 +111,7 @@ const panel = createPanel(app);
 sidebar.header.append(panel.hideButton);
 add(app,
     h('header', { class: 'main-header' },
-      h('div', { class: 'brand', role: 'img', 'aria-label': 'Guitar Theory Lab', title: 'Guitar Theory Lab' }, h('span', { class: 'logo' }, fretIcon(22))),
+      h('div', { class: 'brand', role: 'img', 'aria-label': 'progressions', title: 'progressions' }, h('span', { class: 'logo' }, fretIcon(22))),
       h('nav', { class: 'tabs', role: 'tablist' }, tabs),
       h('span', { class: 'spacer' }),
       player.settings,
