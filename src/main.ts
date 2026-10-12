@@ -18,7 +18,7 @@ import { undoIcon } from './ui/icons';
 import { state, subscribe } from './state';
 import { setTone } from './audio';
 import { PROGRESSION_ID, progressionFingerings } from './playback';
-import { TAB_HASHES, TAB_LABELS } from './tabs';
+import { OLD_TAB_HASHES, TAB_HASHES, TAB_LABELS } from './tabs';
 
 type Tab = 'detector' | 'progressions' | 'tab';
 
@@ -125,4 +125,7 @@ add(app,
 document.querySelector('#app')!.append(app);
 
 // Old links (#progressions) still open Relationships.
-show(location.hash === '#tab' ? 'tab' : ['#relationships', '#progressions'].includes(location.hash) ? 'progressions' : 'detector');
+const hashName = location.hash.slice(1);
+const fromHash = (Object.keys(TAB_HASHES) as Tab[]).find((t) => TAB_HASHES[t] === hashName)
+  ?? OLD_TAB_HASHES[hashName as keyof typeof OLD_TAB_HASHES];
+show(fromHash ?? 'detector');
