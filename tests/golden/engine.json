@@ -1,0 +1,7814 @@
+{
+ "cases": [
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "",
+     "why": "Common after I",
+     "then": {
+      "name": "Three-chord trick",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Common after I",
+     "then": {
+      "name": "I–V–vi–IV",
+      "chords": [
+       "Am",
+       "F",
+       "C"
+      ],
+      "numerals": [
+       "vi",
+       "IV",
+       "I"
+      ],
+      "lanes": [
+       "T",
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps C and E; Common after I",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "F",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Tonic to predominant",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Keeps E and G; Common after I",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Dm",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Moves 2 semitones in all; Common after I",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "E7",
+     "numeral": "III7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Common after I",
+     "then": null
+    },
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Common after I",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in I–IV–I–V; G resolves to C",
+     "then": null
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "As in I–V–vi–IV; Sidesteps the expected C",
+     "then": {
+      "name": "I–V–vi–IV",
+      "chords": [
+       "F",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps G and B; Common after V",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am",
+       "F"
+      ],
+      "numerals": [
+       "vi",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G Am F",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in I–V–vi–IV; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "As in 50s progression; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps F and A",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G Am F",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C; Common after IV",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "F#dim7",
+     "numeral": "#iv°7",
+     "lane": "D",
+     "tag": "Leads to C",
+     "why": "Keeps A and C; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Keeps F and C; Common after IV",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Dm",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am F G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in 50s progression; G resolves to C",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "As in Royal road; Keeps G and B",
+     "then": null
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "Dm",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am F G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Dm7 G7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cmaj7",
+     "numeral": "Imaj7",
+     "lane": "T",
+     "tag": "Completes ii–V–I",
+     "why": "As in ii–V–I; G7 resolves to Cmaj7",
+     "then": {
+      "name": "Jazz turnaround",
+      "chords": [
+       "Am7",
+       "Dm7"
+      ],
+      "numerals": [
+       "vi7",
+       "ii7"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am7",
+     "numeral": "vi7",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": null
+    },
+    {
+     "chord": "Em7",
+     "numeral": "iii7",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps G, B and D; Common after V",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Dm7 G7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Abmaj7",
+     "numeral": "bVImaj7",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb7",
+       "Cmaj7"
+      ],
+      "numerals": [
+       "bVII7",
+       "Imaj7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "#v°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Keeps B, D and F; Common after V",
+     "then": {
+      "name": "V–#v°7–vi",
+      "chords": [
+       "Am7"
+      ],
+      "numerals": [
+       "vi7"
+      ],
+      "lanes": [
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am Dm G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Completes ii–V–I",
+     "why": "As in I–vi–ii–V; G resolves to C",
+     "then": null
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "F",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps G and B; Common after V",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am",
+       "F"
+      ],
+      "numerals": [
+       "vi",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am Dm G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C F C G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in I–IV–I–V; G resolves to C",
+     "then": null
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "As in I–V–vi–IV; Sidesteps the expected C",
+     "then": {
+      "name": "I–V–vi–IV",
+      "chords": [
+       "F",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps G and B; Common after V",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am",
+       "F"
+      ],
+      "numerals": [
+       "vi",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C F C G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Bb F",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "Common after IV",
+     "then": null
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "Half cadence",
+     "why": "Turns back to C at bar 4; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps F and A",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps A and C",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "F",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Bb F",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Turns back to C at bar 4; Keeps F and C",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C; Common after IV",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "F#dim7",
+     "numeral": "#iv°7",
+     "lane": "D",
+     "tag": "Leads to C",
+     "why": "Keeps A and C; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Dm",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C E F",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "Half cadence",
+     "why": "Turns back to C at bar 4; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps F and A",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps A and C",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "F",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C E F",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "As in I–III–IV–iv; Turns back to C at bar 4",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C; Common after IV",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Bb",
+     "numeral": "bVII",
+     "lane": "D",
+     "tag": "From C minor",
+     "why": "Turns back to C at bar 4",
+     "then": {
+      "name": "Double plagal",
+      "chords": [
+       "F",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Dm",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C7 F7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C7",
+     "numeral": "I7",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in 12-bar blues; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "G7",
+     "numeral": "V7",
+     "lane": "D",
+     "tag": "",
+     "why": "Common after IV",
+     "then": {
+      "name": "V–IV–I–V",
+      "chords": [
+       "F7",
+       "C7"
+      ],
+      "numerals": [
+       "IV7",
+       "I7"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C7 F7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "F#dim7",
+     "numeral": "#iv°7",
+     "lane": "D",
+     "tag": "Leads to C",
+     "why": "Keeps A, C and Eb; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C; Common after IV",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C7"
+      ],
+      "numerals": [
+       "V7",
+       "I7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Fm7",
+     "numeral": "iv7",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Keeps F, C and Eb; Common after IV",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C7"
+      ],
+      "numerals": [
+       "bVII7",
+       "I7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Db7",
+     "numeral": "bII7",
+     "lane": "D",
+     "tag": "Tritone sub",
+     "why": "Points to C",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C7 F7 G7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C7",
+     "numeral": "I7",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "G7 resolves to C7; Common after V",
+     "then": null
+    },
+    {
+     "chord": "F7",
+     "numeral": "IV7",
+     "lane": "PD",
+     "tag": "",
+     "why": "Turns back to C7 at bar 4; Common after V",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C7 F7 G7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Db7",
+     "numeral": "bII7",
+     "lane": "D",
+     "tag": "Tritone sub",
+     "why": "Points to C; Turns back to C7 at bar 4",
+     "then": null
+    },
+    {
+     "chord": "Ab7",
+     "numeral": "bVI7",
+     "lane": "D",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb7",
+       "C7"
+      ],
+      "numerals": [
+       "bVII7",
+       "I7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Bb7",
+     "numeral": "bVII7",
+     "lane": "D",
+     "tag": "Backdoor",
+     "why": "Turns back to C7 at bar 4; Keeps D and F",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "F G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in Three-chord trick; G resolves to C",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "Am",
+       "F"
+      ],
+      "numerals": [
+       "vi",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "Dm",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "As in Royal road; Keeps G and B",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am",
+       "F"
+      ],
+      "numerals": [
+       "vi",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "F G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "C7",
+     "numeral": "I7",
+     "lane": "D",
+     "tag": "Leads to F",
+     "why": "G resolves to C7; Common after V",
+     "then": null
+    },
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Cmaj7 Am7 Dm7 G7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cmaj7",
+     "numeral": "Imaj7",
+     "lane": "T",
+     "tag": "Completes ii–V–I",
+     "why": "As in Jazz turnaround; G7 resolves to Cmaj7",
+     "then": null
+    },
+    {
+     "chord": "Am7",
+     "numeral": "vi7",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "Fmaj7",
+       "G7",
+       "Cmaj7"
+      ],
+      "numerals": [
+       "IVmaj7",
+       "V7",
+       "Imaj7"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Em7",
+     "numeral": "iii7",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps G, B and D; Common after V",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am7",
+       "Fmaj7"
+      ],
+      "numerals": [
+       "vi7",
+       "IVmaj7"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Cmaj7 Am7 Dm7 G7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Abmaj7",
+     "numeral": "bVImaj7",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb7",
+       "Cmaj7"
+      ],
+      "numerals": [
+       "bVII7",
+       "Imaj7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G Am Em F C F",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "Half cadence",
+     "why": "As in I–V–vi–iii–IV; Turns back to C at bar 8",
+     "then": null
+    },
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in I–IV–I–V; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps F and A",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps A and C",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "F",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G Am Em F C F",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Turns back to C at bar 8; Keeps F and C",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C; Common after IV",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Bb",
+     "numeral": "bVII",
+     "lane": "D",
+     "tag": "From C minor",
+     "why": "Turns back to C at bar 8",
+     "then": {
+      "name": "Double plagal",
+      "chords": [
+       "F",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Dm",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C F",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "As in Three-chord trick; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in I–IV–I–V; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps F and A",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C F",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C; Common after IV",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "F#dim7",
+     "numeral": "#iv°7",
+     "lane": "D",
+     "tag": "Leads to C",
+     "why": "Keeps A and C; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Keeps F and C; Common after IV",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Dm",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G C G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "As in I–V–vi–iii–IV; Sidesteps the expected C",
+     "then": {
+      "name": "I–V–vi–IV",
+      "chords": [
+       "F",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in I–IV–I–V; G resolves to C",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps G and B; Common after V",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am",
+       "F"
+      ],
+      "numerals": [
+       "vi",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G C G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C E7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "E7 resolves to Am",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "F",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in I–III–IV–iv; Common after III",
+     "then": {
+      "name": "I–III–IV–iv",
+      "chords": [
+       "Fm",
+       "C"
+      ],
+      "numerals": [
+       "iv",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C E7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Common after III",
+     "then": {
+      "name": "Ragtime progression",
+      "chords": [
+       "D7",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "II7",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Dm7 Db7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cmaj7",
+     "numeral": "Imaj7",
+     "lane": "T",
+     "tag": "Completes ii–V–I",
+     "why": "As in Tritone sub ii–V–I; Db7 resolves to Cmaj7",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Dm7 Db7",
+   "spice": true,
+   "ideas": []
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Em7 A7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Dm7",
+     "numeral": "ii7",
+     "lane": "PD",
+     "tag": "Completes ii–V",
+     "why": "A7 resolves to Dm7; Common after VI",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "G7",
+       "Cmaj7"
+      ],
+      "numerals": [
+       "V7",
+       "Imaj7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Em7 A7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Common after VI",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "Cmaj7"
+      ],
+      "numerals": [
+       "V7",
+       "Imaj7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C C7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in I–I7–IV–iv; C7 resolves to F",
+     "then": {
+      "name": "I–I7–IV–iv",
+      "chords": [
+       "Fm",
+       "C"
+      ],
+      "numerals": [
+       "iv",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C C7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Dominant to predominant",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Ab Bb",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Back to start",
+     "why": "As in bVI–bVII–I; Bb resolves to C",
+     "then": null
+    },
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "",
+     "why": "Common after bVII",
+     "then": {
+      "name": "Three-chord trick",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "Half cadence",
+     "why": "Turns back to C at bar 4",
+     "then": null
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps D and F",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Ab Bb",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Turns back to C at bar 4",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Am G F E",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "E resolves to Am; Moves 2 semitones in all",
+     "then": null
+    },
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "",
+     "why": "Moves 2 semitones in all",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "Am",
+       "F",
+       "G"
+      ],
+      "numerals": [
+       "vi",
+       "IV",
+       "V"
+      ],
+      "lanes": [
+       "T",
+       "PD",
+       "D"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Am G F E",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Common after III",
+     "then": {
+      "name": "Ragtime progression",
+      "chords": [
+       "D7",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "II7",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "E7",
+     "numeral": "III7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Keeps E, G# and B",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Am G F",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in I–IV–V–IV; Common after IV",
+     "then": {
+      "name": "Three-chord trick",
+      "chords": [
+       "F",
+       "G"
+      ],
+      "numerals": [
+       "IV",
+       "V"
+      ],
+      "lanes": [
+       "PD",
+       "D"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Turns back to Am at bar 4",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "C",
+       "Am"
+      ],
+      "numerals": [
+       "I",
+       "vi"
+      ],
+      "lanes": [
+       "T",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps F and A",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Predominant to tonic",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Am G F",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "E7",
+     "numeral": "III7",
+     "lane": "D",
+     "tag": "Andalusian cadence",
+     "why": "Points to Am; Turns back to Am at bar 4",
+     "then": null
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "#v°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Turns back to Am at bar 4",
+     "then": null
+    },
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C; Common after IV",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Keeps F and C; Common after IV",
+     "then": {
+      "name": "Minor plagal",
+      "chords": [
+       "C"
+      ],
+      "numerals": [
+       "I"
+      ],
+      "lanes": [
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Bdim",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "",
+     "why": "Bdim resolves to C",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Common after vii°",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Bdim",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "C7",
+     "numeral": "I7",
+     "lane": "T",
+     "tag": "",
+     "why": "Bdim resolves to C7",
+     "then": null
+    },
+    {
+     "chord": "E7",
+     "numeral": "III7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Keeps B and D",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C7 F D7 G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in Double dominant; G resolves to C",
+     "then": null
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "F",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps G and B; Common after V",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C7 F D7 G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C F G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in I–V–vi–iii–IV; G resolves to C",
+     "then": null
+    },
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in I–IV–V–IV; Common after V",
+     "then": {
+      "name": "Minor plagal",
+      "chords": [
+       "Fm",
+       "C"
+      ],
+      "numerals": [
+       "iv",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "F",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "As in Royal road; Keeps G and B",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C F G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Bb",
+     "numeral": "bVII",
+     "lane": "D",
+     "tag": "From C minor",
+     "why": "Turns back to C at bar 4",
+     "then": {
+      "name": "Double plagal",
+      "chords": [
+       "F",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G Am",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in I–V–vi–IV; Keeps A and C",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "As in I–V–vi–iii–IV; Common after vi",
+     "then": {
+      "name": "I–V–vi–iii–IV",
+      "chords": [
+       "F",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Common after vi",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "Half cadence",
+     "why": "Turns back to C at bar 4",
+     "then": {
+      "name": "Three-chord trick",
+      "chords": [
+       "C",
+       "F"
+      ],
+      "numerals": [
+       "I",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G Am",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Turns back to C at bar 4; Moves 2 semitones in all",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Keeps A and E",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Dm",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Bb",
+     "numeral": "bVII",
+     "lane": "D",
+     "tag": "From C minor",
+     "why": "Turns back to C at bar 4",
+     "then": {
+      "name": "Double plagal",
+      "chords": [
+       "F",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in I–vi–ii–V; Common after vi",
+     "then": {
+      "name": "I–vi–ii–V",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in 50s progression; Keeps A and C",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Tonic to dominant",
+     "then": {
+      "name": "Three-chord trick",
+      "chords": [
+       "C",
+       "F"
+      ],
+      "numerals": [
+       "I",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Common after vi",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Keeps A and E",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Dm",
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Fm",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Minor plagal",
+     "why": "Moves 2 semitones in all; Common after iv",
+     "then": null
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Three-chord trick",
+      "chords": [
+       "C",
+       "F"
+      ],
+      "numerals": [
+       "I",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Fm",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Bb7",
+     "numeral": "bVII7",
+     "lane": "D",
+     "tag": "Backdoor",
+     "why": "Keeps F and Ab; Common after iv",
+     "then": null
+    },
+    {
+     "chord": "F#dim7",
+     "numeral": "#iv°7",
+     "lane": "D",
+     "tag": "Leads to C",
+     "why": "Predominant to dominant",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Bb",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in I–bVII–IV; Common after bVII",
+     "then": {
+      "name": "Three-chord trick",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "",
+     "why": "Bb resolves to C; Common after bVII",
+     "then": null
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "C",
+       "Am",
+       "F"
+      ],
+      "numerals": [
+       "I",
+       "vi",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Bb",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Stays predominant",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C D",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "As in Double dominant; D resolves to G",
+     "then": {
+      "name": "Three-chord trick",
+      "chords": [
+       "C",
+       "F"
+      ],
+      "numerals": [
+       "I",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C D",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps D, F# and A",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "C"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Dm G C",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "As in I–vi–ii–V; Turns back to Dm at bar 4",
+     "then": null
+    },
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in Circle progression; Common after I",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "Bdim",
+       "Em",
+       "Am"
+      ],
+      "numerals": [
+       "vii°",
+       "iii",
+       "vi"
+      ],
+      "lanes": [
+       "D",
+       "T",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "As in I–V–vi–iii–IV; Common after I",
+     "then": {
+      "name": "Deceptive cadence",
+      "chords": [
+       "Am"
+      ],
+      "numerals": [
+       "vi"
+      ],
+      "lanes": [
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps E and G",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Dm G C",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "As in Fonte; Turns back to Dm at bar 4",
+     "then": null
+    },
+    {
+     "chord": "C#dim7",
+     "numeral": "#i°7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "As in I–#i°7–ii–V; Turns back to Dm at bar 4",
+     "then": null
+    },
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "As in I–II7–ii–V; Common after I",
+     "then": null
+    },
+    {
+     "chord": "Eb",
+     "numeral": "bIII",
+     "lane": "T",
+     "tag": "From C minor",
+     "why": "Common after I",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am F G",
+   "at": 3,
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in I–V–vi–IV; Common after IV",
+     "then": {
+      "name": "Three-chord trick",
+      "chords": [
+       "F",
+       "G"
+      ],
+      "numerals": [
+       "IV",
+       "V"
+      ],
+      "lanes": [
+       "PD",
+       "D"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Leads into G; Keeps F and A",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Predominant to tonic",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "Am",
+       "Dm",
+       "G"
+      ],
+      "numerals": [
+       "vi",
+       "ii",
+       "V"
+      ],
+      "lanes": [
+       "T",
+       "PD",
+       "D"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am F G",
+   "at": 3,
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Leads into G; Keeps A and C",
+     "then": null
+    },
+    {
+     "chord": "F#dim7",
+     "numeral": "#iv°7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Leads into G; Keeps A and C",
+     "then": null
+    },
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Leads into G; Keeps F and C",
+     "then": null
+    },
+    {
+     "chord": "E7",
+     "numeral": "III7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Ragtime progression",
+      "chords": [
+       "A7",
+       "D7",
+       "G"
+      ],
+      "numerals": [
+       "VI7",
+       "II7",
+       "V"
+      ],
+      "lanes": [
+       "D",
+       "D",
+       "D"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C F",
+   "at": 1,
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "Leads into F; Keeps C and E",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "Dm",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "ii",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Leads into F; Keeps E and G",
+     "then": null
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Common after I",
+     "then": {
+      "name": "I–V–vi–IV",
+      "chords": [
+       "Am",
+       "F"
+      ],
+      "numerals": [
+       "vi",
+       "IV"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Dm",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Tonic to predominant",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C F",
+   "at": 1,
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "C7",
+     "numeral": "I7",
+     "lane": "D",
+     "tag": "Leads to F",
+     "why": "Leads into F; Keeps C, E and G",
+     "then": null
+    },
+    {
+     "chord": "Eb",
+     "numeral": "bIII",
+     "lane": "T",
+     "tag": "From C minor",
+     "why": "Leads into F; Common after I",
+     "then": null
+    },
+    {
+     "chord": "Ab",
+     "numeral": "bVI",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Moves 2 semitones in all; Common after I",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb",
+       "C"
+      ],
+      "numerals": [
+       "bVII",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "E7",
+     "numeral": "III7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Common after I",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Dm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "",
+     "why": "Common after i",
+     "then": {
+      "name": "i–iv–V",
+      "chords": [
+       "E",
+       "Am"
+      ],
+      "numerals": [
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Moves 2 semitones in all; Common after i",
+     "then": null
+    },
+    {
+     "chord": "F",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps A and C; Common after i",
+     "then": {
+      "name": "i–VI–III–VII",
+      "chords": [
+       "C",
+       "G",
+       "Am"
+      ],
+      "numerals": [
+       "III",
+       "VII",
+       "i"
+      ],
+      "lanes": [
+       "T",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "G",
+     "numeral": "VII",
+     "lane": "D",
+     "tag": "",
+     "why": "Common after i",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "F",
+       "E",
+       "Am"
+      ],
+      "numerals": [
+       "VI",
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "F7",
+     "numeral": "VI7",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps A and C; Common after i",
+     "then": null
+    },
+    {
+     "chord": "A7",
+     "numeral": "I7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Keeps A and E; Common after i",
+     "then": {
+      "name": "i–I7–iv",
+      "chords": [
+       "Dm",
+       "Am"
+      ],
+      "numerals": [
+       "iv",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "D",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From A major",
+     "why": "Common after i",
+     "then": null
+    },
+    {
+     "chord": "C7",
+     "numeral": "III7",
+     "lane": "D",
+     "tag": "Leads to F",
+     "why": "Keeps C and E",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am G F",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "Andalusian cadence",
+     "why": "As in Andalusian cadence; Turns back to Am at bar 4",
+     "then": null
+    },
+    {
+     "chord": "G",
+     "numeral": "VII",
+     "lane": "D",
+     "tag": "",
+     "why": "As in Aeolian vamp; Turns back to Am at bar 4",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "F",
+       "E",
+       "Am"
+      ],
+      "numerals": [
+       "VI",
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "C",
+     "numeral": "III",
+     "lane": "T",
+     "tag": "",
+     "why": "Predominant to tonic",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am G F",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Turns back to Am at bar 4",
+     "then": null
+    },
+    {
+     "chord": "Bb",
+     "numeral": "bII",
+     "lane": "PD",
+     "tag": "Neapolitan",
+     "why": "Stays predominant",
+     "then": {
+      "name": "Neapolitan cadence",
+      "chords": [
+       "E7",
+       "Am"
+      ],
+      "numerals": [
+       "V7",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "D",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From A major",
+     "why": "Turns back to Am at bar 4",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am G F E",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in Andalusian cadence; E resolves to Am",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am G F E",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Picardy third",
+     "why": "Common after V",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am Dm E",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in i–iv–V; E resolves to Am",
+     "then": null
+    },
+    {
+     "chord": "F",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected Am",
+     "then": {
+      "name": "Aeolian cadence",
+      "chords": [
+       "G",
+       "Am"
+      ],
+      "numerals": [
+       "VII",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am Dm E",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Picardy third",
+     "why": "As in Picardy third; Common after V",
+     "then": null
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Turns back to Am at bar 4; Keeps G# and B",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am F C G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "",
+     "why": "As in i–VI–III–VII; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "C",
+     "numeral": "III",
+     "lane": "T",
+     "tag": "",
+     "why": "Dominant to tonic",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "F",
+       "Bm7b5",
+       "E7"
+      ],
+      "numerals": [
+       "VI",
+       "iiø7",
+       "V7"
+      ],
+      "lanes": [
+       "PD",
+       "PD",
+       "D"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "Keeps G and B",
+     "then": null
+    },
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am F C G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From A major",
+     "why": "As in i–III–VII–IV; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Keeps B and D",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am F G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "Aeolian cadence",
+     "why": "As in i–VI–VII; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "C",
+     "numeral": "III",
+     "lane": "T",
+     "tag": "",
+     "why": "Dominant to tonic",
+     "then": null
+    },
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "Half cadence",
+     "why": "Turns back to Am at bar 4",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "Keeps G and B",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am F G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Turns back to Am at bar 4; Keeps B and D",
+     "then": null
+    },
+    {
+     "chord": "D",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From A major",
+     "why": "Turns back to Am at bar 4; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "Bb",
+     "numeral": "bII",
+     "lane": "PD",
+     "tag": "Neapolitan",
+     "why": "Stays predominant",
+     "then": {
+      "name": "Neapolitan cadence",
+      "chords": [
+       "E7",
+       "Am"
+      ],
+      "numerals": [
+       "V7",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am Dm",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G",
+     "numeral": "VII",
+     "lane": "D",
+     "tag": "",
+     "why": "As in Circle progression; Common after iv",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "F",
+       "E",
+       "Am"
+      ],
+      "numerals": [
+       "VI",
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "As in i–iv–V; Common after iv",
+     "then": null
+    },
+    {
+     "chord": "Am",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in Minor blues; Common after iv",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "As in i–iv–v; Common after iv",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am Dm",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Bb",
+     "numeral": "bII",
+     "lane": "PD",
+     "tag": "Neapolitan",
+     "why": "Keeps D and F",
+     "then": {
+      "name": "Neapolitan cadence",
+      "chords": [
+       "E7",
+       "Am"
+      ],
+      "numerals": [
+       "V7",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Keeps D and F; Common after iv",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am F",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G",
+     "numeral": "VII",
+     "lane": "D",
+     "tag": "",
+     "why": "As in i–VI–VII; Common after VI",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "F",
+       "E",
+       "Am"
+      ],
+      "numerals": [
+       "VI",
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "C",
+     "numeral": "III",
+     "lane": "T",
+     "tag": "",
+     "why": "As in i–VI–III–VII; Common after VI",
+     "then": {
+      "name": "i–VI–III–VII",
+      "chords": [
+       "G",
+       "Am"
+      ],
+      "numerals": [
+       "VII",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Common after VI",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am F",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Bb",
+     "numeral": "bII",
+     "lane": "PD",
+     "tag": "Neapolitan",
+     "why": "Stays predominant",
+     "then": {
+      "name": "Neapolitan cadence",
+      "chords": [
+       "E7",
+       "Am"
+      ],
+      "numerals": [
+       "V7",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Predominant to dominant",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am Bb",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Bb resolves to E; Common after bII",
+     "then": null
+    },
+    {
+     "chord": "G",
+     "numeral": "VII",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "F",
+       "E",
+       "Am"
+      ],
+      "numerals": [
+       "VI",
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "",
+     "why": "Common after bII",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am Bb",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Keeps D and F",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am E",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in La Folia; E resolves to Am",
+     "then": null
+    },
+    {
+     "chord": "F",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected Am",
+     "then": {
+      "name": "Aeolian cadence",
+      "chords": [
+       "G",
+       "Am"
+      ],
+      "numerals": [
+       "VII",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am E",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Picardy third",
+     "why": "Common after V",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Bm7b5 E7 Am7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Dm7",
+     "numeral": "iv7",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in Circle progression; Keeps A and C",
+     "then": {
+      "name": "Plagal cadence",
+      "chords": [
+       "Am7"
+      ],
+      "numerals": [
+       "i7"
+      ],
+      "lanes": [
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Fmaj7",
+     "numeral": "VImaj7",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in Minor turnaround; Keeps A, C and E",
+     "then": {
+      "name": "Aeolian cadence",
+      "chords": [
+       "G7",
+       "Am7"
+      ],
+      "numerals": [
+       "VII7",
+       "i7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "G7",
+     "numeral": "VII7",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in Andalusian cadence; Common after i",
+     "then": null
+    },
+    {
+     "chord": "Cmaj7",
+     "numeral": "IIImaj7",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps C, E and G; Common after i",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Bm7b5 E7 Am7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D7",
+     "numeral": "IV7",
+     "lane": "PD",
+     "tag": "From A major",
+     "why": "Keeps A and C; Common after i",
+     "then": {
+      "name": "Dorian vamp",
+      "chords": [
+       "Am7"
+      ],
+      "numerals": [
+       "i7"
+      ],
+      "lanes": [
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Bb",
+     "numeral": "bII",
+     "lane": "PD",
+     "tag": "Neapolitan",
+     "why": "Common after i",
+     "then": {
+      "name": "Neapolitan cadence",
+      "chords": [
+       "E7",
+       "Am7"
+      ],
+      "numerals": [
+       "V7",
+       "i7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am C",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G",
+     "numeral": "VII",
+     "lane": "D",
+     "tag": "",
+     "why": "As in i–III–VII–IV; Common after III",
+     "then": {
+      "name": "i–III–VII–IV",
+      "chords": [
+       "D",
+       "Am"
+      ],
+      "numerals": [
+       "IV",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "F",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "",
+     "why": "Common after III",
+     "then": {
+      "name": "Aeolian cadence",
+      "chords": [
+       "G",
+       "Am"
+      ],
+      "numerals": [
+       "VII",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Moves 2 semitones in all",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "Keeps E and G",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am C",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From A major",
+     "why": "As in i–III–IV; Common after III",
+     "then": null
+    },
+    {
+     "chord": "Bb",
+     "numeral": "bII",
+     "lane": "PD",
+     "tag": "Neapolitan",
+     "why": "Tonic to predominant",
+     "then": {
+      "name": "Neapolitan cadence",
+      "chords": [
+       "E7",
+       "Am"
+      ],
+      "numerals": [
+       "V7",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "III",
+     "lane": "T",
+     "tag": "",
+     "why": "As in La Folia; Common after VII",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "F",
+       "Bm7b5",
+       "E7"
+      ],
+      "numerals": [
+       "VI",
+       "iiø7",
+       "V7"
+      ],
+      "lanes": [
+       "PD",
+       "PD",
+       "D"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "F",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in Andalusian cadence; Common after VII",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "E",
+       "Am"
+      ],
+      "numerals": [
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "",
+     "why": "Common after VII",
+     "then": null
+    },
+    {
+     "chord": "Em",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "Keeps G and B",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Keeps B and D",
+     "then": null
+    },
+    {
+     "chord": "D",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From A major",
+     "why": "Common after VII",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am7 D7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am7",
+     "numeral": "i7",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps A and C; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "E7",
+     "numeral": "V7",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": null
+    },
+    {
+     "chord": "Em7",
+     "numeral": "v7",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": null
+    },
+    {
+     "chord": "G7",
+     "numeral": "VII7",
+     "lane": "D",
+     "tag": "",
+     "why": "Stays dominant",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "Fmaj7",
+       "E7",
+       "Am7"
+      ],
+      "numerals": [
+       "VImaj7",
+       "V7",
+       "i7"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am7 D7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Bb7",
+     "numeral": "bII7",
+     "lane": "D",
+     "tag": "Tritone sub",
+     "why": "Points to Am",
+     "then": null
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Predominant to dominant",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "F G C",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G",
+     "numeral": "VII",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in La Folia; Common after III",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "F",
+       "E",
+       "Am"
+      ],
+      "numerals": [
+       "VI",
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "F",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "Back to start",
+     "why": "As in Circle progression; Common after III",
+     "then": null
+    },
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Turns back to F at bar 4; Moves 2 semitones in all",
+     "then": {
+      "name": "Authentic cadence",
+      "chords": [
+       "Am"
+      ],
+      "numerals": [
+       "i"
+      ],
+      "lanes": [
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Am",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps C and E",
+     "then": {
+      "name": "i–iv–V",
+      "chords": [
+       "Dm",
+       "E"
+      ],
+      "numerals": [
+       "iv",
+       "V"
+      ],
+      "lanes": [
+       "PD",
+       "D"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "F G C",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "C7",
+     "numeral": "III7",
+     "lane": "D",
+     "tag": "Leads to F",
+     "why": "Turns back to F at bar 4; Keeps C, E and G",
+     "then": null
+    },
+    {
+     "chord": "D",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From A major",
+     "why": "Common after III",
+     "then": null
+    },
+    {
+     "chord": "Bb",
+     "numeral": "bII",
+     "lane": "PD",
+     "tag": "Neapolitan",
+     "why": "Tonic to predominant",
+     "then": {
+      "name": "Neapolitan cadence",
+      "chords": [
+       "E7",
+       "Am"
+      ],
+      "numerals": [
+       "V7",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "minor",
+    "name": "C"
+   },
+   "prog": "Cm Ab Bb",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cm",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "Aeolian cadence",
+     "why": "As in i–VI–VII; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "Eb",
+     "numeral": "III",
+     "lane": "T",
+     "tag": "",
+     "why": "Dominant to tonic",
+     "then": null
+    },
+    {
+     "chord": "G",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "Half cadence",
+     "why": "Turns back to Cm at bar 4",
+     "then": null
+    },
+    {
+     "chord": "Gm",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "Keeps Bb and D",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "minor",
+    "name": "C"
+   },
+   "prog": "Cm Ab Bb",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Bdim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Cm",
+     "why": "Turns back to Cm at bar 4; Keeps D and F",
+     "then": null
+    },
+    {
+     "chord": "F",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From C major",
+     "why": "Turns back to Cm at bar 4; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "Db",
+     "numeral": "bII",
+     "lane": "PD",
+     "tag": "Neapolitan",
+     "why": "Stays predominant",
+     "then": {
+      "name": "Neapolitan cadence",
+      "chords": [
+       "G7",
+       "Cm"
+      ],
+      "numerals": [
+       "V7",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 7,
+    "mode": "major",
+    "name": "G"
+   },
+   "prog": "G D Em C",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in I–V–vi–IV; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "D",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "As in 50s progression; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Am",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps C and E",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "D",
+       "G"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 7,
+    "mode": "major",
+    "name": "G"
+   },
+   "prog": "G D Em C",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to D",
+     "why": "Keeps E and G; Common after IV",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "D7",
+       "G"
+      ],
+      "numerals": [
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "C#dim7",
+     "numeral": "#iv°7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps E and G; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Cm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From G minor",
+     "why": "Keeps C and G; Common after IV",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "F7",
+       "G"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "E7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Am",
+       "D7",
+       "G"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 4,
+    "mode": "minor",
+    "name": "E"
+   },
+   "prog": "Em C G D",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Em",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "",
+     "why": "As in i–VI–III–VII; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "G",
+     "numeral": "III",
+     "lane": "T",
+     "tag": "",
+     "why": "Dominant to tonic",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "C",
+       "F#m7b5",
+       "B7"
+      ],
+      "numerals": [
+       "VI",
+       "iiø7",
+       "V7"
+      ],
+      "lanes": [
+       "PD",
+       "PD",
+       "D"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Bm",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "Keeps D and F#",
+     "then": null
+    },
+    {
+     "chord": "B",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 4,
+    "mode": "minor",
+    "name": "E"
+   },
+   "prog": "Em C G D",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From E major",
+     "why": "As in i–III–VII–IV; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "D#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Em",
+     "why": "Keeps F# and A",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 2,
+    "mode": "minor",
+    "name": "D"
+   },
+   "prog": "Dm Bb C Dm",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C",
+     "numeral": "VII",
+     "lane": "D",
+     "tag": "",
+     "why": "As in Aeolian vamp; Common after i",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "Bb",
+       "A",
+       "Dm"
+      ],
+      "numerals": [
+       "VI",
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Bb",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in i–VI–VII; Keeps D and F",
+     "then": {
+      "name": "i–VI–III–VII",
+      "chords": [
+       "F",
+       "C",
+       "Dm"
+      ],
+      "numerals": [
+       "III",
+       "VII",
+       "i"
+      ],
+      "lanes": [
+       "T",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "A",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "As in La Folia; Moves 2 semitones in all",
+     "then": null
+    },
+    {
+     "chord": "Gm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "",
+     "why": "Common after i",
+     "then": {
+      "name": "i–iv–V",
+      "chords": [
+       "A",
+       "Dm"
+      ],
+      "numerals": [
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 2,
+    "mode": "minor",
+    "name": "D"
+   },
+   "prog": "Dm Bb C Dm",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Bb7",
+     "numeral": "VI7",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps D and F; Common after i",
+     "then": null
+    },
+    {
+     "chord": "D7",
+     "numeral": "I7",
+     "lane": "D",
+     "tag": "Leads to Gm",
+     "why": "Keeps D and A; Common after i",
+     "then": {
+      "name": "i–I7–iv",
+      "chords": [
+       "Gm",
+       "Dm"
+      ],
+      "numerals": [
+       "iv",
+       "i"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "G",
+     "numeral": "IV",
+     "lane": "PD",
+     "tag": "From D major",
+     "why": "Common after i",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 4,
+    "mode": "major",
+    "name": "E"
+   },
+   "prog": "E A B A",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "E",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in I–IV–V–IV; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "B",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Predominant to dominant",
+     "then": null
+    },
+    {
+     "chord": "F#m",
+     "numeral": "ii",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps A and C#",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "B",
+       "E"
+      ],
+      "numerals": [
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 4,
+    "mode": "major",
+    "name": "E"
+   },
+   "prog": "E A B A",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "F#7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to B",
+     "why": "Keeps C# and E; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "A#dim7",
+     "numeral": "#iv°7",
+     "lane": "D",
+     "tag": "Leads to E",
+     "why": "Keeps C# and E; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Am",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From E minor",
+     "why": "Keeps A and E; Common after IV",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "D7",
+       "E"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "C#7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to F#m",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "F#m",
+       "B7",
+       "E"
+      ],
+      "numerals": [
+       "ii",
+       "V7",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 1,
+    "mode": "major",
+    "name": "Db"
+   },
+   "prog": "Ebm7 Ab7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Dbmaj7",
+     "numeral": "Imaj7",
+     "lane": "T",
+     "tag": "Completes ii–V–I",
+     "why": "As in ii–V–I; Ab7 resolves to Dbmaj7",
+     "then": {
+      "name": "Jazz turnaround",
+      "chords": [
+       "Bbm7",
+       "Ebm7"
+      ],
+      "numerals": [
+       "vi7",
+       "ii7"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Bbm7",
+     "numeral": "vi7",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected Db; Common after V",
+     "then": null
+    },
+    {
+     "chord": "Fm7",
+     "numeral": "iii7",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps Ab, C and Eb; Common after V",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 1,
+    "mode": "major",
+    "name": "Db"
+   },
+   "prog": "Ebm7 Ab7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Amaj7",
+     "numeral": "bVImaj7",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected Db; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Cb7",
+       "Dbmaj7"
+      ],
+      "numerals": [
+       "bVII7",
+       "Imaj7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Adim7",
+     "numeral": "#v°7",
+     "lane": "D",
+     "tag": "Leads to Bbm",
+     "why": "Keeps C, Eb and Gb; Common after V",
+     "then": {
+      "name": "V–#v°7–vi",
+      "chords": [
+       "Bbm7"
+      ],
+      "numerals": [
+       "vi7"
+      ],
+      "lanes": [
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 6,
+    "mode": "major",
+    "name": "F#"
+   },
+   "prog": "G#m7 C#7",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "F#maj7",
+     "numeral": "Imaj7",
+     "lane": "T",
+     "tag": "Completes ii–V–I",
+     "why": "As in ii–V–I; C#7 resolves to F#maj7",
+     "then": {
+      "name": "Jazz turnaround",
+      "chords": [
+       "D#m7",
+       "G#m7"
+      ],
+      "numerals": [
+       "vi7",
+       "ii7"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "D#m7",
+     "numeral": "vi7",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected F#; Common after V",
+     "then": null
+    },
+    {
+     "chord": "A#m7",
+     "numeral": "iii7",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps C#, E# and G#; Common after V",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 6,
+    "mode": "major",
+    "name": "F#"
+   },
+   "prog": "G#m7 C#7",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Dmaj7",
+     "numeral": "bVImaj7",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected F#; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "E7",
+       "F#maj7"
+      ],
+      "numerals": [
+       "bVII7",
+       "Imaj7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Ddim7",
+     "numeral": "#v°7",
+     "lane": "D",
+     "tag": "Leads to D#m",
+     "why": "Keeps E#, G# and B; Common after V",
+     "then": {
+      "name": "V–#v°7–vi",
+      "chords": [
+       "D#m7"
+      ],
+      "numerals": [
+       "vi7"
+      ],
+      "lanes": [
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 8,
+    "mode": "minor",
+    "name": "G#"
+   },
+   "prog": "G#m C#m D#",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "G#m",
+     "numeral": "i",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in i–iv–V; D# resolves to G#m",
+     "then": null
+    },
+    {
+     "chord": "E",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected G#m",
+     "then": {
+      "name": "Aeolian cadence",
+      "chords": [
+       "F#",
+       "G#m"
+      ],
+      "numerals": [
+       "VII",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 8,
+    "mode": "minor",
+    "name": "G#"
+   },
+   "prog": "G#m C#m D#",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "G#",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Picardy third",
+     "why": "As in Picardy third; Common after V",
+     "then": null
+    },
+    {
+     "chord": "Gdim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to G#m",
+     "why": "Turns back to G#m at bar 4; Keeps G and A#",
+     "then": null
+    }
+   ]
+  }
+ ],
+ "starts": [
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "groups": [
+    {
+     "name": "Classical and folk",
+     "items": [
+      {
+       "name": "I–V–vi–iii–IV",
+       "chords": [
+        "C",
+        "G",
+        "Am",
+        "Em",
+        "F",
+        "C",
+        "F",
+        "G"
+       ],
+       "numerals": [
+        "I",
+        "V",
+        "vi",
+        "iii",
+        "IV",
+        "I",
+        "IV",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "T",
+        "T",
+        "PD",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "Three-chord trick",
+       "chords": [
+        "C",
+        "F",
+        "G"
+       ],
+       "numerals": [
+        "I",
+        "IV",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "I–IV–I–V",
+       "chords": [
+        "C",
+        "F",
+        "C",
+        "G"
+       ],
+       "numerals": [
+        "I",
+        "IV",
+        "I",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "Mixolydian vamp",
+       "chords": [
+        "C",
+        "Bb"
+       ],
+       "numerals": [
+        "I",
+        "bVII"
+       ],
+       "lanes": [
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      }
+     ]
+    },
+    {
+     "name": "Blues and rock",
+     "items": [
+      {
+       "name": "I–IV–V–IV",
+       "chords": [
+        "C",
+        "F",
+        "G",
+        "F"
+       ],
+       "numerals": [
+        "I",
+        "IV",
+        "V",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "I–bVII–IV",
+       "chords": [
+        "C",
+        "Bb",
+        "F",
+        "C"
+       ],
+       "numerals": [
+        "I",
+        "bVII",
+        "IV",
+        "I"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "12-bar blues",
+       "chords": [
+        "C7",
+        "F7",
+        "C7",
+        "G7",
+        "F7",
+        "C7",
+        "G7"
+       ],
+       "numerals": [
+        "I7",
+        "IV7",
+        "I7",
+        "V7",
+        "IV7",
+        "I7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "D",
+        "PD",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        4,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "C"
+      },
+      {
+       "name": "I7–IV7 vamp",
+       "chords": [
+        "C7",
+        "F7"
+       ],
+       "numerals": [
+        "I7",
+        "IV7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      }
+     ]
+    },
+    {
+     "name": "Jazz and soul",
+     "items": [
+      {
+       "name": "Jazz turnaround",
+       "chords": [
+        "Cmaj7",
+        "Am7",
+        "Dm7",
+        "G7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "vi7",
+        "ii7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "I–VI7–ii–V",
+       "chords": [
+        "C",
+        "A7",
+        "Dm7",
+        "G7"
+       ],
+       "numerals": [
+        "I",
+        "VI7",
+        "ii7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "I–II7–ii–V",
+       "chords": [
+        "Cmaj7",
+        "D7",
+        "Dm7",
+        "G7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "II7",
+        "ii7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "I–IV vamp",
+       "chords": [
+        "Cmaj7",
+        "Fmaj7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "IVmaj7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      }
+     ]
+    },
+    {
+     "name": "Ballad and pop",
+     "items": [
+      {
+       "name": "50s progression",
+       "chords": [
+        "C",
+        "Am",
+        "F",
+        "G"
+       ],
+       "numerals": [
+        "I",
+        "vi",
+        "IV",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "I–V–vi–IV",
+       "chords": [
+        "C",
+        "G",
+        "Am",
+        "F"
+       ],
+       "numerals": [
+        "I",
+        "V",
+        "vi",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "I–I7–IV–iv",
+       "chords": [
+        "C",
+        "C7",
+        "F",
+        "Fm"
+       ],
+       "numerals": [
+        "I",
+        "I7",
+        "IV",
+        "iv"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      },
+      {
+       "name": "Lydian vamp",
+       "chords": [
+        "C",
+        "D"
+       ],
+       "numerals": [
+        "I",
+        "II"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C"
+      }
+     ]
+    },
+    {
+     "name": "Flamenco",
+     "items": [
+      {
+       "name": "Andalusian cadence",
+       "chords": [
+        "Am",
+        "G",
+        "F",
+        "E"
+       ],
+       "numerals": [
+        "i",
+        "VII",
+        "VI",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 7,
+    "mode": "major",
+    "name": "G"
+   },
+   "groups": [
+    {
+     "name": "Classical and folk",
+     "items": [
+      {
+       "name": "I–V–vi–iii–IV",
+       "chords": [
+        "G",
+        "D",
+        "Em",
+        "Bm",
+        "C",
+        "G",
+        "C",
+        "D"
+       ],
+       "numerals": [
+        "I",
+        "V",
+        "vi",
+        "iii",
+        "IV",
+        "I",
+        "IV",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "T",
+        "T",
+        "PD",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "Three-chord trick",
+       "chords": [
+        "G",
+        "C",
+        "D"
+       ],
+       "numerals": [
+        "I",
+        "IV",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "I–IV–I–V",
+       "chords": [
+        "G",
+        "C",
+        "G",
+        "D"
+       ],
+       "numerals": [
+        "I",
+        "IV",
+        "I",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "Mixolydian vamp",
+       "chords": [
+        "G",
+        "F"
+       ],
+       "numerals": [
+        "I",
+        "bVII"
+       ],
+       "lanes": [
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      }
+     ]
+    },
+    {
+     "name": "Blues and rock",
+     "items": [
+      {
+       "name": "I–IV–V–IV",
+       "chords": [
+        "G",
+        "C",
+        "D",
+        "C"
+       ],
+       "numerals": [
+        "I",
+        "IV",
+        "V",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "I–bVII–IV",
+       "chords": [
+        "G",
+        "F",
+        "C",
+        "G"
+       ],
+       "numerals": [
+        "I",
+        "bVII",
+        "IV",
+        "I"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "12-bar blues",
+       "chords": [
+        "G7",
+        "C7",
+        "G7",
+        "D7",
+        "C7",
+        "G7",
+        "D7"
+       ],
+       "numerals": [
+        "I7",
+        "IV7",
+        "I7",
+        "V7",
+        "IV7",
+        "I7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "D",
+        "PD",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        4,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "G"
+      },
+      {
+       "name": "I7–IV7 vamp",
+       "chords": [
+        "G7",
+        "C7"
+       ],
+       "numerals": [
+        "I7",
+        "IV7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      }
+     ]
+    },
+    {
+     "name": "Jazz and soul",
+     "items": [
+      {
+       "name": "Jazz turnaround",
+       "chords": [
+        "Gmaj7",
+        "Em7",
+        "Am7",
+        "D7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "vi7",
+        "ii7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "I–VI7–ii–V",
+       "chords": [
+        "G",
+        "E7",
+        "Am7",
+        "D7"
+       ],
+       "numerals": [
+        "I",
+        "VI7",
+        "ii7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "I–II7–ii–V",
+       "chords": [
+        "Gmaj7",
+        "A7",
+        "Am7",
+        "D7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "II7",
+        "ii7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "I–IV vamp",
+       "chords": [
+        "Gmaj7",
+        "Cmaj7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "IVmaj7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      }
+     ]
+    },
+    {
+     "name": "Ballad and pop",
+     "items": [
+      {
+       "name": "50s progression",
+       "chords": [
+        "G",
+        "Em",
+        "C",
+        "D"
+       ],
+       "numerals": [
+        "I",
+        "vi",
+        "IV",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "I–V–vi–IV",
+       "chords": [
+        "G",
+        "D",
+        "Em",
+        "C"
+       ],
+       "numerals": [
+        "I",
+        "V",
+        "vi",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "I–I7–IV–iv",
+       "chords": [
+        "G",
+        "G7",
+        "C",
+        "Cm"
+       ],
+       "numerals": [
+        "I",
+        "I7",
+        "IV",
+        "iv"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      },
+      {
+       "name": "Lydian vamp",
+       "chords": [
+        "G",
+        "A"
+       ],
+       "numerals": [
+        "I",
+        "II"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G"
+      }
+     ]
+    },
+    {
+     "name": "Flamenco",
+     "items": [
+      {
+       "name": "Andalusian cadence",
+       "chords": [
+        "Em",
+        "D",
+        "C",
+        "B"
+       ],
+       "numerals": [
+        "i",
+        "VII",
+        "VI",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "E"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "groups": [
+    {
+     "name": "Classical and folk",
+     "items": [
+      {
+       "name": "i–iv–V",
+       "chords": [
+        "Am",
+        "Dm",
+        "E"
+       ],
+       "numerals": [
+        "i",
+        "iv",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      },
+      {
+       "name": "i–iv–v",
+       "chords": [
+        "Am",
+        "Dm",
+        "Em"
+       ],
+       "numerals": [
+        "i",
+        "iv",
+        "v"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      },
+      {
+       "name": "Double tonic",
+       "chords": [
+        "Am",
+        "G"
+       ],
+       "numerals": [
+        "i",
+        "VII"
+       ],
+       "lanes": [
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      },
+      {
+       "name": "La Folia",
+       "chords": [
+        "Am",
+        "E",
+        "Am",
+        "G",
+        "C",
+        "G",
+        "Am",
+        "E"
+       ],
+       "numerals": [
+        "i",
+        "V",
+        "i",
+        "VII",
+        "III",
+        "VII",
+        "i",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "T",
+        "D",
+        "T",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      }
+     ]
+    },
+    {
+     "name": "Blues and rock",
+     "items": [
+      {
+       "name": "Aeolian vamp",
+       "chords": [
+        "Am",
+        "G",
+        "F",
+        "G"
+       ],
+       "numerals": [
+        "i",
+        "VII",
+        "VI",
+        "VII"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      },
+      {
+       "name": "Dorian vamp",
+       "chords": [
+        "Am7",
+        "D7"
+       ],
+       "numerals": [
+        "i7",
+        "IV7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      },
+      {
+       "name": "Minor blues",
+       "chords": [
+        "Am7",
+        "Dm7",
+        "Am7",
+        "F7",
+        "E7",
+        "Am7",
+        "E7"
+       ],
+       "numerals": [
+        "i7",
+        "iv7",
+        "i7",
+        "VI7",
+        "V7",
+        "i7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "PD",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        4,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "A"
+      },
+      {
+       "name": "Phrygian vamp",
+       "chords": [
+        "Am",
+        "Bb"
+       ],
+       "numerals": [
+        "i",
+        "bII"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      }
+     ]
+    },
+    {
+     "name": "Jazz and soul",
+     "items": [
+      {
+       "name": "Circle progression",
+       "chords": [
+        "Am7",
+        "Dm7",
+        "G7",
+        "Cmaj7",
+        "Fmaj7",
+        "Bm7b5",
+        "E7"
+       ],
+       "numerals": [
+        "i7",
+        "iv7",
+        "VII7",
+        "IIImaj7",
+        "VImaj7",
+        "iiø7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D",
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      },
+      {
+       "name": "i–iv vamp",
+       "chords": [
+        "Am7",
+        "Dm7"
+       ],
+       "numerals": [
+        "i7",
+        "iv7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      },
+      {
+       "name": "Minor turnaround",
+       "chords": [
+        "Am7",
+        "Fmaj7",
+        "Bm7b5",
+        "E7"
+       ],
+       "numerals": [
+        "i7",
+        "VImaj7",
+        "iiø7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      }
+     ]
+    },
+    {
+     "name": "Ballad and pop",
+     "items": [
+      {
+       "name": "i–VI–III–VII",
+       "chords": [
+        "Am",
+        "F",
+        "C",
+        "G"
+       ],
+       "numerals": [
+        "i",
+        "VI",
+        "III",
+        "VII"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      }
+     ]
+    },
+    {
+     "name": "Flamenco",
+     "items": [
+      {
+       "name": "Andalusian cadence",
+       "chords": [
+        "Am",
+        "G",
+        "F",
+        "E"
+       ],
+       "numerals": [
+        "i",
+        "VII",
+        "VI",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 6,
+    "mode": "minor",
+    "name": "F#"
+   },
+   "groups": [
+    {
+     "name": "Classical and folk",
+     "items": [
+      {
+       "name": "i–iv–V",
+       "chords": [
+        "F#m",
+        "Bm",
+        "C#"
+       ],
+       "numerals": [
+        "i",
+        "iv",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      },
+      {
+       "name": "i–iv–v",
+       "chords": [
+        "F#m",
+        "Bm",
+        "C#m"
+       ],
+       "numerals": [
+        "i",
+        "iv",
+        "v"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      },
+      {
+       "name": "Double tonic",
+       "chords": [
+        "F#m",
+        "E"
+       ],
+       "numerals": [
+        "i",
+        "VII"
+       ],
+       "lanes": [
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      },
+      {
+       "name": "La Folia",
+       "chords": [
+        "F#m",
+        "C#",
+        "F#m",
+        "E",
+        "A",
+        "E",
+        "F#m",
+        "C#"
+       ],
+       "numerals": [
+        "i",
+        "V",
+        "i",
+        "VII",
+        "III",
+        "VII",
+        "i",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "T",
+        "D",
+        "T",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      }
+     ]
+    },
+    {
+     "name": "Blues and rock",
+     "items": [
+      {
+       "name": "Aeolian vamp",
+       "chords": [
+        "F#m",
+        "E",
+        "D",
+        "E"
+       ],
+       "numerals": [
+        "i",
+        "VII",
+        "VI",
+        "VII"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      },
+      {
+       "name": "Dorian vamp",
+       "chords": [
+        "F#m7",
+        "B7"
+       ],
+       "numerals": [
+        "i7",
+        "IV7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      },
+      {
+       "name": "Minor blues",
+       "chords": [
+        "F#m7",
+        "Bm7",
+        "F#m7",
+        "D7",
+        "C#7",
+        "F#m7",
+        "C#7"
+       ],
+       "numerals": [
+        "i7",
+        "iv7",
+        "i7",
+        "VI7",
+        "V7",
+        "i7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "PD",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        4,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "F#"
+      },
+      {
+       "name": "Phrygian vamp",
+       "chords": [
+        "F#m",
+        "G"
+       ],
+       "numerals": [
+        "i",
+        "bII"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      }
+     ]
+    },
+    {
+     "name": "Jazz and soul",
+     "items": [
+      {
+       "name": "Circle progression",
+       "chords": [
+        "F#m7",
+        "Bm7",
+        "E7",
+        "Amaj7",
+        "Dmaj7",
+        "G#m7b5",
+        "C#7"
+       ],
+       "numerals": [
+        "i7",
+        "iv7",
+        "VII7",
+        "IIImaj7",
+        "VImaj7",
+        "iiø7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D",
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      },
+      {
+       "name": "i–iv vamp",
+       "chords": [
+        "F#m7",
+        "Bm7"
+       ],
+       "numerals": [
+        "i7",
+        "iv7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      },
+      {
+       "name": "Minor turnaround",
+       "chords": [
+        "F#m7",
+        "Dmaj7",
+        "G#m7b5",
+        "C#7"
+       ],
+       "numerals": [
+        "i7",
+        "VImaj7",
+        "iiø7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      }
+     ]
+    },
+    {
+     "name": "Ballad and pop",
+     "items": [
+      {
+       "name": "i–VI–III–VII",
+       "chords": [
+        "F#m",
+        "D",
+        "A",
+        "E"
+       ],
+       "numerals": [
+        "i",
+        "VI",
+        "III",
+        "VII"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      }
+     ]
+    },
+    {
+     "name": "Flamenco",
+     "items": [
+      {
+       "name": "Andalusian cadence",
+       "chords": [
+        "F#m",
+        "E",
+        "D",
+        "C#"
+       ],
+       "numerals": [
+        "i",
+        "VII",
+        "VI",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
