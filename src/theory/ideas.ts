@@ -2,11 +2,15 @@
 // optional "then" phrase from the library; and what to start with when there's nothing yet. The
 // engine (engine.ts) decides; this turns the site's chords into its symbols and back.
 
-import { Chord, makeChord } from './chords';
+import { Chord } from './chords';
 import { Key, chordSymbolInKey, romanNumeral, spellRootInKey, tonicName } from './keys';
 import { Lane, laneInfo } from './progressionMap';
 import { ideaTag, secondaryTarget } from './progressions';
+import { parseChordName } from './search';
 import * as engine from './engine';
+
+export type { StyleName } from './engine';
+export const STYLES = engine.STYLES;
 
 export interface ThenPhrase {
   name: string;
@@ -34,37 +38,38 @@ export interface AfterIdea {
 export const thenPhrase = (idea: AfterIdea): Chord[] =>
   idea.then ? [idea.chord, ...(idea.then.returnsHome ? idea.then.chords.slice(0, -1) : idea.then.chords)] : [idea.chord];
 
-const QUALITY: Record<string, engine.Quality> = {
-  maj: 'maj', min: 'm', dim: 'dim', aug: 'aug', 7: '7', m7: 'm7', maj7: 'maj7', m7b5: 'm7b5', dim7: 'dim7',
-  // the rest as the chord they colour
-  5: 'maj', sus2: 'maj', sus4: 'maj', add9: 'maj', 6: 'maj', 69: 'maj', add11: 'maj',
-  m6: 'm', madd9: 'm', m69: 'm', madd11: 'm', mMaj7: 'm',
-  9: '7', 13: '7', '7sus4': '7', '9sus4': '7', '7#9': '7', '7b9': '7', '7b5': '7', '7#11': '7',
-  maj9: 'maj7', maj13: 'maj7', 'maj7#11': 'maj7', m9: 'm7', m11: 'm7', m13: 'm7', '7#5': 'aug', 'maj7#5': 'aug',
-};
-const TEMPLATE: Record<engine.Quality, string> = { maj: 'maj', m: 'min', dim: 'dim', aug: 'aug', 7: '7', m7: 'm7', maj7: 'maj7', m7b5: 'm7b5', dim7: 'dim7' };
 const SHARP = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const FLAT = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 
 const engineKey = (key: Key): engine.EngineKeyInput => ({ tonic: key.tonic, mode: key.mode, name: tonicName(key) });
 
-/** The engine's symbol for a site chord, spelled in the key (no slash, no double accidental). */
+/**
+ * The engine's symbol for a site chord: its root spelled in the key (no slash, no double accidental) and
+ * the site's own suffix, which the engine reads for every chord type (colour chords as their base).
+ */
 export function engineSymbol(c: Chord, key: Key): string {
   let root = spellRootInKey(key, c.root);
   if (/bb|##/.test(root)) root = (root.includes('#') ? SHARP : FLAT)[c.root];
-  const q = QUALITY[c.template.id] ?? (c.template.family === 'minor' ? 'm' : 'maj');
-  return root + (q === 'maj' ? '' : q);
+  return root + c.template.suffix;
 }
-const siteChord = (symbol: string): Chord => {
-  const c = engine.parse(symbol);
-  return makeChord(c.root, TEMPLATE[c.quality]);
-};
+
+/** A site chord for an engine symbol, through the site's own chord-name reader. */
+export function siteChord(symbol: string): Chord {
+  const c = parseChordName(symbol);
+  if (!c) throw new Error(`Unreadable chord from the engine: ${symbol}`);
+  return c;
+}
+
+/** The key's own chords in a style (minor adds the harmonic V, marked borrowed): the Key band. */
+export function keyChords(key: Key, style: engine.StyleName): { chord: Chord; borrowed: boolean }[] {
+  return engine.diatonicSet(engineKey(key), style).map((c, i) => ({ chord: siteChord(c.symbol), borrowed: key.mode === 'minor' && i === 7 }));
+}
 
 /** Up to four ideas for after the progression's last chord (Natural, or Spicy from outside the key). */
-export function afterIdeas(progression: Chord[], key: Key, opts: { spice: boolean; sevenths?: boolean }): AfterIdea[] {
+export function afterIdeas(progression: Chord[], key: Key, opts: { spice: boolean; style?: engine.StyleName }): AfterIdea[] {
   if (!progression.length) return [];
   const first = progression[0];
-  return engine.afterIdeas(progression.map((c) => engineSymbol(c, key)), engineKey(key), { spice: opts.spice, sevenths: opts.sevenths }).map((x) => {
+  return engine.afterIdeas(progression.map((c) => engineSymbol(c, key)), engineKey(key), { spice: opts.spice, style: opts.style }).map((x) => {
     const t = x.then;
     let then: ThenPhrase | null = null;
     if (t) {
@@ -107,27 +112,30 @@ export interface StartItem {
   lanes: Lane[];
   /** One line for the name's tooltip. */
   note: string;
+  /** The style its chords imply: adding it to an empty progression sets the style control. */
+  style: engine.StyleName;
 }
 
 export interface StartGroup {
   name: string;
+  /** Shown first (at most four). */
   items: StartItem[];
+  /** The rest, behind a More control. */
+  more: StartItem[];
 }
 
 /** Progressions to start from, grouped by genre family, realized in the key (the other mode on its relative). */
 export function starts(key: Key): StartGroup[] {
-  return engine.starts(engineKey(key)).map((g) => ({
-    name: g.name,
-    items: g.items.map((x) => {
-      const bars = <T,>(list: T[]) => list.flatMap((v, i) => Array.from({ length: x.repeat?.[i] ?? 1 }, () => v));
-      return {
-        id: x.id, name: x.name, genre: x.genre, mood: x.mood, mode: x.mode, note: x.note,
-        key: { tonic: engine.parse(x.tonic).root, mode: x.mode },
-        chords: bars(x.chords.map(siteChord)),
-        lanes: bars(x.lanes),
-      };
-    }),
-  }));
+  const item = (x: engine.EngineStart): StartItem => {
+    const bars = <T,>(list: T[]) => list.flatMap((v, i) => Array.from({ length: x.repeat?.[i] ?? 1 }, () => v));
+    return {
+      id: x.id, name: x.name, genre: x.genre, mood: x.mood, mode: x.mode, note: x.note, style: x.style,
+      key: { tonic: engine.parse(x.tonic).root, mode: x.mode },
+      chords: bars(x.chords.map(siteChord)),
+      lanes: bars(x.lanes),
+    };
+  };
+  return engine.starts(engineKey(key)).map((g) => ({ name: g.name, items: g.items.map(item), more: g.more.map(item) }));
 }
 
 /** Runs of the same chord in a row become one column with a count (12-bar: C7 x4, F7 x2...). */

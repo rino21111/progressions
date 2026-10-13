@@ -4,9 +4,9 @@
 // Shared notes map.
 
 import { Chord, makeChord } from '../theory/chords';
-import { ALL_KEYS, Key, chordFitInKey, chordSymbolInKey, diatonicChords, keyId, keyName, rankKeys, romanNumeral } from '../theory/keys';
+import { ALL_KEYS, Key, chordFitInKey, chordSymbolInKey, keyId, keyName, rankKeys, romanNumeral } from '../theory/keys';
 import { sameFunction } from '../theory/progressions';
-import { AfterIdea, StartItem, afterIdeas, collapseRepeats, ideaFor, ideaReason, starts, thenPhrase } from '../theory/ideas';
+import { AfterIdea, StartItem, StyleName, afterIdeas, collapseRepeats, ideaFor, ideaReason, keyChords, starts, thenPhrase } from '../theory/ideas';
 import { laneInfo } from '../theory/progressionMap';
 import { AddMode, state, subscribe, update } from '../state';
 import { currentKey, currentKeyGuess } from '../key';
@@ -23,6 +23,12 @@ import { ExampleMap, exampleMap, voiceExtent, voicePicture, voiceSummary } from 
 const ADD_MODES: { id: AddMode; label: string }[] = [
   { id: 'suggested', label: 'Natural' },
   { id: 'spice', label: 'Spicy' },
+];
+const STYLE_CHOICES: { id: StyleName; label: string }[] = [
+  { id: 'triads', label: 'Triads' },
+  { id: 'sevenths', label: '7ths' },
+  { id: 'ninths', label: '9ths' },
+  { id: 'add9', label: 'add9' },
 ];
 const LANE_WORDS = { D: 'Dominant', PD: 'Predominant', T: 'Tonic' } as const;
 const same = (a: Chord, b: Chord) => a.root === b.root && a.template.id === b.template.id && a.bass === b.bass;
@@ -63,7 +69,7 @@ export function createProgressions(): HTMLElement {
       h('optgroup', { label: 'All keys' }, ALL_KEYS.filter((k) => !likely.has(keyId(k))).map((k) => option(k))),
     );
     const home = makeChord(key.tonic, key.mode === 'major' ? 'maj' : 'min');
-    const chords = diatonicChords(key, state.sevenths);
+    const chords = keyChords(key, state.style);
     const playing = playingChord();
     bandColumns = chords.map((d) => {
       const lane = laneInfo(d.chord, key, home);
@@ -82,9 +88,11 @@ export function createProgressions(): HTMLElement {
       h('span', { class: `kb-lane lane-${l}` }, h('span', { class: 'word' }, LANE_WORDS[l]), h('span', { class: 'abbr' }, l))));
     add(keyCard,
       h('div', { class: 'card-head' }, h('h2', {}, 'Key'), picker,
-        h('div', { class: 'segmented small' },
-          h('button', { class: `seg ${state.sevenths ? '' : 'active'}`, onclick: () => update({ sevenths: false }) }, 'Triads'),
-          h('button', { class: `seg ${state.sevenths ? 'active' : ''}`, onclick: () => update({ sevenths: true }) }, '7th chords'),
+        h('div', { class: 'segmented small', role: 'group', 'aria-label': 'Chord style' },
+          STYLE_CHOICES.map((c) => h('button', {
+            class: `seg ${state.style === c.id ? 'active' : ''}`, 'aria-pressed': String(state.style === c.id),
+            onclick: () => update({ style: c.id }),
+          }, c.label)),
         ),
       ),
       h('div', { class: 'kb-grid', style: `--cols: ${chords.length}` },
@@ -101,12 +109,12 @@ export function createProgressions(): HTMLElement {
     afterCard.hidden = !x;
     if (!x) return;
     const tab: AddMode = state.addMode === 'spice' ? 'spice' : 'suggested';
-    const ideas: AfterIdea[] = afterIdeas(state.progression, key, { spice: tab === 'spice', sevenths: state.sevenths });
+    const ideas: AfterIdea[] = afterIdeas(state.progression, key, { spice: tab === 'spice', style: state.style });
     const first = state.progression[0];
     // A chord picked in the key band that isn't an idea joins as a fifth row, to compare (no then line).
     const sel = state.selected;
     if (sel && state.selectedCard === null && !selectedPhrase() && !ideas.some((i) => same(i.chord, sel))
-      && diatonicChords(key, state.sevenths).some((d) => same(d.chord, sel) && isSelected(d.chord, `key:${chordSymbolInKey(d.chord, key)}`))) {
+      && keyChords(key, state.style).some((d) => same(d.chord, sel) && isSelected(d.chord, `key:${chordSymbolInKey(d.chord, key)}`))) {
       ideas.push(ideaFor(x, sel, key, first));
     }
     const xName = chordSymbolInKey(x, key);
@@ -180,41 +188,62 @@ export function createProgressions(): HTMLElement {
     );
   };
 
-  // ---- Start with (only when the progression is empty), drawn once per key and chord style.
+  // ---- Start with (only when the progression is empty), drawn once per key.
   type StartCard = { item: StartItem; chords: Chord[]; card: HTMLElement; map: ExampleMap; id: string };
   const startCache = new Map<string, { el: HTMLElement; cards: StartCard[] }>();
   let shown: StartCard[] = [];
   const buildStarts = (key: Key) => {
     const cards: StartCard[] = [];
-    const el = h('div', { class: 'example-groups' }, starts(key).map((group) =>
-      h('div', { class: 'ex-group' },
+    const build = (item: StartItem) => {
+      const k = item.key;
+      const chords = item.chords;
+      const cols = collapseRepeats(chords, same);
+      const id = `start:${item.id}`;
+      const wide = cols.length >= 5;
+      const map = exampleMap(cols, chords, item.lanes, k, wide ? 470 : 230, (i) => onChordClick(cols[i].chord, undefined, `${id}:${i}`));
+      const card = h('article', { class: `ex-card${wide ? ' wide' : ''}` },
+        h('div', { class: 'ex-head' },
+          h('h4', { title: item.note }, item.name),
+          h('div', { class: 'row' },
+            h('button', {
+              class: 'icon', title: 'Play this progression', 'aria-label': `Play ${item.name}`,
+              onclick: () => play(id, () => chords.map((c) => bestVoicing(c)).filter((f) => f !== null), { perChord: true }),
+            }, playIcon()),
+            h('button', {
+              class: 'icon', title: 'Add these chords to the progression', 'aria-label': `Add ${item.name} to the progression`,
+              onclick: () => {
+                // Starting from nothing, the style control follows the entry (a bossa start lands in 9ths).
+                const empty = !state.progression.length;
+                addToProgression(...chords);
+                if (empty) update({ style: item.style });
+              },
+            }, '+'),
+          ),
+        ),
+        map.svg,
+        h('p', { class: 'ex-genre' }, h('span', { class: 'genre' }, item.genre), h('span', { class: 'muted' }, ` · ${item.mood}`)),
+      );
+      cards.push({ item, chords, card, map, id });
+      return card;
+    };
+    const el = h('div', { class: 'example-groups' }, starts(key).map((group) => {
+      const extra = group.more.map(build);
+      extra.forEach((c) => (c.hidden = true));
+      const more = h('button', {
+        class: 'text-btn ex-more', 'aria-expanded': 'false',
+        onclick: () => {
+          const open = extra[0].hidden;
+          extra.forEach((c) => (c.hidden = !open));
+          more.textContent = open ? 'Less' : `${extra.length} more`;
+          more.setAttribute('aria-expanded', String(open));
+        },
+      }, `${extra.length} more`);
+      return h('div', { class: 'ex-group' },
         h('h3', {}, group.name),
-        h('div', { class: 'ex-row' }, group.items.map((item) => {
-          const k = item.key;
-          const chords = item.chords;
-          const cols = collapseRepeats(chords, same);
-          const id = `start:${item.id}`;
-          const wide = cols.length >= 5;
-          const map = exampleMap(cols, chords, item.lanes, k, wide ? 470 : 230, (i) => onChordClick(cols[i].chord, undefined, `${id}:${i}`));
-          const card = h('article', { class: `ex-card${wide ? ' wide' : ''}` },
-            h('div', { class: 'ex-head' },
-              h('h4', { title: item.note }, item.name),
-              h('div', { class: 'row' },
-                h('button', {
-                  class: 'icon', title: 'Play this progression', 'aria-label': `Play ${item.name}`,
-                  onclick: () => play(id, () => chords.map((c) => bestVoicing(c)).filter((f) => f !== null), { perChord: true }),
-                }, playIcon()),
-                h('button', { class: 'icon', title: 'Add these chords to the progression', 'aria-label': `Add ${item.name} to the progression`, onclick: () => addToProgression(...chords) }, '+'),
-              ),
-            ),
-            map.svg,
-            h('p', { class: 'ex-genre' }, h('span', { class: 'genre' }, item.genre), h('span', { class: 'muted' }, ` · ${item.mood}`)),
-          );
-          cards.push({ item, chords, card, map, id });
-          return card;
-        })),
-      ),
-    ));
+        h('div', { class: 'ex-row' }, group.items.map(build), extra),
+        extra.length ? more : null,
+      );
+    }));
     return { el, cards };
   };
 
@@ -224,7 +253,7 @@ export function createProgressions(): HTMLElement {
       shown = [];
       return;
     }
-    const cacheKey = `${keyId(key)}|${state.sevenths}`;
+    const cacheKey = keyId(key);
     let entry = startCache.get(cacheKey);
     if (!entry) {
       entry = buildStarts(key);

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { ideaTag } from '../src/theory/progressions';
-import { Chord, chordSymbol, makeChord } from '../src/theory/chords';
-import { afterIdeas, collapseRepeats, engineSymbol, ideaReason, starts, thenPhrase } from '../src/theory/ideas';
+import { CHORD_TEMPLATES, Chord, chordSymbol, makeChord } from '../src/theory/chords';
+import { StyleName, afterIdeas, collapseRepeats, engineSymbol, ideaReason, keyChords, siteChord, starts, thenPhrase } from '../src/theory/ideas';
+import * as engine from '../src/theory/engine';
 import { showsReturn } from '../src/theory/progressionMap';
 import { Key, chordSymbolInKey, keyName } from '../src/theory/keys';
 
@@ -39,27 +40,49 @@ describe('after ideas and start with (site bridge to the engine)', () => {
     expect(names(spicy.map((i) => i.chord), C)).toEqual(['D7', 'F#dim7', 'Fm', 'A7']);
     expect(afterIdeas([], C, { spice: false })).toEqual([]);
   });
-  it('the Triads / 7th chords toggle reaches the engine', () => {
+  it('the style control reaches the engine', () => {
     const prog = [ch(0, 'maj'), ch(7, 'maj'), ch(9, 'min'), ch(5, 'maj')];
-    expect(names(afterIdeas(prog, C, { spice: false, sevenths: true }).map((i) => i.chord), C)).toEqual(['Cmaj7', 'G7', 'Dm7']);
-    expect(names(afterIdeas(prog, C, { spice: false, sevenths: false }).map((i) => i.chord), C)).toEqual(['C', 'G', 'Dm']);
+    const at = (style: StyleName) => names(afterIdeas(prog, C, { spice: false, style }).map((i) => i.chord), C);
+    expect(at('sevenths')).toEqual(['Cmaj7', 'G7', 'Dm7']);
+    expect(at('triads')).toEqual(['C', 'G', 'Dm']);
+    expect(at('ninths')).toEqual(['Cmaj9', 'G13', 'Dm9']);
+    expect(at('add9')).toEqual(['Cadd9', 'Gadd9', 'Dm(add9)']);
+  });
+  it('the Key band follows the style', () => {
+    expect(names(keyChords(C, 'ninths').map((d) => d.chord), C)).toEqual(['Cmaj9', 'Dm9', 'Em7', 'Fmaj9', 'G13', 'Am9', 'Bm7b5']);
+    expect(keyChords(Am, 'triads').map((d) => d.borrowed)).toEqual([false, false, false, false, false, false, false, true]);
   });
   it('the title drops an "As in" that only repeats the tag', () => {
     const e = afterIdeas([ch(9, 'min'), ch(7, 'maj'), ch(5, 'maj')], Am, { spice: false })[0];
     expect(ideaReason(e)).toBe('Andalusian cadence. Turns back to Am at bar 4');
   });
-  it('the engine reads slash, sus and extended chords as the chord they colour', () => {
+  it('chords go to the engine with their own suffix (no slash) and come back as the same type', () => {
     expect(engineSymbol(makeChord(5, 'maj7', 9), C)).toBe('Fmaj7');
-    expect(engineSymbol(ch(7, '9'), C)).toBe('G7');
-    expect(engineSymbol(ch(2, 'm11'), C)).toBe('Dm7');
-    expect(engineSymbol(ch(7, 'sus4'), C)).toBe('G');
+    expect(engineSymbol(ch(7, '9'), C)).toBe('G9');
+    expect(engineSymbol(ch(2, 'm11'), C)).toBe('Dm11');
+    expect(engineSymbol(ch(7, 'sus4'), C)).toBe('Gsus4');
     expect(engineSymbol(ch(6, 'dim7'), C)).toBe('F#dim7');
     expect(engineSymbol(ch(10, 'maj'), { tonic: 6, mode: 'major' })).toBe('A#');
   });
+  it('every chord type on every root round-trips through the engine', () => {
+    for (const key of [C, Am, { tonic: 6, mode: 'major' } as Key, { tonic: 1, mode: 'major' } as Key]) {
+      for (const t of CHORD_TEMPLATES) {
+        for (let root = 0; root < 12; root++) {
+          const c = ch(root, t.id);
+          const e = engine.parse(engineSymbol(c, key));
+          expect(e.root).toBe(root);
+          const back = siteChord(e.symbol);
+          expect([back.root, back.template.id]).toEqual([root, t.id]);
+        }
+      }
+    }
+  });
   it('start entries: groups in display order, realized in the key, repeats written out', () => {
     const groups = starts(C);
-    expect(groups.map((g) => g.name)).toEqual(['Classical and folk', 'Blues and rock', 'Jazz and soul', 'Ballad and pop', 'Flamenco']);
-    const andalusian = groups[4].items[0];
+    expect(groups.map((g) => g.name)).toEqual(['Classical and folk', 'Blues and rock', 'Jazz and soul', 'Bossa nova', 'Ballad and pop', 'Post-rock and cinematic', 'Flamenco']);
+    const andalusian = groups[6].items[0];
+    expect(groups.every((g) => g.items.length <= 4)).toBe(true);
+    expect(groups.find((g) => g.name === 'Bossa nova')!.items.every((i) => i.style === 'ninths' || i.style === 'sevenths')).toBe(true);
     expect(names(andalusian.chords, andalusian.key)).toEqual(['Am', 'G', 'F', 'E']);
     expect(keyName(andalusian.key)).toBe('A minor');
     const blues = groups[1].items.find((i) => i.name === '12-bar blues')!;

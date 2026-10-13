@@ -6,6 +6,728 @@
     "mode": "major",
     "name": "C"
    },
+   "prog": "Cmaj9 Am9 Dm9 G13",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cmaj9",
+     "numeral": "Imaj9",
+     "lane": "T",
+     "tag": "Completes ii–V–I",
+     "why": "As in Jazz turnaround; G13 resolves to Cmaj9",
+     "then": null
+    },
+    {
+     "chord": "Em7",
+     "numeral": "iii7",
+     "lane": "T",
+     "tag": "",
+     "why": "As in iii–VI–ii–V; Keeps G, B and D",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am9",
+       "Fmaj9"
+      ],
+      "numerals": [
+       "vi9",
+       "IVmaj9"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Am9",
+     "numeral": "vi9",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "Fmaj9",
+       "G13",
+       "Cmaj9"
+      ],
+      "numerals": [
+       "IVmaj9",
+       "V13",
+       "Imaj9"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Cmaj9 Am9 Dm9 G13",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Abmaj9",
+     "numeral": "bVImaj9",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb13",
+       "Cmaj9"
+      ],
+      "numerals": [
+       "bVII13",
+       "Imaj9"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Dm9 G13",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cmaj9",
+     "numeral": "Imaj9",
+     "lane": "T",
+     "tag": "Completes ii–V–I",
+     "why": "As in ii–V–I; G13 resolves to Cmaj9",
+     "then": {
+      "name": "Jazz turnaround",
+      "chords": [
+       "Am9",
+       "Dm9"
+      ],
+      "numerals": [
+       "vi9",
+       "ii9"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Am9",
+     "numeral": "vi9",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": null
+    },
+    {
+     "chord": "Em7",
+     "numeral": "iii7",
+     "lane": "T",
+     "tag": "",
+     "why": "As in iii–VI–ii–V; Keeps G, B and D",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Dm9 G13",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Abmaj9",
+     "numeral": "bVImaj9",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb13",
+       "Cmaj9"
+      ],
+      "numerals": [
+       "bVII13",
+       "Imaj9"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "#v°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Keeps B, D and F; Common after V",
+     "then": {
+      "name": "V–#v°7–vi",
+      "chords": [
+       "Am9"
+      ],
+      "numerals": [
+       "vi9"
+      ],
+      "lanes": [
+       "T"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Cadd9 Gadd9 Am(add9) Fadd9",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cadd9",
+     "numeral": "Iadd9",
+     "lane": "T",
+     "tag": "Plagal cadence",
+     "why": "As in I–V–vi–IV; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Gadd9",
+     "numeral": "Vadd9",
+     "lane": "D",
+     "tag": "",
+     "why": "As in IV–V–vi climb; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Dm(add9)",
+     "numeral": "iiadd9",
+     "lane": "PD",
+     "tag": "",
+     "why": "Keeps F and A",
+     "then": {
+      "name": "ii–V–I",
+      "chords": [
+       "Gadd9",
+       "Cadd9"
+      ],
+      "numerals": [
+       "Vadd9",
+       "Iadd9"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Cadd9 Gadd9 Am(add9) Fadd9",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "D7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to G",
+     "why": "Keeps A and C; Common after IV",
+     "then": {
+      "name": "Double dominant",
+      "chords": [
+       "G7",
+       "Cadd9"
+      ],
+      "numerals": [
+       "V7",
+       "Iadd9"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "F#dim7",
+     "numeral": "#iv°7",
+     "lane": "D",
+     "tag": "Leads to C",
+     "why": "Keeps A and C; Common after IV",
+     "then": null
+    },
+    {
+     "chord": "Fm(add9)",
+     "numeral": "ivadd9",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Keeps F and C; Common after IV",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "Cadd9"
+      ],
+      "numerals": [
+       "bVII7",
+       "Iadd9"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "A7",
+     "numeral": "VI7",
+     "lane": "D",
+     "tag": "Leads to Dm",
+     "why": "Predominant to dominant",
+     "then": {
+      "name": "Fonte",
+      "chords": [
+       "Dm(add9)",
+       "G7",
+       "Cadd9"
+      ],
+      "numerals": [
+       "iiadd9",
+       "V7",
+       "Iadd9"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am F G",
+   "style": "ninths",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cmaj9",
+     "numeral": "Imaj9",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in 50s progression; G resolves to Cmaj9",
+     "then": null
+    },
+    {
+     "chord": "Em7",
+     "numeral": "iii7",
+     "lane": "T",
+     "tag": "",
+     "why": "As in Royal road; Keeps G, B and D",
+     "then": {
+      "name": "iii–VI–ii–V",
+      "chords": [
+       "A7b9",
+       "Dm9",
+       "G13"
+      ],
+      "numerals": [
+       "VI7b9",
+       "ii9",
+       "V13"
+      ],
+      "lanes": [
+       "D",
+       "PD",
+       "D"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Am9",
+     "numeral": "vi9",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "As in IV–V–vi climb; Sidesteps the expected C",
+     "then": {
+      "name": "Jazz turnaround",
+      "chords": [
+       "Dm9",
+       "G13",
+       "C"
+      ],
+      "numerals": [
+       "ii9",
+       "V13",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C Am F G",
+   "style": "ninths",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Abmaj9",
+     "numeral": "bVImaj9",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb13",
+       "C"
+      ],
+      "numerals": [
+       "bVII13",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G",
+   "style": "add9",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cadd9",
+     "numeral": "Iadd9",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in I–IV–I–V; G resolves to Cadd9",
+     "then": null
+    },
+    {
+     "chord": "Am(add9)",
+     "numeral": "viadd9",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "As in I–V–vi–IV; Sidesteps the expected C",
+     "then": {
+      "name": "I–V–vi–IV",
+      "chords": [
+       "Fadd9",
+       "C"
+      ],
+      "numerals": [
+       "IVadd9",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps G and B; Common after V",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am(add9)",
+       "Fadd9"
+      ],
+      "numerals": [
+       "viadd9",
+       "IVadd9"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C G",
+   "style": "add9",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Abadd9",
+     "numeral": "bVIadd9",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bbadd9",
+       "C"
+      ],
+      "numerals": [
+       "bVIIadd9",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C7 F7 C7 G7",
+   "style": "ninths",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "C13",
+     "numeral": "I13",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in 12-bar blues; G7 resolves to C13",
+     "then": null
+    },
+    {
+     "chord": "F13",
+     "numeral": "IV13",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in 12-bar blues; Common after V",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "C7 F7 C7 G7",
+   "style": "ninths",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Ab13",
+     "numeral": "bVI13",
+     "lane": "D",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb13",
+       "C7"
+      ],
+      "numerals": [
+       "bVII13",
+       "I7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Cmaj7 C6 Dm7 G7",
+   "style": "sevenths",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Cmaj7",
+     "numeral": "Imaj7",
+     "lane": "T",
+     "tag": "Completes ii–V–I",
+     "why": "As in ii–V–I; G7 resolves to Cmaj7",
+     "then": null
+    },
+    {
+     "chord": "Em7",
+     "numeral": "iii7",
+     "lane": "T",
+     "tag": "",
+     "why": "As in iii–VI–ii–V; Keeps G, B and D",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am7",
+       "Fmaj7"
+      ],
+      "numerals": [
+       "vi7",
+       "IVmaj7"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Am7",
+     "numeral": "vi7",
+     "lane": "T",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "Jazz turnaround",
+      "chords": [
+       "Dm7",
+       "G7",
+       "Cmaj7"
+      ],
+      "numerals": [
+       "ii7",
+       "V7",
+       "Imaj7"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "prog": "Cmaj7 C6 Dm7 G7",
+   "style": "sevenths",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Abmaj7",
+     "numeral": "bVImaj7",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected C; Common after V",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bb7",
+       "Cmaj7"
+      ],
+      "numerals": [
+       "bVII7",
+       "Imaj7"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
    "prog": "C",
    "spice": false,
    "ideas": [
@@ -470,7 +1192,7 @@
      "numeral": "vi",
      "lane": "T",
      "tag": "Deceptive cadence",
-     "why": "Sidesteps the expected C",
+     "why": "As in IV–V–vi climb; Sidesteps the expected C",
      "then": {
       "name": "Circle progression",
       "chords": [
@@ -572,7 +1294,7 @@
      "numeral": "iii7",
      "lane": "T",
      "tag": "",
-     "why": "Keeps G, B and D; Common after V",
+     "why": "As in iii–VI–ii–V; Keeps G, B and D",
      "then": null
     }
    ]
@@ -679,7 +1401,7 @@
      "numeral": "iii",
      "lane": "T",
      "tag": "",
-     "why": "Keeps G and B; Common after V",
+     "why": "As in iii–VI–ii–V; Keeps G and B",
      "then": {
       "name": "Royal road",
       "chords": [
@@ -1237,7 +1959,7 @@
      "numeral": "#iv°7",
      "lane": "D",
      "tag": "Leads to C",
-     "why": "Keeps A, C and Eb; Common after IV",
+     "why": "As in Jazz blues; Keeps A, C and Eb",
      "then": null
     },
     {
@@ -1410,7 +2132,7 @@
      "numeral": "vi",
      "lane": "T",
      "tag": "Deceptive cadence",
-     "why": "Sidesteps the expected C",
+     "why": "As in IV–V–vi climb; Sidesteps the expected C",
      "then": {
       "name": "Circle progression",
       "chords": [
@@ -1516,6 +2238,29 @@
      "then": null
     },
     {
+     "chord": "Em7",
+     "numeral": "iii7",
+     "lane": "T",
+     "tag": "",
+     "why": "As in iii–VI–ii–V; Keeps G, B and D",
+     "then": {
+      "name": "Royal road",
+      "chords": [
+       "Am7",
+       "Fmaj7"
+      ],
+      "numerals": [
+       "vi7",
+       "IVmaj7"
+      ],
+      "lanes": [
+       "T",
+       "PD"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
      "chord": "Am7",
      "numeral": "vi7",
      "lane": "T",
@@ -1539,29 +2284,6 @@
        "T"
       ],
       "returnsHome": true
-     }
-    },
-    {
-     "chord": "Em7",
-     "numeral": "iii7",
-     "lane": "T",
-     "tag": "",
-     "why": "Keeps G, B and D; Common after V",
-     "then": {
-      "name": "Royal road",
-      "chords": [
-       "Am7",
-       "Fmaj7"
-      ],
-      "numerals": [
-       "vi7",
-       "IVmaj7"
-      ],
-      "lanes": [
-       "T",
-       "PD"
-      ],
-      "returnsHome": false
      }
     }
    ]
@@ -1829,6 +2551,32 @@
       ],
       "returnsHome": true
      }
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps A and C",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "F",
+       "G",
+       "C"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
     }
    ]
   },
@@ -2036,7 +2784,7 @@
      "numeral": "vi",
      "lane": "T",
      "tag": "",
-     "why": "E7 resolves to Am",
+     "why": "E7 resolves to Am; Common after III",
      "then": {
       "name": "50s progression",
       "chords": [
@@ -2134,7 +2882,22 @@
      "lane": "T",
      "tag": "Completes ii–V–I",
      "why": "As in Tritone sub ii–V–I; Db7 resolves to Cmaj7",
-     "then": null
+     "then": {
+      "name": "Chromatic turnaround",
+      "chords": [
+       "Ebdim7",
+       "Dm7"
+      ],
+      "numerals": [
+       "biii°7",
+       "ii7"
+      ],
+      "lanes": [
+       "D",
+       "PD"
+      ],
+      "returnsHome": true
+     }
     }
    ]
   },
@@ -2162,22 +2925,22 @@
      "numeral": "ii7",
      "lane": "PD",
      "tag": "Completes ii–V",
-     "why": "A7 resolves to Dm7; Common after VI",
+     "why": "As in iii–VI–ii–V; A7 resolves to Dm7",
      "then": {
-      "name": "Fonte",
+      "name": "iii–VI–ii–V",
       "chords": [
        "G7",
-       "Cmaj7"
+       "Em7"
       ],
       "numerals": [
        "V7",
-       "Imaj7"
+       "iii7"
       ],
       "lanes": [
        "D",
        "T"
       ],
-      "returnsHome": false
+      "returnsHome": true
      }
     }
    ]
@@ -2191,6 +2954,14 @@
    "prog": "Em7 A7",
    "spice": true,
    "ideas": [
+    {
+     "chord": "Ebm7",
+     "numeral": "biii7",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in Descending ii–Vs; Common after VI",
+     "then": null
+    },
     {
      "chord": "D7",
      "numeral": "II7",
@@ -2711,7 +3482,7 @@
      "numeral": "III7",
      "lane": "D",
      "tag": "Leads to Am",
-     "why": "Keeps B and D",
+     "why": "Keeps B and D; Common after vii°",
      "then": null
     }
    ]
@@ -2817,7 +3588,7 @@
      "numeral": "I",
      "lane": "T",
      "tag": "Authentic cadence",
-     "why": "As in I–V–vi–iii–IV; G resolves to C",
+     "why": "G resolves to C; Common after V",
      "then": null
     },
     {
@@ -2848,7 +3619,7 @@
      "numeral": "vi",
      "lane": "T",
      "tag": "Deceptive cadence",
-     "why": "Sidesteps the expected C",
+     "why": "As in IV–V–vi climb; Sidesteps the expected C",
      "then": {
       "name": "50s progression",
       "chords": [
@@ -2996,7 +3767,7 @@
      "numeral": "ii",
      "lane": "PD",
      "tag": "",
-     "why": "Common after vi",
+     "why": "Tonic to predominant",
      "then": {
       "name": "Circle progression",
       "chords": [
@@ -3205,19 +3976,16 @@
      "numeral": "V",
      "lane": "D",
      "tag": "",
-     "why": "Tonic to dominant",
+     "why": "Common after vi",
      "then": {
-      "name": "Three-chord trick",
+      "name": "vi–V–IV fall",
       "chords": [
-       "C",
        "F"
       ],
       "numerals": [
-       "I",
        "IV"
       ],
       "lanes": [
-       "T",
        "PD"
       ],
       "returnsHome": false
@@ -3242,6 +4010,29 @@
    "prog": "C Am",
    "spice": true,
    "ideas": [
+    {
+     "chord": "Fm",
+     "numeral": "iv",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "As in I–vi–iv–bVII; Moves 2 semitones in all",
+     "then": {
+      "name": "Backdoor ii–V",
+      "chords": [
+       "Bb7",
+       "C"
+      ],
+      "numerals": [
+       "bVII7",
+       "I"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
     {
      "chord": "D7",
      "numeral": "II7",
@@ -3576,6 +4367,14 @@
      }
     },
     {
+     "chord": "Em",
+     "numeral": "iii",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps E and G",
+     "then": null
+    },
+    {
      "chord": "G",
      "numeral": "V",
      "lane": "D",
@@ -3594,14 +4393,6 @@
       ],
       "returnsHome": false
      }
-    },
-    {
-     "chord": "Em",
-     "numeral": "iii",
-     "lane": "T",
-     "tag": "",
-     "why": "Keeps E and G",
-     "then": null
     }
    ]
   },
@@ -3714,6 +4505,14 @@
       ],
       "returnsHome": true
      }
+    },
+    {
+     "chord": "Am",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps A and C",
+     "then": null
     }
    ]
   },
@@ -3936,9 +4735,200 @@
     "mode": "minor",
     "name": "A"
    },
+   "prog": "Am9 Dm9 E7b9",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am9",
+     "numeral": "i9",
+     "lane": "T",
+     "tag": "Authentic cadence",
+     "why": "As in i–iv–V; E7b9 resolves to Am9",
+     "then": null
+    },
+    {
+     "chord": "Fmaj9",
+     "numeral": "VImaj9",
+     "lane": "PD",
+     "tag": "Deceptive cadence",
+     "why": "Sidesteps the expected Am",
+     "then": {
+      "name": "Minor turnaround",
+      "chords": [
+       "Bm7b5",
+       "E7b9",
+       "Am9"
+      ],
+      "numerals": [
+       "iiø7",
+       "V7b9",
+       "i9"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am9 Dm9 E7b9",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "A",
+     "numeral": "I",
+     "lane": "T",
+     "tag": "Picardy third",
+     "why": "As in Picardy third; Common after V",
+     "then": null
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Turns back to Am9 at bar 4; Keeps G#, B and D",
+     "then": null
+    },
+    {
+     "chord": "Bb7#11",
+     "numeral": "bII7#11",
+     "lane": "D",
+     "tag": "Tritone sub",
+     "why": "Points to Am; Turns back to Am9 at bar 4",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am(add9) Fadd9 Cadd9 G",
+   "spice": false,
+   "ideas": [
+    {
+     "chord": "Am(add9)",
+     "numeral": "iadd9",
+     "lane": "T",
+     "tag": "",
+     "why": "As in i–VI–III–VII; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "Fadd9",
+     "numeral": "VIadd9",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in i–III–VII–VI; Common after VII",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "E",
+       "Am(add9)"
+      ],
+      "numerals": [
+       "V",
+       "iadd9"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
+     "chord": "Cadd9",
+     "numeral": "IIIadd9",
+     "lane": "T",
+     "tag": "",
+     "why": "Dominant to tonic",
+     "then": {
+      "name": "Circle progression",
+      "chords": [
+       "Fadd9",
+       "Bm7b5",
+       "E7"
+      ],
+      "numerals": [
+       "VIadd9",
+       "iiø7",
+       "V7"
+      ],
+      "lanes": [
+       "PD",
+       "PD",
+       "D"
+      ],
+      "returnsHome": false
+     }
+    },
+    {
+     "chord": "Em",
+     "numeral": "v",
+     "lane": "D",
+     "tag": "",
+     "why": "Keeps G and B",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "prog": "Am(add9) Fadd9 Cadd9 G",
+   "spice": true,
+   "ideas": [
+    {
+     "chord": "Dadd9",
+     "numeral": "IVadd9",
+     "lane": "PD",
+     "tag": "From A major",
+     "why": "As in i–III–VII–IV; Common after VII",
+     "then": null
+    },
+    {
+     "chord": "G#dim7",
+     "numeral": "vii°7",
+     "lane": "D",
+     "tag": "Leads to Am",
+     "why": "Keeps B and D",
+     "then": null
+    }
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
    "prog": "Am",
    "spice": false,
    "ideas": [
+    {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Moves 2 semitones in all; Common after i",
+     "then": null
+    },
     {
      "chord": "Dm",
      "numeral": "iv",
@@ -3961,14 +4951,6 @@
       ],
       "returnsHome": true
      }
-    },
-    {
-     "chord": "E",
-     "numeral": "V",
-     "lane": "D",
-     "tag": "",
-     "why": "Moves 2 semitones in all; Common after i",
-     "then": null
     },
     {
      "chord": "F",
@@ -4134,12 +5116,27 @@
      "then": null
     },
     {
-     "chord": "Em",
-     "numeral": "v",
-     "lane": "D",
+     "chord": "Dm",
+     "numeral": "iv",
+     "lane": "PD",
      "tag": "",
-     "why": "Predominant to dominant",
-     "then": null
+     "why": "Keeps F and A; Common after VI",
+     "then": {
+      "name": "iv–vii°7–i",
+      "chords": [
+       "G#dim7",
+       "Am"
+      ],
+      "numerals": [
+       "vii°7",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
     }
    ]
   },
@@ -4344,19 +5341,34 @@
      }
     },
     {
+     "chord": "F",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in i–III–VII–VI; Common after VII",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "E",
+       "Am"
+      ],
+      "numerals": [
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
      "chord": "Em",
      "numeral": "v",
      "lane": "D",
      "tag": "",
      "why": "Keeps G and B",
-     "then": null
-    },
-    {
-     "chord": "E",
-     "numeral": "V",
-     "lane": "D",
-     "tag": "",
-     "why": "Predominant to dominant",
      "then": null
     }
    ]
@@ -4410,7 +5422,7 @@
      "numeral": "III",
      "lane": "T",
      "tag": "",
-     "why": "Dominant to tonic",
+     "why": "As in Relative-major lift; Common after VII",
      "then": null
     },
     {
@@ -4491,6 +5503,14 @@
    "spice": false,
    "ideas": [
     {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "As in i–iv–V; Common after iv",
+     "then": null
+    },
+    {
      "chord": "G",
      "numeral": "VII",
      "lane": "D",
@@ -4515,14 +5535,6 @@
       ],
       "returnsHome": true
      }
-    },
-    {
-     "chord": "E",
-     "numeral": "V",
-     "lane": "D",
-     "tag": "",
-     "why": "As in i–iv–V; Common after iv",
-     "then": null
     },
     {
      "chord": "Am",
@@ -4620,6 +5632,14 @@
      }
     },
     {
+     "chord": "E",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Common after VI",
+     "then": null
+    },
+    {
      "chord": "C",
      "numeral": "III",
      "lane": "T",
@@ -4643,20 +5663,27 @@
      }
     },
     {
-     "chord": "E",
-     "numeral": "V",
-     "lane": "D",
+     "chord": "Dm",
+     "numeral": "iv",
+     "lane": "PD",
      "tag": "",
-     "why": "Common after VI",
-     "then": null
-    },
-    {
-     "chord": "Em",
-     "numeral": "v",
-     "lane": "D",
-     "tag": "",
-     "why": "Predominant to dominant",
-     "then": null
+     "why": "Keeps F and A; Common after VI",
+     "then": {
+      "name": "iv–vii°7–i",
+      "chords": [
+       "G#dim7",
+       "Am"
+      ],
+      "numerals": [
+       "vii°7",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
     }
    ]
   },
@@ -4851,14 +5878,17 @@
      "tag": "",
      "why": "As in Circle progression; Keeps A and C",
      "then": {
-      "name": "Plagal cadence",
+      "name": "iv–vii°7–i",
       "chords": [
+       "G#dim7",
        "Am7"
       ],
       "numerals": [
+       "vii°7",
        "i7"
       ],
       "lanes": [
+       "D",
        "T"
       ],
       "returnsHome": false
@@ -4915,6 +5945,14 @@
    "spice": true,
    "ideas": [
     {
+     "chord": "B7",
+     "numeral": "II7",
+     "lane": "D",
+     "tag": "Leads to E",
+     "why": "As in i–II7–iiø–V; Common after i",
+     "then": null
+    },
+    {
      "chord": "D7",
      "numeral": "IV7",
      "lane": "PD",
@@ -4935,27 +5973,12 @@
      }
     },
     {
-     "chord": "Bb",
-     "numeral": "bII",
+     "chord": "Bbm7",
+     "numeral": "bii7",
      "lane": "PD",
-     "tag": "Neapolitan",
+     "tag": "",
      "why": "Common after i",
-     "then": {
-      "name": "Neapolitan cadence",
-      "chords": [
-       "E7",
-       "Am7"
-      ],
-      "numerals": [
-       "V7",
-       "i7"
-      ],
-      "lanes": [
-       "D",
-       "T"
-      ],
-      "returnsHome": false
-     }
+     "then": null
     }
    ]
   },
@@ -5425,7 +6448,7 @@
      "numeral": "III",
      "lane": "T",
      "tag": "",
-     "why": "Dominant to tonic",
+     "why": "As in Relative-major lift; Common after VII",
      "then": null
     },
     {
@@ -5681,19 +6704,34 @@
      }
     },
     {
+     "chord": "C",
+     "numeral": "VI",
+     "lane": "PD",
+     "tag": "",
+     "why": "As in i–III–VII–VI; Common after VII",
+     "then": {
+      "name": "Andalusian cadence",
+      "chords": [
+       "B",
+       "Em"
+      ],
+      "numerals": [
+       "V",
+       "i"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
+    },
+    {
      "chord": "Bm",
      "numeral": "v",
      "lane": "D",
      "tag": "",
      "why": "Keeps D and F#",
-     "then": null
-    },
-    {
-     "chord": "B",
-     "numeral": "V",
-     "lane": "D",
-     "tag": "",
-     "why": "Predominant to dominant",
      "then": null
     }
    ]
@@ -5787,19 +6825,11 @@
      }
     },
     {
-     "chord": "A",
-     "numeral": "V",
-     "lane": "D",
-     "tag": "",
-     "why": "As in La Folia; Moves 2 semitones in all",
-     "then": null
-    },
-    {
      "chord": "Gm",
      "numeral": "iv",
      "lane": "PD",
      "tag": "",
-     "why": "Common after i",
+     "why": "As in i–iv–VI–VII; Common after i",
      "then": {
       "name": "i–iv–V",
       "chords": [
@@ -5816,6 +6846,14 @@
       ],
       "returnsHome": true
      }
+    },
+    {
+     "chord": "A",
+     "numeral": "V",
+     "lane": "D",
+     "tag": "",
+     "why": "Moves 2 semitones in all; Common after i",
+     "then": null
     }
    ]
   },
@@ -5893,6 +6931,32 @@
      "tag": "",
      "why": "Predominant to dominant",
      "then": null
+    },
+    {
+     "chord": "C#m",
+     "numeral": "vi",
+     "lane": "T",
+     "tag": "",
+     "why": "Keeps C# and E",
+     "then": {
+      "name": "50s progression",
+      "chords": [
+       "A",
+       "B",
+       "E"
+      ],
+      "numerals": [
+       "IV",
+       "V",
+       "I"
+      ],
+      "lanes": [
+       "PD",
+       "D",
+       "T"
+      ],
+      "returnsHome": true
+     }
     },
     {
      "chord": "F#m",
@@ -6040,7 +7104,7 @@
      "numeral": "iii7",
      "lane": "T",
      "tag": "",
-     "why": "Keeps Ab, C and Eb; Common after V",
+     "why": "As in iii–VI–ii–V; Keeps Ab, C and Eb",
      "then": null
     }
    ]
@@ -6144,7 +7208,7 @@
      "numeral": "iii7",
      "lane": "T",
      "tag": "",
-     "why": "Keeps C#, E# and G#; Common after V",
+     "why": "As in iii–VI–ii–V; Keeps C#, E# and G#",
      "then": null
     }
    ]
@@ -6317,7 +7381,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
       },
       {
        "name": "Three-chord trick",
@@ -6337,7 +7402,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
       },
       {
        "name": "I–IV–I–V",
@@ -6360,7 +7426,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
       },
       {
        "name": "Mixolydian vamp",
@@ -6377,7 +7444,88 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "Circle progression",
+       "chords": [
+        "C",
+        "F",
+        "Bdim",
+        "Em",
+        "Am",
+        "Dm",
+        "G"
+       ],
+       "numerals": [
+        "I",
+        "IV",
+        "vii°",
+        "iii",
+        "vi",
+        "ii",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D",
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "triads"
+      },
+      {
+       "name": "Double dominant",
+       "chords": [
+        "C",
+        "D7",
+        "G7"
+       ],
+       "numerals": [
+        "I",
+        "II7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "triads"
+      },
+      {
+       "name": "Monte",
+       "chords": [
+        "C7",
+        "F",
+        "D7",
+        "G"
+       ],
+       "numerals": [
+        "I7",
+        "IV",
+        "II7",
+        "V"
+       ],
+       "lanes": [
+        "D",
+        "PD",
+        "D",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "triads"
       }
      ]
     },
@@ -6405,7 +7553,8 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
       },
       {
        "name": "I–bVII–IV",
@@ -6428,7 +7577,8 @@
         "T"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
       },
       {
        "name": "12-bar blues",
@@ -6468,7 +7618,8 @@
         1,
         1
        ],
-       "tonic": "C"
+       "tonic": "C",
+       "style": "sevenths"
       },
       {
        "name": "I7–IV7 vamp",
@@ -6485,7 +7636,145 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "sevenths"
+      }
+     ],
+     "more": [
+      {
+       "name": "I–bIII–IV",
+       "chords": [
+        "C",
+        "Eb",
+        "F"
+       ],
+       "numerals": [
+        "I",
+        "bIII",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "triads"
+      },
+      {
+       "name": "Quick-change blues",
+       "chords": [
+        "C7",
+        "F7",
+        "C7",
+        "F7",
+        "C7",
+        "G7",
+        "F7",
+        "C7",
+        "G7"
+       ],
+       "numerals": [
+        "I7",
+        "IV7",
+        "I7",
+        "IV7",
+        "I7",
+        "V7",
+        "IV7",
+        "I7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "PD",
+        "T",
+        "D",
+        "PD",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        1,
+        1,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "C",
+       "style": "sevenths"
+      },
+      {
+       "name": "8-bar blues",
+       "chords": [
+        "C7",
+        "G7",
+        "F7",
+        "C7",
+        "G7",
+        "C7",
+        "G7"
+       ],
+       "numerals": [
+        "I7",
+        "V7",
+        "IV7",
+        "I7",
+        "V7",
+        "I7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "T",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "C",
+       "style": "sevenths"
+      },
+      {
+       "name": "I–III–IV–iv",
+       "chords": [
+        "C",
+        "E",
+        "F",
+        "Fm"
+       ],
+       "numerals": [
+        "I",
+        "III",
+        "IV",
+        "iv"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "triads"
       }
      ]
     },
@@ -6513,7 +7802,32 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "sevenths"
+      },
+      {
+       "name": "iii–VI–ii–V",
+       "chords": [
+        "Em7",
+        "A7b9",
+        "Dm9",
+        "G13"
+       ],
+       "numerals": [
+        "iii7",
+        "VI7b9",
+        "ii9",
+        "V13"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "ninths"
       },
       {
        "name": "I–VI7–ii–V",
@@ -6536,8 +7850,211 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "sevenths"
       },
+      {
+       "name": "I–IV vamp",
+       "chords": [
+        "Cmaj7",
+        "Fmaj7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "IVmaj7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "sevenths"
+      }
+     ],
+     "more": [
+      {
+       "name": "Tritone turnaround",
+       "chords": [
+        "Cmaj7",
+        "Eb7",
+        "Ab7",
+        "Db7#11"
+       ],
+       "numerals": [
+        "Imaj7",
+        "bIII7",
+        "bVI7",
+        "bII7#11"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "D",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "sevenths"
+      },
+      {
+       "name": "Chromatic turnaround",
+       "chords": [
+        "Cmaj7",
+        "Ebdim7",
+        "Dm9",
+        "Db7#11"
+       ],
+       "numerals": [
+        "Imaj7",
+        "biii°7",
+        "ii9",
+        "bII7#11"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "ninths"
+      },
+      {
+       "name": "ii–V to IV",
+       "chords": [
+        "Cmaj9",
+        "Gm9",
+        "C13",
+        "Fmaj7",
+        "Fm7",
+        "Bb9"
+       ],
+       "numerals": [
+        "Imaj9",
+        "v9",
+        "I13",
+        "IVmaj7",
+        "iv7",
+        "bVII9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "ninths"
+      },
+      {
+       "name": "Jazz blues",
+       "chords": [
+        "C13",
+        "F9",
+        "C13",
+        "F9",
+        "F#dim7",
+        "C13",
+        "A7b9",
+        "Dm9",
+        "G13",
+        "C13",
+        "G7#9"
+       ],
+       "numerals": [
+        "I13",
+        "IV9",
+        "I13",
+        "IV9",
+        "#iv°7",
+        "I13",
+        "VI7b9",
+        "ii9",
+        "V13",
+        "I13",
+        "V7#9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "PD",
+        "D",
+        "T",
+        "D",
+        "PD",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "C",
+       "style": "ninths"
+      },
+      {
+       "name": "Lydian I–vii7 vamp",
+       "chords": [
+        "Cmaj7#11",
+        "Bm7"
+       ],
+       "numerals": [
+        "Imaj7#11",
+        "vii7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "ninths"
+      },
+      {
+       "name": "I–#i°7–ii–V",
+       "chords": [
+        "C",
+        "C#dim7",
+        "Dm7",
+        "G7"
+       ],
+       "numerals": [
+        "I",
+        "#i°7",
+        "ii7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "sevenths"
+      }
+     ]
+    },
+    {
+     "name": "Bossa nova",
+     "items": [
       {
        "name": "I–II7–ii–V",
        "chords": [
@@ -6559,24 +8076,112 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "sevenths"
       },
       {
-       "name": "I–IV vamp",
+       "name": "I–II7–ii–bII7",
        "chords": [
         "Cmaj7",
-        "Fmaj7"
+        "D7#11",
+        "Dm9",
+        "Db7#11"
        ],
        "numerals": [
         "Imaj7",
-        "IVmaj7"
+        "II7#11",
+        "ii9",
+        "bII7#11"
        ],
        "lanes": [
         "T",
-        "PD"
+        "D",
+        "PD",
+        "D"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "ninths"
+      },
+      {
+       "name": "Rising diminished line",
+       "chords": [
+        "C6/9",
+        "C#dim7",
+        "Dm9",
+        "D#dim7",
+        "Em7",
+        "A7b9",
+        "Dm9",
+        "G13"
+       ],
+       "numerals": [
+        "I6/9",
+        "#i°7",
+        "ii9",
+        "#ii°7",
+        "iii7",
+        "VI7b9",
+        "ii9",
+        "V13"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D",
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "ninths"
+      },
+      {
+       "name": "I–vi–iv–bVII",
+       "chords": [
+        "Cmaj9",
+        "Am9",
+        "Fm9",
+        "Bb13"
+       ],
+       "numerals": [
+        "Imaj9",
+        "vi9",
+        "iv9",
+        "bVII13"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "ninths"
+      }
+     ],
+     "more": [
+      {
+       "name": "ii–V vamp",
+       "chords": [
+        "Dm9",
+        "G13"
+       ],
+       "numerals": [
+        "ii9",
+        "V13"
+       ],
+       "lanes": [
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "ninths"
       }
      ]
     },
@@ -6604,7 +8209,32 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
+      },
+      {
+       "name": "I–vi–ii–V",
+       "chords": [
+        "C",
+        "Am",
+        "Dm",
+        "G"
+       ],
+       "numerals": [
+        "I",
+        "vi",
+        "ii",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "triads"
       },
       {
        "name": "I–V–vi–IV",
@@ -6627,7 +8257,8 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
       },
       {
        "name": "I–I7–IV–iv",
@@ -6650,7 +8281,99 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "Royal road",
+       "chords": [
+        "Fmaj7",
+        "G7",
+        "Em7",
+        "Am7"
+       ],
+       "numerals": [
+        "IVmaj7",
+        "V7",
+        "iii7",
+        "vi7"
+       ],
+       "lanes": [
+        "PD",
+        "D",
+        "T",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "sevenths"
+      }
+     ]
+    },
+    {
+     "name": "Post-rock and cinematic",
+     "items": [
+      {
+       "name": "IV–V–vi climb",
+       "chords": [
+        "Fadd9",
+        "Gsus4",
+        "Am7"
+       ],
+       "numerals": [
+        "IVadd9",
+        "Vsus4",
+        "vi7"
+       ],
+       "lanes": [
+        "PD",
+        "D",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "add9"
+      },
+      {
+       "name": "I–iii pendulum",
+       "chords": [
+        "Cmaj7",
+        "Em7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "iii7"
+       ],
+       "lanes": [
+        "T",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "sevenths"
+      },
+      {
+       "name": "I–bVI–bVII swell",
+       "chords": [
+        "Cadd9",
+        "Abmaj7",
+        "Bbadd9"
+       ],
+       "numerals": [
+        "Iadd9",
+        "bVImaj7",
+        "bVIIadd9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "add9"
       },
       {
        "name": "Lydian vamp",
@@ -6667,7 +8390,49 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "C"
+       "tonic": "C",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "Mixolydian I–v–IV",
+       "chords": [
+        "Cadd9",
+        "Gm7",
+        "Fmaj7"
+       ],
+       "numerals": [
+        "Iadd9",
+        "v7",
+        "IVmaj7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "sevenths"
+      },
+      {
+       "name": "Chromatic mediant",
+       "chords": [
+        "C",
+        "Ab"
+       ],
+       "numerals": [
+        "I",
+        "bVI"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "C",
+       "style": "triads"
       }
      ]
     },
@@ -6695,9 +8460,11 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "triads"
       }
-     ]
+     ],
+     "more": []
     }
    ]
   },
@@ -6744,7 +8511,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
       },
       {
        "name": "Three-chord trick",
@@ -6764,7 +8532,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
       },
       {
        "name": "I–IV–I–V",
@@ -6787,7 +8556,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
       },
       {
        "name": "Mixolydian vamp",
@@ -6804,7 +8574,88 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "Circle progression",
+       "chords": [
+        "G",
+        "C",
+        "F#dim",
+        "Bm",
+        "Em",
+        "Am",
+        "D"
+       ],
+       "numerals": [
+        "I",
+        "IV",
+        "vii°",
+        "iii",
+        "vi",
+        "ii",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D",
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "triads"
+      },
+      {
+       "name": "Double dominant",
+       "chords": [
+        "G",
+        "A7",
+        "D7"
+       ],
+       "numerals": [
+        "I",
+        "II7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "triads"
+      },
+      {
+       "name": "Monte",
+       "chords": [
+        "G7",
+        "C",
+        "A7",
+        "D"
+       ],
+       "numerals": [
+        "I7",
+        "IV",
+        "II7",
+        "V"
+       ],
+       "lanes": [
+        "D",
+        "PD",
+        "D",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "triads"
       }
      ]
     },
@@ -6832,7 +8683,8 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
       },
       {
        "name": "I–bVII–IV",
@@ -6855,7 +8707,8 @@
         "T"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
       },
       {
        "name": "12-bar blues",
@@ -6895,7 +8748,8 @@
         1,
         1
        ],
-       "tonic": "G"
+       "tonic": "G",
+       "style": "sevenths"
       },
       {
        "name": "I7–IV7 vamp",
@@ -6912,7 +8766,145 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "sevenths"
+      }
+     ],
+     "more": [
+      {
+       "name": "I–bIII–IV",
+       "chords": [
+        "G",
+        "Bb",
+        "C"
+       ],
+       "numerals": [
+        "I",
+        "bIII",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "triads"
+      },
+      {
+       "name": "Quick-change blues",
+       "chords": [
+        "G7",
+        "C7",
+        "G7",
+        "C7",
+        "G7",
+        "D7",
+        "C7",
+        "G7",
+        "D7"
+       ],
+       "numerals": [
+        "I7",
+        "IV7",
+        "I7",
+        "IV7",
+        "I7",
+        "V7",
+        "IV7",
+        "I7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "PD",
+        "T",
+        "D",
+        "PD",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        1,
+        1,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "G",
+       "style": "sevenths"
+      },
+      {
+       "name": "8-bar blues",
+       "chords": [
+        "G7",
+        "D7",
+        "C7",
+        "G7",
+        "D7",
+        "G7",
+        "D7"
+       ],
+       "numerals": [
+        "I7",
+        "V7",
+        "IV7",
+        "I7",
+        "V7",
+        "I7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "T",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "G",
+       "style": "sevenths"
+      },
+      {
+       "name": "I–III–IV–iv",
+       "chords": [
+        "G",
+        "B",
+        "C",
+        "Cm"
+       ],
+       "numerals": [
+        "I",
+        "III",
+        "IV",
+        "iv"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "triads"
       }
      ]
     },
@@ -6940,7 +8932,32 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "sevenths"
+      },
+      {
+       "name": "iii–VI–ii–V",
+       "chords": [
+        "Bm7",
+        "E7b9",
+        "Am9",
+        "D13"
+       ],
+       "numerals": [
+        "iii7",
+        "VI7b9",
+        "ii9",
+        "V13"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "ninths"
       },
       {
        "name": "I–VI7–ii–V",
@@ -6963,8 +8980,211 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "sevenths"
       },
+      {
+       "name": "I–IV vamp",
+       "chords": [
+        "Gmaj7",
+        "Cmaj7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "IVmaj7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "sevenths"
+      }
+     ],
+     "more": [
+      {
+       "name": "Tritone turnaround",
+       "chords": [
+        "Gmaj7",
+        "Bb7",
+        "Eb7",
+        "Ab7#11"
+       ],
+       "numerals": [
+        "Imaj7",
+        "bIII7",
+        "bVI7",
+        "bII7#11"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "D",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "sevenths"
+      },
+      {
+       "name": "Chromatic turnaround",
+       "chords": [
+        "Gmaj7",
+        "Bbdim7",
+        "Am9",
+        "Ab7#11"
+       ],
+       "numerals": [
+        "Imaj7",
+        "biii°7",
+        "ii9",
+        "bII7#11"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "ninths"
+      },
+      {
+       "name": "ii–V to IV",
+       "chords": [
+        "Gmaj9",
+        "Dm9",
+        "G13",
+        "Cmaj7",
+        "Cm7",
+        "F9"
+       ],
+       "numerals": [
+        "Imaj9",
+        "v9",
+        "I13",
+        "IVmaj7",
+        "iv7",
+        "bVII9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "ninths"
+      },
+      {
+       "name": "Jazz blues",
+       "chords": [
+        "G13",
+        "C9",
+        "G13",
+        "C9",
+        "C#dim7",
+        "G13",
+        "E7b9",
+        "Am9",
+        "D13",
+        "G13",
+        "D7#9"
+       ],
+       "numerals": [
+        "I13",
+        "IV9",
+        "I13",
+        "IV9",
+        "#iv°7",
+        "I13",
+        "VI7b9",
+        "ii9",
+        "V13",
+        "I13",
+        "V7#9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T",
+        "PD",
+        "D",
+        "T",
+        "D",
+        "PD",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "G",
+       "style": "ninths"
+      },
+      {
+       "name": "Lydian I–vii7 vamp",
+       "chords": [
+        "Gmaj7#11",
+        "F#m7"
+       ],
+       "numerals": [
+        "Imaj7#11",
+        "vii7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "ninths"
+      },
+      {
+       "name": "I–#i°7–ii–V",
+       "chords": [
+        "G",
+        "G#dim7",
+        "Am7",
+        "D7"
+       ],
+       "numerals": [
+        "I",
+        "#i°7",
+        "ii7",
+        "V7"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "sevenths"
+      }
+     ]
+    },
+    {
+     "name": "Bossa nova",
+     "items": [
       {
        "name": "I–II7–ii–V",
        "chords": [
@@ -6986,24 +9206,112 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "sevenths"
       },
       {
-       "name": "I–IV vamp",
+       "name": "I–II7–ii–bII7",
        "chords": [
         "Gmaj7",
-        "Cmaj7"
+        "A7#11",
+        "Am9",
+        "Ab7#11"
        ],
        "numerals": [
         "Imaj7",
-        "IVmaj7"
+        "II7#11",
+        "ii9",
+        "bII7#11"
        ],
        "lanes": [
         "T",
-        "PD"
+        "D",
+        "PD",
+        "D"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "ninths"
+      },
+      {
+       "name": "Rising diminished line",
+       "chords": [
+        "G6/9",
+        "G#dim7",
+        "Am9",
+        "A#dim7",
+        "Bm7",
+        "E7b9",
+        "Am9",
+        "D13"
+       ],
+       "numerals": [
+        "I6/9",
+        "#i°7",
+        "ii9",
+        "#ii°7",
+        "iii7",
+        "VI7b9",
+        "ii9",
+        "V13"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D",
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "ninths"
+      },
+      {
+       "name": "I–vi–iv–bVII",
+       "chords": [
+        "Gmaj9",
+        "Em9",
+        "Cm9",
+        "F13"
+       ],
+       "numerals": [
+        "Imaj9",
+        "vi9",
+        "iv9",
+        "bVII13"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "ninths"
+      }
+     ],
+     "more": [
+      {
+       "name": "ii–V vamp",
+       "chords": [
+        "Am9",
+        "D13"
+       ],
+       "numerals": [
+        "ii9",
+        "V13"
+       ],
+       "lanes": [
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "ninths"
       }
      ]
     },
@@ -7031,7 +9339,32 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
+      },
+      {
+       "name": "I–vi–ii–V",
+       "chords": [
+        "G",
+        "Em",
+        "Am",
+        "D"
+       ],
+       "numerals": [
+        "I",
+        "vi",
+        "ii",
+        "V"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "triads"
       },
       {
        "name": "I–V–vi–IV",
@@ -7054,7 +9387,8 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
       },
       {
        "name": "I–I7–IV–iv",
@@ -7077,7 +9411,99 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "Royal road",
+       "chords": [
+        "Cmaj7",
+        "D7",
+        "Bm7",
+        "Em7"
+       ],
+       "numerals": [
+        "IVmaj7",
+        "V7",
+        "iii7",
+        "vi7"
+       ],
+       "lanes": [
+        "PD",
+        "D",
+        "T",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "sevenths"
+      }
+     ]
+    },
+    {
+     "name": "Post-rock and cinematic",
+     "items": [
+      {
+       "name": "IV–V–vi climb",
+       "chords": [
+        "Cadd9",
+        "Dsus4",
+        "Em7"
+       ],
+       "numerals": [
+        "IVadd9",
+        "Vsus4",
+        "vi7"
+       ],
+       "lanes": [
+        "PD",
+        "D",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "add9"
+      },
+      {
+       "name": "I–iii pendulum",
+       "chords": [
+        "Gmaj7",
+        "Bm7"
+       ],
+       "numerals": [
+        "Imaj7",
+        "iii7"
+       ],
+       "lanes": [
+        "T",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "sevenths"
+      },
+      {
+       "name": "I–bVI–bVII swell",
+       "chords": [
+        "Gadd9",
+        "Ebmaj7",
+        "Fadd9"
+       ],
+       "numerals": [
+        "Iadd9",
+        "bVImaj7",
+        "bVIIadd9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "add9"
       },
       {
        "name": "Lydian vamp",
@@ -7094,7 +9520,49 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "G"
+       "tonic": "G",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "Mixolydian I–v–IV",
+       "chords": [
+        "Gadd9",
+        "Dm7",
+        "Cmaj7"
+       ],
+       "numerals": [
+        "Iadd9",
+        "v7",
+        "IVmaj7"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "sevenths"
+      },
+      {
+       "name": "Chromatic mediant",
+       "chords": [
+        "G",
+        "Eb"
+       ],
+       "numerals": [
+        "I",
+        "bVI"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "G",
+       "style": "triads"
       }
      ]
     },
@@ -7122,9 +9590,11 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "E"
+       "tonic": "E",
+       "style": "triads"
       }
-     ]
+     ],
+     "more": []
     }
    ]
   },
@@ -7156,7 +9626,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "triads"
       },
       {
        "name": "i–iv–v",
@@ -7176,7 +9647,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "triads"
       },
       {
        "name": "Double tonic",
@@ -7193,7 +9665,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "triads"
       },
       {
        "name": "La Folia",
@@ -7228,7 +9701,31 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "i–I7–iv",
+       "chords": [
+        "Am",
+        "A7",
+        "Dm"
+       ],
+       "numerals": [
+        "i",
+        "I7",
+        "iv"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "triads"
       }
      ]
     },
@@ -7256,7 +9753,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "triads"
       },
       {
        "name": "Dorian vamp",
@@ -7273,7 +9771,8 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "sevenths"
       },
       {
        "name": "Minor blues",
@@ -7313,7 +9812,8 @@
         1,
         1
        ],
-       "tonic": "A"
+       "tonic": "A",
+       "style": "sevenths"
       },
       {
        "name": "Phrygian vamp",
@@ -7330,7 +9830,76 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "i–VI–VII",
+       "chords": [
+        "Am",
+        "F",
+        "G"
+       ],
+       "numerals": [
+        "i",
+        "VI",
+        "VII"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "triads"
+      },
+      {
+       "name": "i–III–VII–IV",
+       "chords": [
+        "Am",
+        "C",
+        "G",
+        "D"
+       ],
+       "numerals": [
+        "i",
+        "III",
+        "VII",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "triads"
+      },
+      {
+       "name": "i–III–IV",
+       "chords": [
+        "Am",
+        "C",
+        "D"
+       ],
+       "numerals": [
+        "i",
+        "III",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "triads"
       }
      ]
     },
@@ -7367,7 +9936,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "sevenths"
       },
       {
        "name": "i–iv vamp",
@@ -7384,7 +9954,8 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "sevenths"
       },
       {
        "name": "Minor turnaround",
@@ -7407,9 +9978,208 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "sevenths"
+      },
+      {
+       "name": "i–imaj7–i7–i6",
+       "chords": [
+        "Am",
+        "Am(maj7)",
+        "Am7",
+        "Am6"
+       ],
+       "numerals": [
+        "i",
+        "imaj7",
+        "i7",
+        "i6"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "T",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "ninths"
+      }
+     ],
+     "more": [
+      {
+       "name": "Jazz minor blues",
+       "chords": [
+        "Am9",
+        "A7b9",
+        "Dm9",
+        "Am9",
+        "F9",
+        "E7#9",
+        "Am9",
+        "E7#9"
+       ],
+       "numerals": [
+        "i9",
+        "I7b9",
+        "iv9",
+        "i9",
+        "VI9",
+        "V7#9",
+        "i9",
+        "V7#9"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "T",
+        "PD",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        3,
+        1,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "A",
+       "style": "ninths"
+      },
+      {
+       "name": "Dorian i–ii vamp",
+       "chords": [
+        "Am9",
+        "Bm7"
+       ],
+       "numerals": [
+        "i9",
+        "ii7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "ninths"
+      },
+      {
+       "name": "Half-step modal form",
+       "chords": [
+        "Am11",
+        "Bbm11",
+        "Am11"
+       ],
+       "numerals": [
+        "i11",
+        "bii11",
+        "i11"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T"
+       ],
+       "repeat": [
+        4,
+        2,
+        2
+       ],
+       "tonic": "A",
+       "style": "ninths"
       }
      ]
+    },
+    {
+     "name": "Bossa nova",
+     "items": [
+      {
+       "name": "i–iv–iiø–V",
+       "chords": [
+        "Am9",
+        "Dm9",
+        "Bm7b5",
+        "E7b9"
+       ],
+       "numerals": [
+        "i9",
+        "iv9",
+        "iiø7",
+        "V7b9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "ninths"
+      },
+      {
+       "name": "Minor cliché turnaround",
+       "chords": [
+        "Am",
+        "Am(maj7)",
+        "Am7",
+        "Am6",
+        "Fmaj7",
+        "E7b9"
+       ],
+       "numerals": [
+        "i",
+        "imaj7",
+        "i7",
+        "i6",
+        "VImaj7",
+        "V7b9"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "ninths"
+      },
+      {
+       "name": "i–II7–iiø–V",
+       "chords": [
+        "Am6",
+        "B7",
+        "Bm7b5",
+        "E7b9"
+       ],
+       "numerals": [
+        "i6",
+        "II7",
+        "iiø7",
+        "V7b9"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "ninths"
+      }
+     ],
+     "more": []
     },
     {
      "name": "Ballad and pop",
@@ -7435,9 +10205,107 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "triads"
       }
-     ]
+     ],
+     "more": []
+    },
+    {
+     "name": "Post-rock and cinematic",
+     "items": [
+      {
+       "name": "i–VI drone",
+       "chords": [
+        "Am(add9)",
+        "Fmaj7#11"
+       ],
+       "numerals": [
+        "iadd9",
+        "VImaj7#11"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "add9"
+      },
+      {
+       "name": "i–III–VII–VI",
+       "chords": [
+        "Am(add9)",
+        "Cadd9",
+        "G6",
+        "Fmaj7"
+       ],
+       "numerals": [
+        "iadd9",
+        "IIIadd9",
+        "VII6",
+        "VImaj7"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "add9"
+      },
+      {
+       "name": "i–v–VI–iv",
+       "chords": [
+        "Am7",
+        "Em7",
+        "Fmaj7",
+        "Dm9"
+       ],
+       "numerals": [
+        "i7",
+        "v7",
+        "VImaj7",
+        "iv9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "sevenths"
+      },
+      {
+       "name": "i–iv–VI–VII",
+       "chords": [
+        "Am(add9)",
+        "Dm7",
+        "Fmaj7",
+        "Gsus2"
+       ],
+       "numerals": [
+        "iadd9",
+        "iv7",
+        "VImaj7",
+        "VIIsus2"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "A",
+       "style": "add9"
+      }
+     ],
+     "more": []
     },
     {
      "name": "Flamenco",
@@ -7463,9 +10331,11 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "A"
+       "tonic": "A",
+       "style": "triads"
       }
-     ]
+     ],
+     "more": []
     }
    ]
   },
@@ -7497,7 +10367,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "triads"
       },
       {
        "name": "i–iv–v",
@@ -7517,7 +10388,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "triads"
       },
       {
        "name": "Double tonic",
@@ -7534,7 +10406,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "triads"
       },
       {
        "name": "La Folia",
@@ -7569,7 +10442,31 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "i–I7–iv",
+       "chords": [
+        "F#m",
+        "F#7",
+        "Bm"
+       ],
+       "numerals": [
+        "i",
+        "I7",
+        "iv"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "triads"
       }
      ]
     },
@@ -7597,7 +10494,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "triads"
       },
       {
        "name": "Dorian vamp",
@@ -7614,7 +10512,8 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "sevenths"
       },
       {
        "name": "Minor blues",
@@ -7654,7 +10553,8 @@
         1,
         1
        ],
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "sevenths"
       },
       {
        "name": "Phrygian vamp",
@@ -7671,7 +10571,76 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "triads"
+      }
+     ],
+     "more": [
+      {
+       "name": "i–VI–VII",
+       "chords": [
+        "F#m",
+        "D",
+        "E"
+       ],
+       "numerals": [
+        "i",
+        "VI",
+        "VII"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "triads"
+      },
+      {
+       "name": "i–III–VII–IV",
+       "chords": [
+        "F#m",
+        "A",
+        "E",
+        "B"
+       ],
+       "numerals": [
+        "i",
+        "III",
+        "VII",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "triads"
+      },
+      {
+       "name": "i–III–IV",
+       "chords": [
+        "F#m",
+        "A",
+        "B"
+       ],
+       "numerals": [
+        "i",
+        "III",
+        "IV"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "triads"
       }
      ]
     },
@@ -7708,7 +10677,8 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "sevenths"
       },
       {
        "name": "i–iv vamp",
@@ -7725,7 +10695,8 @@
         "PD"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "sevenths"
       },
       {
        "name": "Minor turnaround",
@@ -7748,9 +10719,208 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "sevenths"
+      },
+      {
+       "name": "i–imaj7–i7–i6",
+       "chords": [
+        "F#m",
+        "F#m(maj7)",
+        "F#m7",
+        "F#m6"
+       ],
+       "numerals": [
+        "i",
+        "imaj7",
+        "i7",
+        "i6"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "T",
+        "T"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "ninths"
+      }
+     ],
+     "more": [
+      {
+       "name": "Jazz minor blues",
+       "chords": [
+        "F#m9",
+        "F#7b9",
+        "Bm9",
+        "F#m9",
+        "D9",
+        "C#7#9",
+        "F#m9",
+        "C#7#9"
+       ],
+       "numerals": [
+        "i9",
+        "I7b9",
+        "iv9",
+        "i9",
+        "VI9",
+        "V7#9",
+        "i9",
+        "V7#9"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "T",
+        "PD",
+        "D",
+        "T",
+        "D"
+       ],
+       "repeat": [
+        3,
+        1,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+       ],
+       "tonic": "F#",
+       "style": "ninths"
+      },
+      {
+       "name": "Dorian i–ii vamp",
+       "chords": [
+        "F#m9",
+        "G#m7"
+       ],
+       "numerals": [
+        "i9",
+        "ii7"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "ninths"
+      },
+      {
+       "name": "Half-step modal form",
+       "chords": [
+        "F#m11",
+        "Gm11",
+        "F#m11"
+       ],
+       "numerals": [
+        "i11",
+        "bii11",
+        "i11"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "T"
+       ],
+       "repeat": [
+        4,
+        2,
+        2
+       ],
+       "tonic": "F#",
+       "style": "ninths"
       }
      ]
+    },
+    {
+     "name": "Bossa nova",
+     "items": [
+      {
+       "name": "i–iv–iiø–V",
+       "chords": [
+        "F#m9",
+        "Bm9",
+        "G#m7b5",
+        "C#7b9"
+       ],
+       "numerals": [
+        "i9",
+        "iv9",
+        "iiø7",
+        "V7b9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "ninths"
+      },
+      {
+       "name": "Minor cliché turnaround",
+       "chords": [
+        "F#m",
+        "F#m(maj7)",
+        "F#m7",
+        "F#m6",
+        "Dmaj7",
+        "C#7b9"
+       ],
+       "numerals": [
+        "i",
+        "imaj7",
+        "i7",
+        "i6",
+        "VImaj7",
+        "V7b9"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "T",
+        "T",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "ninths"
+      },
+      {
+       "name": "i–II7–iiø–V",
+       "chords": [
+        "F#m6",
+        "G#7",
+        "G#m7b5",
+        "C#7b9"
+       ],
+       "numerals": [
+        "i6",
+        "II7",
+        "iiø7",
+        "V7b9"
+       ],
+       "lanes": [
+        "T",
+        "D",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "ninths"
+      }
+     ],
+     "more": []
     },
     {
      "name": "Ballad and pop",
@@ -7776,9 +10946,107 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "triads"
       }
-     ]
+     ],
+     "more": []
+    },
+    {
+     "name": "Post-rock and cinematic",
+     "items": [
+      {
+       "name": "i–VI drone",
+       "chords": [
+        "F#m(add9)",
+        "Dmaj7#11"
+       ],
+       "numerals": [
+        "iadd9",
+        "VImaj7#11"
+       ],
+       "lanes": [
+        "T",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "add9"
+      },
+      {
+       "name": "i–III–VII–VI",
+       "chords": [
+        "F#m(add9)",
+        "Aadd9",
+        "E6",
+        "Dmaj7"
+       ],
+       "numerals": [
+        "iadd9",
+        "IIIadd9",
+        "VII6",
+        "VImaj7"
+       ],
+       "lanes": [
+        "T",
+        "T",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "add9"
+      },
+      {
+       "name": "i–v–VI–iv",
+       "chords": [
+        "F#m7",
+        "C#m7",
+        "Dmaj7",
+        "Bm9"
+       ],
+       "numerals": [
+        "i7",
+        "v7",
+        "VImaj7",
+        "iv9"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "PD"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "sevenths"
+      },
+      {
+       "name": "i–iv–VI–VII",
+       "chords": [
+        "F#m(add9)",
+        "Bm7",
+        "Dmaj7",
+        "Esus2"
+       ],
+       "numerals": [
+        "iadd9",
+        "iv7",
+        "VImaj7",
+        "VIIsus2"
+       ],
+       "lanes": [
+        "T",
+        "PD",
+        "PD",
+        "D"
+       ],
+       "repeat": null,
+       "tonic": "F#",
+       "style": "add9"
+      }
+     ],
+     "more": []
     },
     {
      "name": "Flamenco",
@@ -7804,10 +11072,154 @@
         "D"
        ],
        "repeat": null,
-       "tonic": "F#"
+       "tonic": "F#",
+       "style": "triads"
       }
-     ]
+     ],
+     "more": []
     }
+   ]
+  }
+ ],
+ "sets": [
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "style": "triads",
+   "chords": [
+    "C",
+    "Dm",
+    "Em",
+    "F",
+    "G",
+    "Am",
+    "Bdim"
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "style": "sevenths",
+   "chords": [
+    "Cmaj7",
+    "Dm7",
+    "Em7",
+    "Fmaj7",
+    "G7",
+    "Am7",
+    "Bm7b5"
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "style": "ninths",
+   "chords": [
+    "Cmaj9",
+    "Dm9",
+    "Em7",
+    "Fmaj9",
+    "G13",
+    "Am9",
+    "Bm7b5"
+   ]
+  },
+  {
+   "key": {
+    "tonic": 0,
+    "mode": "major",
+    "name": "C"
+   },
+   "style": "add9",
+   "chords": [
+    "Cadd9",
+    "Dm(add9)",
+    "Em",
+    "Fadd9",
+    "Gadd9",
+    "Am(add9)",
+    "Bdim"
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "style": "triads",
+   "chords": [
+    "Am",
+    "Bdim",
+    "C",
+    "Dm",
+    "Em",
+    "F",
+    "G",
+    "E"
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "style": "sevenths",
+   "chords": [
+    "Am7",
+    "Bm7b5",
+    "Cmaj7",
+    "Dm7",
+    "Em7",
+    "Fmaj7",
+    "G7",
+    "E7"
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "style": "ninths",
+   "chords": [
+    "Am9",
+    "Bm7b5",
+    "Cmaj9",
+    "Dm9",
+    "Em7",
+    "Fmaj9",
+    "G13",
+    "E7b9"
+   ]
+  },
+  {
+   "key": {
+    "tonic": 9,
+    "mode": "minor",
+    "name": "A"
+   },
+   "style": "add9",
+   "chords": [
+    "Am(add9)",
+    "Bdim",
+    "Cadd9",
+    "Dm(add9)",
+    "Em",
+    "Fadd9",
+    "Gadd9",
+    "E"
    ]
   }
  ]

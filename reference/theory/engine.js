@@ -28,8 +28,50 @@ const QALIAS = {
   7: '7', dom7: '7', m7: 'm7', min7: 'm7', '-7': 'm7', maj7: 'maj7', M7: 'maj7', 'Δ': 'maj7', 'Δ7': 'maj7',
   m7b5: 'm7b5', 'ø': 'm7b5', 'ø7': 'm7b5', dim7: 'dim7', '°7': 'dim7', o7: 'dim7',
 };
-const SYM_RE = /^([A-G])(bb|##|b|#|♭|♯)?(maj7|M7|Δ7|Δ|m7b5|ø7|ø|dim7|°7|o7|dim|°|o|aug|\+|min7|m7|-7|min|m|-|dom7|7|M)?$/;
-const NUM_RE = /^(bb|b|#)?(VII|VI|IV|V|III|II|I|vii|vi|iv|v|iii|ii|i)(maj7|ø7|°7|°|\+|7)?$/;
+// Colour chords (the site's other chord types). The logic reads each as its base quality, so Cmaj9 is Cmaj7 and
+// Cadd9 is C to every rule below; the colour is kept on the chord (c.colour) and in its symbol and numeral.
+// set: 'ext' colours mark the 9ths style, 'open' colours the add9 style. Keys match the site's template ids.
+const COLOUR = {
+  5: { base: 'maj', suf: '5', num: '5', set: 'open' },
+  sus2: { base: 'maj', suf: 'sus2', num: 'sus2', set: 'open' },
+  sus4: { base: 'maj', suf: 'sus4', num: 'sus4', set: 'open' },
+  add9: { base: 'maj', suf: 'add9', num: 'add9', set: 'open' },
+  add11: { base: 'maj', suf: 'add11', num: 'add11', set: 'open' },
+  6: { base: 'maj', suf: '6', num: '6', set: 'ext' },
+  69: { base: 'maj', suf: '6/9', num: '6/9', set: 'ext' },
+  madd9: { base: 'm', suf: 'm(add9)', num: 'add9', set: 'open' },
+  madd11: { base: 'm', suf: 'm(add11)', num: 'add11', set: 'open' },
+  m6: { base: 'm', suf: 'm6', num: '6', set: 'ext' },
+  m69: { base: 'm', suf: 'm6/9', num: '6/9', set: 'ext' },
+  mMaj7: { base: 'm', suf: 'm(maj7)', num: 'maj7', set: 'ext' },
+  maj9: { base: 'maj7', suf: 'maj9', num: 'maj9', set: 'ext' },
+  maj13: { base: 'maj7', suf: 'maj13', num: 'maj13', set: 'ext' },
+  'maj7#11': { base: 'maj7', suf: 'maj7#11', num: 'maj7#11', set: 'ext' },
+  m9: { base: 'm7', suf: 'm9', num: '9', set: 'ext' },
+  m11: { base: 'm7', suf: 'm11', num: '11', set: 'ext' },
+  m13: { base: 'm7', suf: 'm13', num: '13', set: 'ext' },
+  9: { base: '7', suf: '9', num: '9', set: 'ext' },
+  13: { base: '7', suf: '13', num: '13', set: 'ext' },
+  '7sus4': { base: '7', suf: '7sus4', num: '7sus4', set: 'ext' },
+  '9sus4': { base: '7', suf: '9sus4', num: '9sus4', set: 'ext' },
+  '7b9': { base: '7', suf: '7b9', num: '7b9', set: 'ext' },
+  '7#9': { base: '7', suf: '7#9', num: '7#9', set: 'ext' },
+  '7b5': { base: '7', suf: '7b5', num: '7b5', set: 'ext' },
+  '7#11': { base: '7', suf: '7#11', num: '7#11', set: 'ext' },
+  '7#5': { base: '7', suf: '7#5', num: '7#5', set: 'ext' },
+  'maj7#5': { base: 'aug', suf: 'maj7#5', num: 'maj7#5', set: 'ext' },
+};
+const reAlt = (list) => [...new Set(list)].sort((a, b) => b.length - a.length).map((s) => s.replace(/[+()/#]/g, '\\$&')).join('|');
+const SYM_SUF = Object.keys(QALIAS).filter(Boolean).concat(Object.values(COLOUR).map((x) => x.suf));
+const SYM_RE = new RegExp('^([A-G])(bb|##|b|#|♭|♯)?(' + reAlt(SYM_SUF) + ')?$');
+// numeral suffixes: upper case is the major or dominant family, lower case the minor or diminished family
+const NUM_UP = { '': 'maj', 7: '7', maj7: 'maj7', '+': 'aug' };
+const NUM_LO = { '': 'm', 7: 'm7', '°': 'dim', '°7': 'dim7', 'ø7': 'm7b5' };
+for (const [id, x] of Object.entries(COLOUR)) {
+  const lower = QUAL[x.base].fam === 'm';
+  (lower ? NUM_LO : NUM_UP)[x.num] = id;
+}
+const NUM_RE = new RegExp('^(bb|b|#)?(VII|VI|IV|V|III|II|I|vii|vi|iv|v|iii|ii|i)(' + reAlt([...Object.keys(NUM_UP), ...Object.keys(NUM_LO)].filter(Boolean)) + ')?$');
 const MAJ_NAMES = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
 const MIN_NAMES = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'G#', 'A', 'Bb', 'B'];
 
@@ -39,16 +81,22 @@ const isTriad = (q) => q === 'maj' || q === 'm' || q === 'dim' || q === 'aug';
 const fam = (c) => QUAL[c.quality].fam;
 const TRIAD_OF = { M: 'maj', m: 'm', d: 'dim', a: 'aug' };
 
+// quality is a base quality (QUAL) or a colour id (COLOUR); a colour is stored as c.colour over its base
 function mk(letter, acc, quality) {
   const root = mod(NAT[LETTERS.indexOf(letter)] + acc);
-  return { letter, acc, root, quality, symbol: letter + accStr(acc) + QUAL[quality].suf };
+  const col = COLOUR[quality];
+  const c = { letter, acc, root, quality: col ? col.base : quality, symbol: letter + accStr(acc) + (col ? col.suf : QUAL[quality].suf) };
+  if (col) c.colour = quality;
+  return c;
 }
 function tagNum(c, kid, deg, nacc) { c.kid = kid; c.deg = deg; c.nacc = nacc; return c; }
-// same letter and accidental, another quality; the numeral information comes along
+// same letter and accidental, another quality (a colour drops away); the numeral information comes along
 function requality(c, q) {
   const r = mk(c.letter, c.acc, q);
   return c.kid ? tagNum(r, c.kid, c.deg, c.nacc) : r;
 }
+// the base chord under a colour (Cmaj9 to Cmaj7)
+const plain = (c) => (c.colour ? requality(c, c.quality) : c);
 
 function parse(symbol) {
   if (symbol && typeof symbol === 'object') return symbol;
@@ -56,7 +104,9 @@ function parse(symbol) {
   if (!m) throw new Error('Unrecognized chord: ' + symbol);
   const a = (m[2] || '').replace('♭', 'b').replace('♯', '#');
   const acc = a ? (a[0] === 'b' ? -a.length : a.length) : 0;
-  return mk(m[1], acc, QALIAS[m[3] || '']);
+  const s = m[3] || '';
+  const col = Object.keys(COLOUR).find((id) => COLOUR[id].suf === s);
+  return mk(m[1], acc, col || QALIAS[s]);
 }
 
 function keyInfo(key) {
@@ -101,10 +151,7 @@ function parseNumeral(str) {
   const acc = m[1] ? (m[1][0] === 'b' ? -m[1].length : 1) : 0;
   const upper = m[2] === m[2].toUpperCase();
   const d = ROMAN.indexOf(m[2].toUpperCase());
-  const s = m[3] || '';
-  const quality = upper
-    ? { '': 'maj', 7: '7', maj7: 'maj7', '+': 'aug' }[s]
-    : { '': 'm', 7: 'm7', '°': 'dim', '°7': 'dim7', 'ø7': 'm7b5' }[s];
+  const quality = (upper ? NUM_UP : NUM_LO)[m[3] || ''];
   if (!quality) throw new Error('Bad numeral quality: ' + str);
   return { d, acc, quality };
 }
@@ -113,23 +160,23 @@ function realize(num, key) {
   const k = keyInfo(key);
   const { d, acc, quality } = parseNumeral(num);
   let semis = SCALE[k.mode][d] + acc;
-  if (k.mode === 'minor' && d === 6 && acc === 0 && QUAL[quality].fam === 'd') semis += 1;
+  if (k.mode === 'minor' && d === 6 && acc === 0 && QUAL[COLOUR[quality] ? COLOUR[quality].base : quality].fam === 'd') semis += 1;
   return chordOnDegree(k, d, semis, quality, acc);
 }
 
-const numFrom = (d, nacc, q) => {
+const numFrom = (d, nacc, q, colour) => {
   const f = QUAL[q].fam;
-  return accStr(nacc) + (f === 'M' || f === 'a' ? ROMAN[d] : ROMAN[d].toLowerCase()) + QUAL[q].num;
+  return accStr(nacc) + (f === 'M' || f === 'a' ? ROMAN[d] : ROMAN[d].toLowerCase()) + (colour ? COLOUR[colour].num : QUAL[q].num);
 };
 // the numeral of a chord in a key: the degree it was realized from when known, else read from its spelling
 function numeral(chord, key) {
   const c = parse(chord), k = keyInfo(key);
-  if (c.kid === k.id) return numFrom(c.deg, c.nacc, c.quality);
+  if (c.kid === k.id) return numFrom(c.deg, c.nacc, c.quality, c.colour);
   const d = mod(LETTERS.indexOf(c.letter) - k.li, 7);
   const semis = mod(c.root - k.tonic);
   let acc = mod(semis - SCALE[k.mode][d] + 6) - 6;
   if (k.mode === 'minor' && d === 6 && acc === 1 && fam(c) === 'd') acc = 0;
-  return numFrom(d, acc, c.quality);
+  return numFrom(d, acc, c.quality, c.colour);
 }
 
 const semisOf = (c, k) => mod(c.root - k.tonic);
@@ -234,7 +281,7 @@ function laneInfo(chord, key, next, opts = {}) {
       const from = 'From ' + parallelLabel(k);
       if (k.mode === 'major') {
         if (s === 10) return ns === 0 ? out('D', c.quality === '7' ? 'Backdoor' : from) : out('PD', from);
-        if (s === 7) return out(ns === 0 ? 'D' : 'PD', from);
+        if (s === 7) return out(ns === 0 && nx.quality !== '7' ? 'D' : 'PD', from); // v before I7 is the ii of a ii–V into IV
         if (s === 11) return out('D', from);
         return out(s === 0 || s === 3 ? 'T' : 'PD', from);
       }
@@ -386,6 +433,10 @@ function collapse(list, eq) {
 
 // 7th style: half the chords are 7ths and at least one is not a plain dominant 7th (V7 and secondary dominants live
 // happily among triads). Blues: I7 and IV7 both, or dominant 7ths on I, IV and V make up at least half the chords.
+// Colour styles: 9ths when at least half the chords carry 9ths-style colours (maj9, m9, 13, 6/9...), add9 when at least
+// half carry open colours (add9, sus2...). opts.style ('triads', 'sevenths', 'ninths', 'add9') or the older
+// opts.sevenths overrides the automatic choice; a blues is always detected.
+const STYLES = ['triads', 'sevenths', 'ninths', 'add9'];
 function styleOf(P, k, opts = {}) {
   const sev = P.filter((c) => !isTriad(c.quality)).length;
   const dom = P.filter((c) => c.quality === '7');
@@ -393,9 +444,16 @@ function styleOf(P, k, opts = {}) {
   const on = (s) => dom.some((c) => semisOf(c, k) === s);
   const prim = dom.filter((c) => [0, 5, 7].includes(semisOf(c, k))).length;
   const blues = major && ((on(0) && on(5)) || ((on(0) || on(5)) && prim >= 2 && prim * 2 >= P.length));
-  const auto = sev / P.length >= 0.5 && sev > dom.length;
-  const sevenths = opts.sevenths != null ? !!opts.sevenths : auto;
-  return { sevenths: sevenths || blues, blues, kind: blues ? 'blues' : sevenths ? 'jazz' : 'triad' };
+  const set = (x) => P.filter((c) => c.colour && COLOUR[c.colour].set === x).length;
+  const ext = set('ext'), open = set('open');
+  let style = STYLES.includes(opts.style) ? opts.style : opts.sevenths != null ? (opts.sevenths ? 'sevenths' : 'triads') : null;
+  if (!style) {
+    if (ext * 2 >= P.length || open * 2 >= P.length) style = ext > open ? 'ninths' : 'add9'; // a tie reads as add9 (Am(add9) Fmaj7#11)
+    else style = sev / P.length >= 0.5 && sev > dom.length ? 'sevenths' : 'triads';
+  }
+  const sevenths = style === 'sevenths' || style === 'ninths' || blues;
+  const colour = style === 'ninths' ? 'ext' : style === 'add9' ? 'open' : null;
+  return { sevenths, blues, kind: blues ? 'blues' : sevenths ? 'jazz' : 'triad', colour, style: blues && !colour ? 'sevenths' : style };
 }
 
 // ---------- library index ----------
@@ -445,7 +503,11 @@ function libIndex(k, blues) {
 
 // n-gram support: library entries where the last k chords are followed by t (k = 1..3; loops wrap). Blues forms
 // speak only to blues players (their I7 is a tonic, not V of IV).
-function ngram(ctx, idx, sameOnly, bluesUser = sameOnly) {
+// st (the player's style) tempers the new genres for plain triad players: an entry written in colours, or a Post-rock or
+// Bossa nova entry, counts half; a Jazz, Bossa nova or Post-rock vamp (a texture, not a chord-to-chord habit) counts only
+// for players in its own style
+const STYLED_GENRES = ['Jazz', 'Bossa nova', 'Post-rock'];
+function ngram(ctx, idx, sameOnly, bluesUser = sameOnly, st = null) {
   const cnt = [null, new Map(), new Map(), new Map()];
   const src = [null, new Map(), new Map(), new Map()];
   const sample = new Map();
@@ -453,6 +515,10 @@ function ngram(ctx, idx, sameOnly, bluesUser = sameOnly) {
   for (const ent of idx) {
     if (sameOnly && !ent.same) continue;
     if (ent.style.blues && !bluesUser) continue;
+    if (ent.E.variantOf) continue; // a colour variant repeats its entry's harmony: no extra support
+    if (st && ent.E.kind === 'vamp' && STYLED_GENRES.includes(ent.E.genre) && (ent.style.kind !== st.kind || (ent.style.colour && ent.style.colour !== st.colour))) continue;
+    const plainHalf = st && st.kind === 'triad' && !st.colour && (ent.style.colour || ['Post-rock', 'Bossa nova'].includes(ent.E.genre));
+    const w = ent.w * (plainHalf ? 0.5 : 1);
     const S = ent.seq, L = S.length;
     for (let j = 0; j < L; j++) {
       for (let kk = 1; kk <= K; kk++) {
@@ -460,10 +526,10 @@ function ngram(ctx, idx, sameOnly, bluesUser = sameOnly) {
         if (!ent.same && kk > 2) break; // another centre's 3-chord habit says little about this key
         if (S[mod(j - kk, L)].tok !== ctx[ctx.length - kk]) break;
         const t = S[j].tok;
-        cnt[kk].set(t, (cnt[kk].get(t) || 0) + ent.w);
+        cnt[kk].set(t, (cnt[kk].get(t) || 0) + w);
         if (!src[kk].has(t)) src[kk].set(t, []);
-        src[kk].get(t).push({ ent, ch: S[j].ch, num: S[j].num });
-        if (!sample.has(t) || ent.w > sample.get(t).w) sample.set(t, { ch: S[j].ch, num: S[j].num, w: ent.w, same: ent.same });
+        src[kk].get(t).push({ ent, w, ch: S[j].ch, num: S[j].num, j, kk });
+        if (!sample.has(t) || w > sample.get(t).w) sample.set(t, { ch: S[j].ch, num: S[j].num, w, same: ent.same });
       }
     }
   }
@@ -479,7 +545,7 @@ function ngramScore(t, ng) {
   for (let kk = 1; kk <= ng.K; kk++) {
     const c = ng.cnt[kk].get(t) || 0;
     if (!c) continue;
-    const maxW = Math.max(...ng.src[kk].get(t).map((x) => x.ent.w));
+    const maxW = Math.max(...ng.src[kk].get(t).map((x) => x.w));
     s += (NG_W[kk] * (c / ng.tot[kk]) + NG_B[kk]) * maxW;
     best = kk;
   }
@@ -513,7 +579,14 @@ function closeScore(c, F, k, phraseEnd, after, st = {}) {
 // play a library chord in the player's style. Only chords of the key change: triad players get triads, 7th players
 // the key's diatonic 7ths, blues players dominant 7ths on I, IV and V. Chromatic 7ths (I7, VI7, bII7...) stay as
 // written, because they are what makes the entry that entry. Borrowed triads become their 7ths in 7th style.
+// The key's own and borrowed chords lose their written colour first, and so does any chord whose colour belongs to a style
+// the player is not in (A7b9 is A7 to a 7ths player); the colour styles then add theirs (colourize).
 function dressTo(c, st, k) {
+  if (c.colour && (diatonic(c, k) || roleOf(c, k).role === 'borrowed' || COLOUR[c.colour].set !== st.colour)) c = plain(c);
+  const d = dressBase(c, st, k);
+  return st.colour ? colourize(d, st, k) : d;
+}
+function dressBase(c, st, k) {
   const s = semisOf(c, k), r = roleOf(c, k).role;
   const major = k.mode === 'major';
   if (st.blues && major && [0, 5, 7].includes(s) && fam(c) === 'M' && (diatonic(c, k) || r === 'tonic7' || r === 'blues')) return requality(c, '7');
@@ -533,6 +606,45 @@ function dressTo(c, st, k) {
     if (other && other[0] === fam(c)) return requality(c, other[1]);
   }
   if (r === 'borrowed' && !st.sevenths && (c.quality === 'maj7' || c.quality === 'm7')) return requality(c, TRIAD_OF[fam(c)]);
+  return c;
+}
+// the scale a chord's added notes come from: a pull chord's target key (A7 to Dm takes D minor's Bb, so A7b9), the
+// parallel mode for a borrowed chord, else the key itself
+function colourScale(c, k) {
+  const r = roleOf(c, k);
+  const pcs = (t, mode) => new Set(SCALE[mode].map((x) => mod(t + x)));
+  if (['secondary', 'tonic7'].includes(r.role) && r.target != null) {
+    const T = triadAt(k, r.target);
+    return pcs(T.root, fam(T) === 'm' ? 'minor' : 'major');
+  }
+  const dorian = new Set([...pcs(k.tonic, 'minor')].map((p) => (p === mod(k.tonic + 8) ? mod(k.tonic + 9) : p)));
+  // the Dorian IV, and a minor key's borrowed chord that fits Dorian (Bm7 in A minor stays Bm7, not Bm9 with C#)
+  if (r.role === 'dorian4' || (r.role === 'borrowed' && k.mode === 'minor' && tones(c).every((t) => dorian.has(t.pc)))) return dorian;
+  const onBorrowed = r.role === 'other' && c.quality === '7' && roleOf(requality(c, 'maj'), k).role === 'borrowed'; // bVI7 in a blues
+  if (r.role === 'borrowed' || r.role === 'picardy' || onBorrowed) return pcs(k.tonic, k.mode === 'major' ? 'minor' : 'major');
+  return pcs(k.tonic, k.mode);
+}
+// a chord written without colour, in the colour of the player's style, using only notes of its scale:
+// 9ths: maj7 to maj9 (or maj7#11), m7 to m9, 7 to 13, 9 or 7b9 (bII7 to 7#11); add9: major and minor triads add the 9th
+function colourize(c, st, k) {
+  if (c.colour) return c;
+  const sc = colourScale(c, k), has = (iv) => sc.has(mod(c.root + iv));
+  const as = (id) => requality(c, id);
+  const q = c.quality;
+  if (st.colour === 'ext') {
+    if (q === 'maj7') return has(2) ? as('maj9') : has(6) ? as('maj7#11') : c;
+    if (q === 'm7') return has(2) ? as('m9') : c; // Em7 in C stays Em7: an m11 implies the 9th (F#)
+    if (q === '7') {
+      if (roleOf(c, k).role === 'tritone' && has(6)) return as('7#11');
+      if (has(2)) return has(9) ? as('13') : as('9');
+      return has(1) ? as('7b9') : c;
+    }
+    return c;
+  }
+  if (st.colour === 'open') {
+    if ((q === 'maj' || q === 'm') && has(2)) return as(q === 'maj' ? 'add9' : 'madd9');
+    return c;
+  }
   return c;
 }
 
@@ -585,16 +697,22 @@ function styleGate(ent, st) {
 }
 function styleFit(ent, st) {
   const ek = ent.style.kind;
-  if (ek === st.kind) return 0.3;
+  // a plain triad player hears the plain classics first: an entry written in add9 or 9ths colours pays 0.4
+  const plainPays = st.kind === 'triad' && !st.colour && ent.style.colour ? 0.4 : 0;
+  if (ek === st.kind) return 0.3 + (st.colour && ent.style.colour === st.colour ? 0.2 : 0) - plainPays; // a 9ths player hears the jazz entry first
   if (st.kind === 'blues') return ek === 'jazz' ? -0.2 : -0.3; // a blues player takes a jazz ii–V before a hymn cadence
   if (ek === 'blues') return -0.6;
-  if (st.kind === 'triad' && ek === 'jazz') return -0.4;
-  return -0.1;
+  if (st.kind === 'triad' && ek === 'jazz') return -0.4 - plainPays;
+  return -0.1 - plainPays;
 }
 const phraseOut = (E) => ({ id: E.id, name: E.name, genre: E.genre, mood: E.mood });
 // a name written in numerals reads in order, so the chips must start where the name starts
 const NUMERAL_NAME = /^[b#]?[IViv]+[°ø7+]*(–[b#]?[IViv]+[°ø7+]*)+$/;
-const nameFits = (ent, from) => !NUMERAL_NAME.test(ent.E.name) || mod(from, ent.seq.length) === 0;
+// so does a numeral chain with a word before or after it (Lydian I–vii7 vamp, IV–V–vi climb), unless a core says which
+// chords the name means
+const CHAIN_NAME = /^(?:[A-Z][a-z]+ )?[b#]?[IViv]+[^\s–]*(?:–[b#]?[IViv]+[^\s–]*)+(?:\s|$)/;
+const numName = (E) => NUMERAL_NAME.test(E.name) || (!E.core && CHAIN_NAME.test(E.name));
+const nameFits = (ent, from) => !numName(ent.E) || mod(from, ent.seq.length) === 0;
 // the chord a pull chord must move to first: its target, or a dominant on the target's root (E7 to A7 in a chain)
 function pullOk(y, c, k) {
   const r = roleOf(y, k);
@@ -622,7 +740,7 @@ function thenCandidates(ctx, y) {
   const out = [];
   for (const ent of libIndex(k)) {
     const E = ent.E;
-    if (!ent.same || ent.hasPicardy || !styleGate(ent, st)) continue;
+    if (!ent.same || ent.hasPicardy || E.nameNeedsColours || !styleGate(ent, st)) continue;
     const canCont = E.uses.includes('continue'), canEnd = E.uses.includes('end');
     if (!canCont && !canEnd) continue;
     const S = ent.seq, L = S.length;
@@ -630,7 +748,8 @@ function thenCandidates(ctx, y) {
       if (S[j].tok !== yt) continue;
       let m = backMatch(ent, j, Pc, k, false, ent.cyclic ? L - 2 : j);
       // a numeral name reads from the entry's first chord: when your chords match back past it round the loop, start there
-      if (ent.cyclic && NUMERAL_NAME.test(E.name) && j - m < 0) m = j;
+      if (ent.cyclic && numName(E) && j - m < 0) m = j;
+      if (ent.style.colour && ent.style.colour !== st.colour && m < 1) continue; // another colour style: only where your chords are already in it
       for (let t = 1; t <= 3; t++) {
         if (ent.cyclic ? m + 1 + t > L : j + t > L - 1) break;
         const th = [];
@@ -661,15 +780,18 @@ function thenCandidates(ctx, y) {
           + styleFit(ent, st)
           + (whole ? 0.3 : 0)
           + (ent.cyclic && mod(j - m, L) === 0 ? 0.2 : 0)
-          - (sameChord(ch[0], X) && !whole ? 0.4 : 0);   // X, idea, X again: a neighbour, not a phrase
+          - (sameChord(ch[0], X) && (!whole || !ent.cyclic) ? 0.4 : 0); // X, idea, X again: a neighbour, not a phrase
         out.push({ ent, j, m, t, ch, ret, home, sc });
       }
     }
   }
   out.sort((a, b2) => b2.sc - a.sc);
-  // one candidate per chord sequence
-  const seen = new Set();
-  return out.filter((c) => { const s = c.ch.map((x) => x.symbol).join(' '); if (seen.has(s)) return false; seen.add(s); return true; });
+  // one candidate per chord sequence, named by the entry that best fits the player's style (bVI–bVII–I, not the
+  // post-rock swell, for a plain player), then by score
+  const key = (c) => c.ch.map((x) => x.symbol).join(' ');
+  const pick = new Map();
+  for (const c of out) { const s = key(c), p = pick.get(s); if (!p || styleFit(c.ent, st) > styleFit(p.ent, st)) pick.set(s, c); }
+  return out.filter((c) => pick.get(key(c)) === c);
 }
 const THEN_MIN = 0.6;
 function thenOut(c, ctx) {
@@ -771,18 +893,19 @@ function afterIdeas(progression, key, opts = {}) {
   const { k, n, at, P, X, follow, afterFollow, st, Pc, prev, phraseEnd, posW, open } = ctx;
   const b = st.blues;
   const idx = libIndex(k, b);
-  const ng = ngram(Pc.map((c) => tok(c, k, b)), idx, b);
+  const ng = ngram(Pc.map((c) => tok(c, k, b)), idx, b, b, st);
   ctx.ng = ng;
   const lo = { blues: b };
 
   const pool = POOLS[k.mode];
-  const dia = (b ? pool.blues : st.sevenths ? pool.sev : pool.tri).map((nm) => realize(nm, k));
+  const inStyle = (nm) => colourize(realize(nm, k), st, k);
+  const dia = (b ? pool.blues : st.sevenths ? pool.sev : pool.tri).map(inStyle);
   const chromNames = b ? pool.spiceBlues : st.sevenths ? pool.spiceSev : pool.spiceTri;
-  const chrom = chromNames.map((nm) => realize(nm, k)).filter((c) => !dia.some((d) => sameChord(c, d)));
+  const chrom = chromNames.map(inStyle).filter((c) => !dia.some((d) => sameChord(c, d)));
   const has = (list, t) => list.some((d) => tok(d, k, b) === t);
   // a chromatic chord the library context points to that neither pool holds (E major in I–III–IV–iv)
   for (const [t, smp] of ng.sample) {
-    if (!smp.same || has(dia, t) || has(chrom, t)) continue;
+    if (!smp.same || smp.w < 1 || has(dia, t) || has(chrom, t)) continue; // a full-weight same-mode entry only
     const c = dressTo(smp.ch, st, k);
     if (!diatonic(c, k)) chrom.push(c);
   }
@@ -940,9 +1063,18 @@ const SPICY_MIN = 0.3, SPICY_FLOOR = -0.25;
 
 function joinNames(a) { return a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
 // the library entry to quote: same mode only, same quality, shorter (more canonical) first
-function bestSrc(srcs, c, st) {
-  const ok = srcs.filter((x) => x.ent.same && (!st.blues || x.ent.style.blues));
-  const rank = (x) => (x.ent.style.kind === st.kind ? 1.5 : 0) + (x.ch.quality === c.quality ? 1 : 0) + (x.ent.E.uses.includes('continue') ? 0.5 : 0) - 0.05 * x.ent.seq.length;
+function bestSrc(srcs, c, st, ctx) {
+  // a cited entry must reach its core (Descending ii–Vs is not quoted for its last ii–V), and an entry whose name lives in
+  // its colours (a line cliché) is never cited
+  const touchesCore = (x) => {
+    if (!x.ent.core.ordered) return true;
+    for (let q = x.j - x.kk; q < x.j; q++) if (x.ent.core.pos.includes(x.ent.cyclic ? mod(q, x.ent.seq.length) : q)) return true;
+    // or the user's chords already play the core (the canon typed out)
+    const L = x.ent.seq.length, m = backMatch(x.ent, x.j, ctx.Pc, ctx.k, st.blues, x.ent.cyclic ? L - 1 : x.j);
+    return coversCore(x.ent, x.j - m, x.j);
+  };
+  const ok = srcs.filter((x) => x.ent.same && (!st.blues || x.ent.style.blues) && !x.ent.E.nameNeedsColours && touchesCore(x));
+  const rank = (x) => (x.ent.style.kind === st.kind ? 1.5 : 0) + (x.ent.style.colour === st.colour ? 0.5 : 0) + (x.ch.quality === c.quality ? 1 : 0) + (x.ent.E.uses.includes('continue') ? 0.5 : 0) - 0.05 * x.ent.seq.length;
   return ok.sort((a, b) => rank(b) - rank(a))[0];
 }
 // numeral of the chord as the context sees it: Cmaj7 reads I (its token), C7 reads I7
@@ -956,7 +1088,7 @@ function whyAfter(X, s, ctx) {
   const out = [];
   const c = s.c;
   const tag = tagFor(X, c, ctx);
-  const src = s.ngs.best >= 2 && bestSrc(s.ngs.srcs, c, st);
+  const src = s.ngs.best >= 2 && bestSrc(s.ngs.srcs, c, st, ctx);
   // never quote a cadence entry under a different cadence tag ("Deceptive cadence; As in Authentic cadence")
   if (src && !(CADENCE_TAGS.includes(tag) && src.ent.E.kind === 'cadence' && src.ent.E.name !== tag)) out.push([3, 'As in ' + src.ent.E.name]);
   const hit = expectHit(X, c, k);
@@ -1033,7 +1165,7 @@ function continuations(progression, key, opts = {}) {
   const affinity = {}; // genres whose entries already match 3+ of your chords in a row
   for (const ent of idx) {
     const E = ent.E;
-    if (!ent.same || ent.hasPicardy || !styleGate(ent, st)) continue;
+    if (!ent.same || ent.hasPicardy || E.nameNeedsColours || !styleGate(ent, st)) continue;
     const canCont = E.uses.includes('continue'), canEnd = E.uses.includes('end');
     if (!canCont && !canEnd) continue;
     const S = ent.seq, L = S.length;
@@ -1049,7 +1181,7 @@ function continuations(progression, key, opts = {}) {
       if (m < topM) continue;
       let mm = Math.max(1, Math.floor(m)); // chords of the entry already on screen, X included
       // a numeral name reads from the entry's first chord: when your chords match back past it round the loop, start there
-      if (ent.cyclic && NUMERAL_NAME.test(E.name) && mm > j + 1) { mm = j + 1; m = mm; }
+      if (ent.cyclic && numName(E) && mm > j + 1) { mm = j + 1; m = mm; }
       for (let len = 1; len <= 4; len++) {
         if (ent.cyclic ? mm + len > L : j + len > L - 1) break;
         const orig = [];
@@ -1084,6 +1216,7 @@ function continuations(progression, key, opts = {}) {
     if (replays(fresh, all, k)) continue;
     const toks = ch.map((c) => tok(c, k, b));
     const parts = { match: 0, gate: 0, end: 0, vl: 0, nov: 0, fit: 0, use: 0, style: 0, cover: 1.5 * Math.min(1, (r.to - r.from + 1) / r.ent.seq.length) };
+    if (r.m < 1 && r.ent.style.colour && r.ent.style.colour !== st.colour) continue; // as for then lines
     if (r.m >= 1) parts.match = 0.9 * Math.min(r.m, 4);
     else if (r.m === 0.5) parts.match = 0.5;
     else {
@@ -1166,43 +1299,58 @@ function whyCont(s, ctx) {
 const FAMILIES = [
   { name: 'Classical and folk', genres: ['Baroque', 'Classical', 'Hymn', 'Folk', 'Celtic', 'Country'] },
   { name: 'Blues and rock', genres: ['Blues', 'Rock', 'Funk', 'Metal'] },
-  { name: 'Jazz and soul', genres: ['Jazz', 'Swing', 'Ragtime', 'Bossa nova', 'Soul', 'Gospel'] },
-  { name: 'Ballad and pop', genres: ['Ballad', 'Cinematic', 'Pop', 'Doo-wop'] },
+  { name: 'Jazz and soul', genres: ['Jazz', 'Swing', 'Ragtime', 'Soul', 'Gospel'] },
+  { name: 'Bossa nova', genres: ['Bossa nova'] },
+  { name: 'Ballad and pop', genres: ['Ballad', 'Pop', 'Doo-wop'] },
+  { name: 'Post-rock and cinematic', genres: ['Post-rock', 'Cinematic'] },
   { name: 'Flamenco', genres: ['Flamenco'] },
 ];
 const BLUES_GENRES = ['Blues', 'Funk'];
 const START_CAP = 4;
+// groups of Start with entries: items (at most START_CAP, shown) and more (the rest, behind a More control).
+// Each item's style is the style its chords imply ('triads', 'sevenths', 'ninths', 'add9').
 function starts(key) {
   const k = keyInfo(key);
-  const groups = FAMILIES.map((f) => ({ name: f.name, items: [] }));
+  const groups = FAMILIES.map((f) => ({ name: f.name, items: [], more: [] }));
   for (const E of LIBRARY) {
     if (!E.uses.includes('start')) continue;
     const frame = E.mode === k.mode ? k : relative(k);
     const chords = E.numerals.map((nm) => realize(nm, frame));
-    const blues = BLUES_GENRES.includes(E.genre);
+    const blues = BLUES_GENRES.includes(E.genre) || styleOf(chords, frame).blues; // the Jazz blues too
     const g = groups[FAMILIES.findIndex((f) => f.genres.includes(E.genre))];
     g.items.push({
       id: E.id, name: E.name, genre: E.genre, mood: E.mood, mode: E.mode, kind: E.kind, tonic: frame.name,
       chords: chords.map((c) => c.symbol), numerals: E.numerals.slice(),
       lanes: chords.map((c, i) => lane(c, frame, chords[(i + 1) % chords.length], { blues })),
-      repeat: E.repeat || null, note: E.note,
+      repeat: E.repeat || null, note: E.note, style: styleOf(chords, frame).style,
     });
   }
   for (const g of groups) g.items.sort((a, b) => (a.mode === k.mode ? 0 : 1) - (b.mode === k.mode ? 0 : 1));
-  // Keep each group short: at most START_CAP entries of the key's own mode, one per genre first, then the rest in order.
+  // Show at most START_CAP entries of the key's own mode, one per genre first, then the rest in order; the other own-mode
+  // entries go to more. Other-mode entries appear only in a group with none of its own (Flamenco in a major key).
   for (const g of groups) {
+    const own = g.items.filter((x) => x.mode === k.mode);
+    const pool = own.length ? own : g.items;
     const keep = new Set(), genres = new Set();
-    for (const x of g.items) if (keep.size < START_CAP && x.mode === k.mode && !genres.has(x.genre)) { keep.add(x); genres.add(x.genre); }
-    for (const x of g.items) if (keep.size < START_CAP && x.mode === k.mode) keep.add(x);
-    if (!keep.size) for (const x of g.items) if (keep.size < START_CAP) keep.add(x); // other mode only for a group with none of its own
-    g.items = g.items.filter((x) => keep.has(x));
+    for (const x of pool) if (keep.size < START_CAP && !genres.has(x.genre)) { keep.add(x); genres.add(x.genre); }
+    for (const x of pool) if (keep.size < START_CAP) keep.add(x);
+    g.items = pool.filter((x) => keep.has(x));
+    g.more = pool.filter((x) => !keep.has(x));
   }
   const share = (g) => (g.items.length ? g.items.filter((x) => x.mode === 'minor').length / g.items.length : 0);
   if (k.mode === 'minor') groups.sort((a, b) => share(b) - share(a));
   return groups.filter((g) => g.items.length);
 }
 
+// the key's diatonic chords in a style ('triads', 'sevenths', 'ninths', 'add9'), I to vii (minor adds V); for the Key band
+function diatonicSet(key, style) {
+  const k = keyInfo(key);
+  const st = styleOf([], k, { style });
+  const pool = POOLS[k.mode][st.sevenths ? 'sev' : 'tri'];
+  return pool.map((nm) => colourize(realize(nm, k), st, k));
+}
+
 module.exports = {
   parse, numeral, realize, keyInfo, relative, tones, laneInfo, lane, roleOf, voiceLead, styleOf,
-  afterIdeas, thenFor, continuations, starts, LIBRARY,
+  afterIdeas, thenFor, continuations, starts, diatonicSet, colourize, STYLES, COLOUR, LIBRARY,
 };

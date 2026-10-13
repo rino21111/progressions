@@ -1,5 +1,6 @@
 // Shared app state with simple change notifications and local persistence.
 
+import { STYLES, StyleName } from './theory/engine';
 import { Chord, makeChord } from './theory/chords';
 import { Fingering } from './theory/fingering';
 import { BeatsPerBar, PLAY_STYLES, PlayStyle, validVariant } from './theory/patterns';
@@ -49,7 +50,8 @@ export interface AppState {
   progression: ProgressionChord[];
   /** The progression card that was clicked (index), or null. Never an undo step. */
   selectedCard: number | null;
-  sevenths: boolean;
+  /** How chords are written on Next…: triads, 7ths, 9ths or add9. */
+  style: StyleName;
   /** Key chosen on the progressions page, or null to use the best guess. */
   keyChoice: string | null;
   addMode: AddMode;
@@ -79,7 +81,7 @@ const defaults: AppState = {
   showMap: false,
   progression: [],
   selectedCard: null,
-  sevenths: false,
+  style: 'triads',
   keyChoice: null,
   addMode: 'suggested',
   playPattern: 'strum',
@@ -98,6 +100,9 @@ function load(): AppState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { ...defaults };
     const data = JSON.parse(raw);
+    // Older saves had a 7th-chords switch.
+    if (!STYLES.includes(data.style)) data.style = data.sevenths ? 'sevenths' : 'triads';
+    delete data.sevenths;
     // Settings that no longer exist.
     delete data.countIn;
     delete data.walkUps;

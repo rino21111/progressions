@@ -1792,6 +1792,12 @@ main {
   }
 }
 
+/* A group's further Start with entries: a quiet text control after its row. */
+.ex-more {
+  margin-top: 6px;
+  padding: 4px 0;
+}
+
 /* Hidden always wins over a display rule (the Relationships page is a flex column). */
 [hidden] {
   display: none !important;
