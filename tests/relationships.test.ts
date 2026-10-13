@@ -4,7 +4,9 @@ import { CHORD_TEMPLATES, Chord, chordSymbol, makeChord } from '../src/theory/ch
 import { StyleName, afterIdeas, collapseRepeats, engineSymbol, ideaReason, keyChords, siteChord, starts, thenPhrase } from '../src/theory/ideas';
 import * as engine from '../src/theory/engine';
 import { showsReturn } from '../src/theory/progressionMap';
-import { Key, chordSymbolInKey, keyName } from '../src/theory/keys';
+import { Key, chordSymbolInKey, keyName, romanNumeral } from '../src/theory/keys';
+import { parseChordName } from '../src/theory/search';
+import golden from './golden/engine.json';
 
 const C: Key = { tonic: 0, mode: 'major' };
 const Am: Key = { tonic: 9, mode: 'minor' };
@@ -99,5 +101,51 @@ describe('after ideas and start with (site bridge to the engine)', () => {
     expect(showsReturn(prog, true)).toBe(true);
     expect(showsReturn(prog, false)).toBe(false);
     expect(showsReturn([], true)).toBe(false);
+  });
+});
+
+describe("the engine's spelling reaches the page", () => {
+  const read = (symbols: string) => symbols.split(' ').map((x) => parseChordName(x)!);
+  const root = (symbol: string) => /^[A-G][#b]?/.exec(symbol)![0];
+  it('after Dm9 G13 in 9ths, Spicy offers G#dim7 (#v°7), leading to Am, not Abdim7', () => {
+    const spicy = afterIdeas(read('Dm9 G13'), C, { spice: true, style: 'ninths' });
+    const dim = spicy.find((i) => i.chord.template.id === 'dim7')!;
+    expect(chordSymbolInKey(dim.chord, C)).toBe('G#dim7');
+    expect(romanNumeral(dim.chord, C)).toBe('#v°7');
+    expect(dim.numeral).toBe('#v°7');
+  });
+  it("suffixes keep the site's formatting", () => {
+    const natural = afterIdeas(read('Cadd9 Gadd9 Am(add9) Fadd9'), C, { spice: false, style: 'add9' });
+    const ii = natural.find((i) => i.chord.template.id === 'madd9')!;
+    expect([chordSymbolInKey(ii.chord, C), ii.numeral]).toEqual(['Dm(add9)', 'ii(add9)']);
+  });
+  it('every engine symbol keeps its letter and accidental on the site (ideas, then lines, starts)', () => {
+    type G = { key: { tonic: number; mode: 'major' | 'minor' }; prog: string; at?: number; style?: StyleName; spice: boolean;
+      ideas: { chord: string; then: { chords: string[]; returnsHome: boolean } | null }[] };
+    for (const c of (golden.cases as G[]).filter((x) => x.at == null)) {
+      const key: Key = { tonic: c.key.tonic, mode: c.key.mode };
+      const got = afterIdeas(read(c.prog), key, { spice: c.spice, style: c.style });
+      expect(got.map((i) => root(chordSymbolInKey(i.chord, key)))).toEqual(c.ideas.map((i) => root(i.chord)));
+      got.forEach((i, n) => {
+        const want = c.ideas[n].then;
+        if (!want) return expect(i.then).toBeNull();
+        const shown = i.then!.chords.map((x) => root(chordSymbolInKey(x, key)));
+        // a returning last chord is the user's own chord, as played
+        const upTo = want.returnsHome ? -1 : undefined;
+        expect(shown.slice(0, upTo)).toEqual(want.chords.map(root).slice(0, upTo));
+      });
+    }
+    for (const s of golden.starts) {
+      const key: Key = { tonic: s.key.tonic, mode: s.key.mode as Key['mode'] };
+      const groups = starts(key);
+      s.groups.forEach((g, gi) => {
+        [...g.items, ...g.more].forEach((it, ii) => {
+          const site = [...groups[gi].items, ...groups[gi].more][ii];
+          // repeated bars share one chord, so each written chord appears once here
+          const written = site.chords.filter((c, i) => i === 0 || c !== site.chords[i - 1]);
+          expect(written.map((c) => root(chordSymbolInKey(c, site.key)))).toEqual(it.chords.map(root));
+        });
+      });
+    }
   });
 });

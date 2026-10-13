@@ -60,9 +60,24 @@ export function siteChord(symbol: string): Chord {
   return c;
 }
 
+const DEGREE = /^(bb|b|#)?(VII|VI|IV|V|III|II|I|vii|vi|iv|v|iii|ii|i)/;
+/**
+ * A chord the engine supplied, as the site shows it: the engine's root spelling and degree (G#dim7,
+ * #v°7 leading to Am), with the site's own suffix formatting (ii(add9), not iiadd9).
+ */
+function supplied(symbol: string, numeral: string, key: Key): Chord {
+  const c = siteChord(symbol);
+  c.spelling = /^[A-G][#b]?/.exec(symbol)![0];
+  const degree = DEGREE.exec(numeral)?.[0] ?? '';
+  const site = romanNumeral(c, key);
+  c.numeral = degree + site.slice(DEGREE.exec(site)?.[0].length ?? 0);
+  return c;
+}
+
 /** The key's own chords in a style (minor adds the harmonic V, marked borrowed): the Key band. */
 export function keyChords(key: Key, style: engine.StyleName): { chord: Chord; borrowed: boolean }[] {
-  return engine.diatonicSet(engineKey(key), style).map((c, i) => ({ chord: siteChord(c.symbol), borrowed: key.mode === 'minor' && i === 7 }));
+  const k = engineKey(key);
+  return engine.diatonicSet(k, style).map((c, i) => ({ chord: supplied(c.symbol, engine.numeral(c, k), key), borrowed: key.mode === 'minor' && i === 7 }));
 }
 
 /** Up to four ideas for after the progression's last chord (Natural, or Spicy from outside the key). */
@@ -73,12 +88,13 @@ export function afterIdeas(progression: Chord[], key: Key, opts: { spice: boolea
     const t = x.then;
     let then: ThenPhrase | null = null;
     if (t) {
-      const chords = t.chords.map(siteChord);
+      const chords = t.chords.map((sym, i) => supplied(sym, t.numerals[i], key));
       // the return is the progression's own first chord, as played
       if (t.returnsHome) chords[chords.length - 1] = first;
       then = { name: t.name, genre: t.genre, mood: t.mood, chords, numerals: t.numerals, lanes: t.lanes, returnsHome: t.returnsHome };
     }
-    return { chord: siteChord(x.chord), numeral: x.numeral, lane: x.lane, tag: x.tag || null, why: x.why, then };
+    const chord = supplied(x.chord, x.numeral, key);
+    return { chord, numeral: chord.numeral!, lane: x.lane, tag: x.tag || null, why: x.why, then };
   });
 }
 
@@ -128,10 +144,11 @@ export interface StartGroup {
 export function starts(key: Key): StartGroup[] {
   const item = (x: engine.EngineStart): StartItem => {
     const bars = <T,>(list: T[]) => list.flatMap((v, i) => Array.from({ length: x.repeat?.[i] ?? 1 }, () => v));
+    const k: Key = { tonic: engine.parse(x.tonic).root, mode: x.mode };
     return {
       id: x.id, name: x.name, genre: x.genre, mood: x.mood, mode: x.mode, note: x.note, style: x.style,
-      key: { tonic: engine.parse(x.tonic).root, mode: x.mode },
-      chords: bars(x.chords.map(siteChord)),
+      key: k,
+      chords: bars(x.chords.map((sym, i) => supplied(sym, x.numerals[i], k))),
       lanes: bars(x.lanes),
     };
   };

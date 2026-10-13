@@ -132,6 +132,10 @@ export interface Chord {
   template: ChordTemplate;
   /** Lowest note. Equal to root unless the chord is inverted / a slash chord. */
   bass: PitchClass;
+  /** For a chord the engine supplied: its root as the engine spells it (G#, not Ab, leading to A). */
+  spelling?: string;
+  /** For a chord the engine supplied: its numeral in the key it was given for (#v°7). */
+  numeral?: string;
 }
 
 export interface ChordMatch extends Chord {

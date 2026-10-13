@@ -54,7 +54,7 @@ export function spellRootInKey(key: Key, root: PitchClass): string {
 
 /** Chord symbol spelled to suit the key, e.g. A# rather than Bb in F# major. */
 export function chordSymbolInKey(chord: Chord, key: Key): string {
-  return chordSymbol(chord, spellRootInKey(key, chord.root));
+  return chordSymbol(chord, chord.spelling ?? spellRootInKey(key, chord.root));
 }
 
 const MAJOR_DEGREE: Record<number, string> = {
@@ -68,6 +68,7 @@ const isMinorish = (family: ChordFamily) => family === 'minor' || family === 'di
 
 /** Roman numeral for a chord within a key, e.g. "vi", "V7", "ii°", "bVII". */
 export function romanNumeral(chord: Chord, key: Key): string {
+  if (chord.numeral) return chord.numeral;
   const semi = mod12(chord.root - key.tonic);
   let numeral = (key.mode === 'major' ? MAJOR_DEGREE : MINOR_DEGREE)[semi];
   const { family, id, suffix } = chord.template;

@@ -109,7 +109,8 @@ export function selectPhrase(chords: Chord[], source: string) {
 /** Add chords at the end of the progression; the last one added becomes the selected card. */
 export function addToProgression(...chords: ProgressionChord[]) {
   let { progression: list, selectedCard: card } = state;
-  for (const chord of chords) ({ list, card } = append(list, chord));
+  // A card keeps the chord and its shape; an engine's spelling and numeral belong to where it was suggested.
+  for (const { spelling: _s, numeral: _n, ...chord } of chords) ({ list, card } = append(list, chord));
   justAdded = true;
   update({ progression: list, selectedCard: card });
 }

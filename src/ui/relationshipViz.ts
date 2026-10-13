@@ -10,7 +10,7 @@ import { s, toneClass } from './dom';
 const LANES: Exclude<Lane, 'none'>[] = ['D', 'PD', 'T'];
 
 /** A chord's tones spelled as its symbol spells them (in the key). */
-const spelled = (chord: Chord, key: Key) => chordTones(chord, spellRootInKey(key, chord.root));
+const spelled = (chord: Chord, key: Key) => chordTones(chord, chord.spelling ?? spellRootInKey(key, chord.root));
 
 /** Moves in words, top voice first: "F to Fm: C stays, A down 1 fret to Ab, F stays (nearest notes, not strings)". */
 export function voiceSummary(x: Chord, c: Chord, key: Key): string {
