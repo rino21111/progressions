@@ -598,7 +598,7 @@ interface Ngram {
 // Bossa nova entry, counts half; a Jazz, Bossa nova or Post-rock vamp (a texture, not a chord-to-chord habit) counts only
 // for players in its own style
 const STYLED_GENRES = ['Jazz', 'Bossa nova', 'Post-rock'];
-function ngram(ctx: string[], idx: IndexEntry[], sameOnly: boolean, bluesUser = sameOnly, st: Style | null = null): Ngram {
+function ngram(ctx: string[], idx: IndexEntry[], sameOnly: boolean, bluesUser = sameOnly, st: Style | null = null, fa: Affinity | null = null): Ngram {
   const cnt: (Map<string, number> | null)[] = [null, new Map(), new Map(), new Map()];
   const src: (Map<string, Src[]> | null)[] = [null, new Map(), new Map(), new Map()];
   const sample: Ngram['sample'] = new Map();
@@ -609,7 +609,7 @@ function ngram(ctx: string[], idx: IndexEntry[], sameOnly: boolean, bluesUser = 
     if (ent.E.variantOf) continue; // a colour variant repeats its entry's harmony: no extra support
     if (st && ent.E.kind === 'vamp' && STYLED_GENRES.includes(ent.E.genre) && (ent.style.kind !== st.kind || (ent.style.colour && ent.style.colour !== st.colour))) continue;
     const plainHalf = st && st.kind === 'triad' && !st.colour && (ent.style.colour || ['Post-rock', 'Bossa nova'].includes(ent.E.genre));
-    const w = ent.w * (plainHalf ? 0.5 : 1);
+    const w = ent.w * (plainHalf ? 0.5 : 1) * (fa && ent.same ? 1 + 0.5 * fa.rel(ent.E) : 1); // your genre's habits count more
     const S = ent.seq, L = S.length;
     for (let j = 0; j < L; j++) {
       for (let kk = 1; kk <= K; kk++) {
@@ -818,6 +818,79 @@ function pullOk(y: EChord, c: EChord, k: EKey): boolean {
   return ok.some(([t, f]) => sc === t && (fam(c) === f || (r.role !== 'neapolitan' && ['secondary', 'tonic7'].includes(rc))));
 }
 
+// ---------- genre families ----------
+// How strongly the progression reads as each Start with family. Evidence: the share of your latest chords (up to 4, at
+// least 2) that a same-mode entry of the family plays in the same order, +0.25 when the entry is written in your colour
+// style. Prior: the colour style's own leaning (add9 and sus: post-rock; 9ths: jazz and bossa nova; 7ths: jazz; a blues:
+// blues and rock). A family's affinity is the larger of the two, 0 to 1.25.
+const FAMILY_NEAR: Record<string, Record<string, number>> = {
+  'Post-rock and cinematic': { 'Ballad and pop': 0.25, 'Blues and rock': 0.3, 'Classical and folk': 0.2 },
+  'Jazz and soul': { 'Bossa nova': 0.8, 'Ballad and pop': 0.2, 'Blues and rock': 0.2 },
+  'Bossa nova': { 'Jazz and soul': 0.8, 'Ballad and pop': 0.2 },
+  'Blues and rock': { 'Ballad and pop': 0.4, 'Classical and folk': 0.35, 'Post-rock and cinematic': 0.3, 'Jazz and soul': 0.2 },
+  'Ballad and pop': { 'Blues and rock': 0.4, 'Classical and folk': 0.3, 'Post-rock and cinematic': 0.3, 'Jazz and soul': 0.2 },
+  'Classical and folk': { 'Ballad and pop': 0.3, 'Blues and rock': 0.2, 'Flamenco': 0.2 },
+  'Flamenco': { 'Classical and folk': 0.3, 'Blues and rock': 0.2 },
+};
+const familyOf = (E: LibraryEntry) => (FAMILIES.find((f) => f.genres.includes(E.genre)) || { name: '' }).name;
+interface Affinity {
+  aff: Record<string, number>;
+  top: number;
+  /** How near the entry's family is to the progression's genre. */
+  rel: (E: LibraryEntry) => number;
+  /** The same, counting only the families that lead the read. */
+  lead: (E: LibraryEntry) => number;
+}
+function familyAffinity(Pc: EChord[], k: EKey, st: Style, idx: IndexEntry[]): Affinity {
+  const aff: Record<string, number> = {};
+  for (const f of FAMILIES) aff[f.name] = 0;
+  if (st.colour === 'open') aff['Post-rock and cinematic'] = 0.6;
+  if (st.colour === 'ext') { aff['Jazz and soul'] = 0.5; aff['Bossa nova'] = 0.5; }
+  if (st.kind === 'jazz' && !st.colour) { aff['Jazz and soul'] = 0.3; aff['Bossa nova'] = 0.2; }
+  if (st.blues) aff['Blues and rock'] = 0.6;
+  const want = Math.min(4, Pc.length);
+  if (want >= 2) {
+    for (const ent of idx) {
+      if (!ent.same) continue;
+      const L = ent.seq.length;
+      let best = 0;
+      for (let j = 0; j < (ent.cyclic ? L : L + 1); j++) best = Math.max(best, backMatch(ent, j, Pc, k, st.blues, Math.min(4, ent.cyclic ? L : j)));
+      if (best < 2) continue; // one shared chord says nothing about genre
+      // +0.25 when the entry is written in your colour style, or when your chords are the whole entry in its own style
+      // (a Start with pick)
+      const whole = best === Pc.length && best === ent.seq.length && ent.style.kind === st.kind && (ent.style.colour || null) === (st.colour || null);
+      const e = Math.min(1.25, best / want + (ent.style.colour && ent.style.colour === st.colour ? 0.25 : 0) + (whole ? 0.25 : 0));
+      const f = familyOf(ent.E);
+      if (e > aff[f]) aff[f] = e;
+    }
+  }
+  const top = Math.max(...Object.values(aff));
+  // rel: how near the entry's family is to your genre. lead: the same, counting only the families that lead the read
+  // (less than AFF_LEAD under the strongest), so a weak second reading does not let its whole neighbourhood back in
+  const near = (E: LibraryEntry, only: boolean) => {
+    const f = familyOf(E);
+    let v = 0;
+    for (const g in aff) if (!only || aff[g] > top - AFF_LEAD) v = Math.max(v, aff[g] * (g === f ? 1 : FAMILY_NEAR[g]?.[f] || 0));
+    return v;
+  };
+  return { aff, top, rel: (E) => near(E, false), lead: (E) => near(E, true) };
+}
+const AFF_W = 1.0, AFF_OFF = 0.5; // then lines: + AFF_W x the entry's family affinity - AFF_OFF x the strongest affinity
+// when your chords read clearly as a genre with its own sound (an entry of it plays at least 0.8 of them, and no
+// common-practice family leads with it), phrases from far-off families (relation under 0.3 of that read) are not
+// offered at all. A pop or folk loop keeps every phrase: those families are the shared language
+const AFF_CLEAR = 0.8, AFF_FAR = 0.3, AFF_LEAD = 0.25;
+const COMMON_FAMILIES = ['Classical and folk', 'Ballad and pop'];
+const distinctRead = (fa: Affinity) => fa.top >= AFF_CLEAR && COMMON_FAMILIES.every((g) => fa.aff[g] <= fa.top - AFF_LEAD);
+const offGenre = (fa: Affinity, E: LibraryEntry) => distinctRead(fa) && fa.lead(E) < AFF_FAR * fa.top;
+// then-line score: in a distinct read, + AFF_W x the entry's relation - AFF_OFF x the read; otherwise a light preference
+const AFF_LIGHT = 0.2;
+const famScore = (fa: Affinity, E: LibraryEntry) => (distinctRead(fa) ? AFF_W * fa.rel(E) - AFF_OFF * fa.top : AFF_LIGHT * fa.rel(E));
+// post-rock and cinematic: dominant 7ths, diminished chords and chromatic pulls are foreign to the sound
+const CINE = 'Post-rock and cinematic';
+const cineRead = (fa: Affinity) => fa.aff[CINE] >= AFF_CLEAR && fa.aff[CINE] === fa.top && ['Jazz and soul', 'Bossa nova'].every((g) => fa.aff[g] <= fa.top - AFF_LEAD);
+const CINE_PEN = 1.0, CINE_PULL = 1.5;
+
 // ---------- then lines ----------
 interface Ctx {
   k: EKey;
@@ -837,6 +910,8 @@ interface Ctx {
   phraseEnd: boolean;
   posW: number;
   ng?: Ngram;
+  /** How the progression reads as each Start with family. */
+  fam?: Affinity;
 }
 interface ThenCand { ent: IndexEntry; j: number; m: number; t: number; ch: EChord[]; ret: boolean; home: boolean; sc: number }
 // The classic phrase that continues from an idea chord: idea + then-chords is a library phrase picked up from the
@@ -854,6 +929,7 @@ function thenCandidates(ctx: Ctx, y: EChord): ThenCand[] {
   for (const ent of libIndex(k)) {
     const E = ent.E;
     if (!ent.same || ent.hasPicardy || E.nameNeedsColours || !styleGate(ent, st)) continue;
+    if (ctx.fam && offGenre(ctx.fam, E)) continue;     // a post-rock loop is not continued with a country phrase
     const canCont = E.uses.includes('continue'), canEnd = E.uses.includes('end');
     if (!canCont && !canEnd) continue;
     const S = ent.seq, L = S.length;
@@ -893,7 +969,8 @@ function thenCandidates(ctx: Ctx, y: EChord): ThenCand[] {
           + styleFit(ent, st)
           + (whole ? 0.3 : 0)
           + (ent.cyclic && mod(j - m, L) === 0 ? 0.2 : 0)
-          - (sameChord(ch[0], X) && (!whole || !ent.cyclic) ? 0.4 : 0); // X, idea, X again: a neighbour, not a phrase
+          - (sameChord(ch[0], X) && (!whole || !ent.cyclic) ? 0.4 : 0) // X, idea, X again: a neighbour, not a phrase
+          + (ctx.fam ? famScore(ctx.fam, E) : 0); // the progression's own genre first
         out.push({ ent, j, m, t, ch, ret, home, sc });
       }
     }
@@ -936,7 +1013,8 @@ function assignThens(ideas: EChord[], ctx: Ctx): (EngineThen | null)[] {
     let best: ThenCand | null = null, bv = -Infinity;
     for (const c of thenCandidates(ctx, y)) {
       const E = c.ent.E;
-      const v = c.sc - (used.name.includes(E.name) ? 1.0 : 0) - (used.genre.includes(E.genre) ? 0.3 : 0) - (used.mood.includes(E.mood) ? 0.2 : 0);
+      const near = !!ctx.fam && ctx.fam.rel(E) >= 0.6; // within your genre, more of the same genre is welcome
+      const v = c.sc - (used.name.includes(E.name) ? 1.0 : 0) - (used.genre.includes(E.genre) ? (near ? 0.1 : 0.3) : 0) - (used.mood.includes(E.mood) ? (near ? 0.1 : 0.2) : 0);
       if (v > bv) { bv = v; best = c; }
     }
     if (!best || bv < THEN_MIN) return null;
@@ -1046,19 +1124,24 @@ interface Cand {
   v?: number;
 }
 
-/** Up to four ideas for the chord after the progression (or at `opts.at`), each with an optional then line. */
-export function afterIdeas(progression: (string | EChord)[], key: EngineKeyInput, opts: AfterOpts = {}): EngineIdea[] {
-  const ctx = afterContext(progression, key, opts);
-  if (!ctx) return [];
+// the scored candidates behind every After list: the key's chords (nat) and the chromatic chords that pass the Spicy
+// tests (rest, each with its spice value and vouch)
+function afterPool(ctx: Ctx): { nat: Cand[]; rest: Cand[]; reason: (s: Cand) => boolean; lo: { blues: boolean } } {
   const { k, n, at, P, X, follow, afterFollow, st, Pc, prev, phraseEnd, posW, open } = ctx;
   const b = st.blues;
   const idx = libIndex(k, b);
-  const ng = ngram(Pc.map((c) => tok(c, k, b)), idx, b, b, st);
+  ctx.fam = familyAffinity(Pc, k, st, idx);
+  const ng = ngram(Pc.map((c) => tok(c, k, b)), idx, b, b, st, ctx.fam);
+  const cine = cineRead(ctx.fam);
   ctx.ng = ng;
   const lo = { blues: b };
 
   const pool = POOLS[k.mode];
-  const inStyle = (nm: string) => colourize(realize(nm, k), st, k);
+  // in a post-rock read the V is suspended (Gsus4, not G7)
+  const inStyle = (nm: string) => {
+    const c = colourize(realize(nm, k), st, k);
+    return cine && semisOf(c, k) === 7 && fam(c) === 'M' && !b ? requality(c, 'sus4') : c;
+  };
   const dia = (b ? pool.blues : st.sevenths ? pool.sev : pool.tri).map(inStyle);
   const chromNames = b ? pool.spiceBlues : st.sevenths ? pool.spiceSev : pool.spiceTri;
   const chrom = chromNames.map(inStyle).filter((c) => !dia.some((d) => sameChord(c, d)));
@@ -1122,11 +1205,71 @@ export function afterIdeas(progression: (string | EChord)[], key: EngineKeyInput
   // something speaks for a weak row: library support, X's own pull, or a move worth hearing
   const reason = (s: Cand) => s.parts.pen > -0.6 && (s.ngs.best > 0 || expectHit(X, s.c, k) > 0 || isDeceptive(X, s.c, k) || s.parts.move >= 0.5);
 
+  const nat = cands.filter((s) => s.natural);
+  for (const s of nat) if (fam(s.c) === 'd' && s.ngs.best < 3) { s.parts.pen -= 4; s.total -= 4; } // vii° and ii° only when the library context asks
+  if (cine) for (const s of nat) if (s.c.quality === '7' || fam(s.c) === 'd') { s.parts.pen -= CINE_PEN; s.total -= CINE_PEN; }
+  const inPalette = (c: EChord) => diatonic(c, k) || dia.some((d) => sameChord(d, c));
+  const outside2 = Pc.slice(-2).some((c) => !inPalette(c));
+  const rest: Cand[] = [];
+  for (const s of cands) {
+    if (s.natural) continue;
+    const c = s.c, r = roleOf(c, k), sc = semisOf(c, k);
+    if (cands.some((x) => x.natural && x.t === s.t) && !['tonic7', 'secondary'].includes(r.role)) continue; // E7 adds nothing next to E
+    let extra = -0.08 * s.vlr.cost;
+    // minor VI7 (the blues role) leans on V like an augmented sixth, so it is held to the same test
+    if (r.target != null && (PULL_ROLES.includes(r.role) || (r.role === 'blues' && k.mode === 'minor'))) {
+      if (r.target === xs && !sameRF(follow, X)) continue; // points straight back at X
+      extra += 0.2;
+      if (!open) {
+        const fits = semisOf(follow, k) === r.target && expectHit(c, follow, k) >= 1;
+        const ivTo = r.role === 'leading' && c.quality === 'dim7' && sc === 6 && k.mode === 'major' && isTonicChord(follow, k, b) && [0, 5].includes(xs); // I or IV, #iv°7, I
+        // the loop goes elsewhere: a penalty, unless a then line carries the chord to its target
+        const carried = () => thenCandidates(ctx, c).some((x) => x.sc >= THEN_MIN);
+        if (!fits && !ivTo && moveScore(c, follow, k, afterFollow, st) < 0.5 && !libAdj(c, follow) && !carried()) continue;
+        if ((fits || ivTo) && c.quality === 'dim7') extra += 0.4;
+        // after a chord already outside the key, another chromatic pull needs a reason: library support, X's own
+        // pull, or the next chord as its target (C Bb D7 is a detour)
+        if (!inPalette(X) && !fits && !ivTo && !s.ngs.best && !expectHit(X, c, k) && c.root !== X.root) { extra -= 0.5; s.astray = true; }
+      }
+    }
+    if (r.role === 'tonic7' && !open && semisOf(follow, k) !== 5) continue; // I7 only on its way to IV
+    if (r.role === 'picardy') {
+      if (isDominantOfTonic(X, k) && at === n) extra += 0.4;
+      else if (!(semisOf(follow, k) === 5 && fam(follow) === 'm')) continue; // otherwise only as V of iv
+    }
+    if (r.role === 'dorian4') extra -= 0.25;
+    if (cine && (PULL_ROLES.includes(r.role) || c.quality === '7' || fam(c) === 'd')) extra -= CINE_PULL;
+    if (!st.sevenths && c.quality === 'dim7') extra -= 0.4;
+    if (!st.sevenths && r.role === 'tritone') continue; // a jazz substitute: only among 7th chords
+    const hit = expectHit(X, c, k) > 0;
+    if (r.role === 'borrowed' && !s.ngs.best && !hit && !isDeceptive(X, c, k)) extra -= 0.8; // a borrowed chord needs a reason
+    const rx = roleOf(X, k);
+    if (rx.target != null && PULL_ROLES.includes(rx.role) && rx.target === sc && expectHit(X, c, k) < 1) extra -= 0.5; // V/ii into a borrowed ii
+    if (b && c.quality === 'dim7' && sc === 6 && semisOf(X, k) === 5) extra += 1.0; // blues IV7 to #iv°7
+    // the library continues this exact context with it: three chords of context, or two when your last two leave the
+    // key, or one when X does. These lead the Spicy list.
+    const q = (kk: number) => !!ng.cnt[kk] && ng.cnt[kk]!.has(s.t) && ng.src[kk]!.get(s.t)!.some((x) => x.ent.same);
+    if (q(3) || (outside2 && q(2)) || (!inPalette(X) && q(1))) extra += 1.0;
+    s.spice = s.total + extra;
+    // a row under SPICY_MIN needs something to speak for it: library support, X's pull, a deceptive move, the same
+    // root inflected (D to D7), or a target that is the next chord reached by a good move
+    s.vouch = !s.astray && (s.ngs.best > 0 || expectHit(X, c, k) > 0 || isDeceptive(X, c, k) || c.root === X.root
+      || (r.target != null && semisOf(follow, k) === r.target && s.parts.move >= 0.5)
+      || (s.parts.move >= 0.5 && thenCandidates(ctx, c).some((x) => x.sc >= THEN_MIN)));
+    rest.push(s);
+  }
+  return { nat, rest, reason, lo };
+}
+
+/** Up to four ideas for the chord after the progression (or at `opts.at`), each with an optional then line. */
+export function afterIdeas(progression: (string | EChord)[], key: EngineKeyInput, opts: AfterOpts = {}): EngineIdea[] {
+  const ctx = afterContext(progression, key, opts);
+  if (!ctx) return [];
+  const { k } = ctx;
+  const { nat, rest, reason, lo } = afterPool(ctx);
   let picked: Cand[];
   if (!opts.spice) {
     // Natural: the key's chords in the player's style
-    const nat = cands.filter((s) => s.natural);
-    for (const s of nat) if (fam(s.c) === 'd' && s.ngs.best < 3) { s.parts.pen -= 4; s.total -= 4; } // vii° and ii° only when the library context asks
     nat.sort((a, x) => x.total - a.total);
     picked = [];
     for (const s of nat) {
@@ -1138,55 +1281,6 @@ export function afterIdeas(progression: (string | EChord)[], key: EngineKeyInput
     }
   } else {
     // Spicy: secondary dominants, borrowed chords, diminished 7ths, Neapolitan, Picardy, tritone sub
-    const inPalette = (c: EChord) => diatonic(c, k) || dia.some((d) => sameChord(d, c));
-    const outside2 = Pc.slice(-2).some((c) => !inPalette(c));
-    const rest: Cand[] = [];
-    for (const s of cands) {
-      if (s.natural) continue;
-      const c = s.c, r = roleOf(c, k), sc = semisOf(c, k);
-      if (cands.some((x) => x.natural && x.t === s.t) && !['tonic7', 'secondary'].includes(r.role)) continue; // E7 adds nothing next to E
-      let extra = -0.08 * s.vlr.cost;
-      // minor VI7 (the blues role) leans on V like an augmented sixth, so it is held to the same test
-      if (r.target != null && (PULL_ROLES.includes(r.role) || (r.role === 'blues' && k.mode === 'minor'))) {
-        if (r.target === xs && !sameRF(follow, X)) continue; // points straight back at X
-        extra += 0.2;
-        if (!open) {
-          const fits = semisOf(follow, k) === r.target && expectHit(c, follow, k) >= 1;
-          const ivTo = r.role === 'leading' && c.quality === 'dim7' && sc === 6 && k.mode === 'major' && isTonicChord(follow, k, b) && [0, 5].includes(xs); // I or IV, #iv°7, I
-          // the loop goes elsewhere: a penalty, unless a then line carries the chord to its target
-          const carried = () => thenCandidates(ctx, c).some((x) => x.sc >= THEN_MIN);
-          if (!fits && !ivTo && moveScore(c, follow, k, afterFollow, st) < 0.5 && !libAdj(c, follow) && !carried()) continue;
-          if ((fits || ivTo) && c.quality === 'dim7') extra += 0.4;
-          // after a chord already outside the key, another chromatic pull needs a reason: library support, X's own
-          // pull, or the next chord as its target (C Bb D7 is a detour)
-          if (!inPalette(X) && !fits && !ivTo && !s.ngs.best && !expectHit(X, c, k) && c.root !== X.root) { extra -= 0.5; s.astray = true; }
-        }
-      }
-      if (r.role === 'tonic7' && !open && semisOf(follow, k) !== 5) continue; // I7 only on its way to IV
-      if (r.role === 'picardy') {
-        if (isDominantOfTonic(X, k) && at === n) extra += 0.4;
-        else if (!(semisOf(follow, k) === 5 && fam(follow) === 'm')) continue; // otherwise only as V of iv
-      }
-      if (r.role === 'dorian4') extra -= 0.25;
-      if (!st.sevenths && c.quality === 'dim7') extra -= 0.4;
-      if (!st.sevenths && r.role === 'tritone') continue; // a jazz substitute: only among 7th chords
-      const hit = expectHit(X, c, k) > 0;
-      if (r.role === 'borrowed' && !s.ngs.best && !hit && !isDeceptive(X, c, k)) extra -= 0.8; // a borrowed chord needs a reason
-      const rx = roleOf(X, k);
-      if (rx.target != null && PULL_ROLES.includes(rx.role) && rx.target === sc && expectHit(X, c, k) < 1) extra -= 0.5; // V/ii into a borrowed ii
-      if (b && c.quality === 'dim7' && sc === 6 && semisOf(X, k) === 5) extra += 1.0; // blues IV7 to #iv°7
-      // the library continues this exact context with it: three chords of context, or two when your last two leave the
-      // key, or one when X does. These lead the Spicy list.
-      const q = (kk: number) => !!ng.cnt[kk] && ng.cnt[kk]!.has(s.t) && ng.src[kk]!.get(s.t)!.some((x) => x.ent.same);
-      if (q(3) || (outside2 && q(2)) || (!inPalette(X) && q(1))) extra += 1.0;
-      s.spice = s.total + extra;
-      // a row under SPICY_MIN needs something to speak for it: library support, X's pull, a deceptive move, the same
-      // root inflected (D to D7), or a target that is the next chord reached by a good move
-      s.vouch = !s.astray && (s.ngs.best > 0 || expectHit(X, c, k) > 0 || isDeceptive(X, c, k) || c.root === X.root
-        || (r.target != null && semisOf(follow, k) === r.target && s.parts.move >= 0.5)
-        || (s.parts.move >= 0.5 && thenCandidates(ctx, c).some((x) => x.sc >= THEN_MIN)));
-      rest.push(s);
-    }
     // greedy: at most 3 chords that pull to a target and 2 per other role, a second chord for the same target pays 0.6
     picked = [];
     while (picked.length < 4) {
@@ -1206,14 +1300,95 @@ export function afterIdeas(progression: (string | EChord)[], key: EngineKeyInput
     picked.sort((a, x) => x.spice! - a.spice!);
   }
   const thens = assignThens(picked.map((s) => s.c), ctx);
-  return picked.map((s, i) => ({
+  return picked.map((s, i) => ideaOut(s, thens[i], ctx, lo));
+}
+function ideaOut(s: Cand, then: EngineThen | null, ctx: Ctx, lo: { blues: boolean }): EngineIdea {
+  const { k, X, follow } = ctx;
+  return {
     chord: s.c.symbol,
     numeral: numeral(s.c, k),
     lane: lane(s.c, k, follow, lo),
     tag: tagFor(X, s.c, ctx),
     why: whyAfter(X, s, ctx),
-    then: thens[i],
+    then,
     score: +(s.spice != null ? s.spice : s.total).toFixed(2),
+  };
+}
+
+// ---------- Next by feeling ----------
+// The same candidates as the After lists, grouped by what the move feels like instead of Natural and Spicy:
+// Resolve (home), Lift (a major chord away from home), Drift (a gentle minor chord of the key), Darken (the relative or a
+// borrowed minor colour), Tension (dominants, leading and diminished chords, pulls to a target).
+export const MOODS = ['Resolve', 'Lift', 'Drift', 'Darken', 'Tension'] as const;
+export type Mood = (typeof MOODS)[number];
+const MOOD_MAX = 3, MOOD_FILL = 0;
+function moodOf(c: EChord, k: EKey, follow: EChord, b: boolean): Mood {
+  const s = semisOf(c, k), f = fam(c), r = roleOf(c, k).role, major = k.mode === 'major';
+  if (isTonicChord(c, k, b)) return 'Resolve';
+  if (r === 'picardy') return 'Lift';
+  if (b && f === 'M' && s === 5) return 'Lift';                                  // the blues IV7
+  if (['leading', 'tonic7', 'tritone'].includes(r) || f === 'd') return 'Tension';
+  if (r === 'secondary') return isTriad(c.quality) && lane(c, k, follow, { blues: b }) === 'PD' ? 'Lift' : 'Tension'; // the Lydian II stays bright
+  if ((s === 7 || (major && s === 11)) && f === 'M') return 'Tension';            // V, and VII as V of iii
+  if (c.quality === '7' && !(b && [0, 5, 7].includes(s))) return 'Tension';       // other dominant 7ths
+  if (f === 'M' || f === 'a') {
+    if (major && [1, 3, 8].includes(s)) return 'Darken';                          // bII, bIII, bVI from the parallel minor
+    if (!major && s === 1) return 'Darken';                                       // Phrygian bII
+    return 'Lift';                                                                 // IV, bVII, II, III; III, VI, VII and Dorian IV in minor
+  }
+  if (major) return s === 2 || s === 4 || s === 7 ? 'Drift' : 'Darken';           // ii, iii, v drift; vi, iv, i darken
+  return s === 5 ? 'Darken' : 'Drift';                                            // minor: iv darkens; v and ii drift
+}
+/** The After candidates grouped by what the move feels like (Resolve, Lift, Drift, Darken, Tension; empty groups left out). */
+export function nextByMood(progression: (string | EChord)[], key: EngineKeyInput, opts: AfterOpts = {}): { mood: Mood; ideas: EngineIdea[] }[] {
+  const ctx = afterContext(progression, key, opts);
+  if (!ctx) return [];
+  const { k, follow, st } = ctx;
+  const b = st.blues;
+  const { nat, rest, reason, lo } = afterPool(ctx);
+  // one value per candidate: Natural rows by total, chromatic rows by their Spicy value; each must pass its own list's bar
+  // a mood with nothing over its bar still shows its best key chord when that scores at least MOOD_FILL (G, F, C)
+  type P = { s: Cand; v: number; chrom: boolean };
+  const pool: P[] = [], fill: P[] = [];
+  for (const s of nat) {
+    if (s.total < NATURAL_FLOOR || (s.total < NATURAL_MIN && !reason(s))) { if (s.total >= MOOD_FILL) fill.push({ s, v: s.total, chrom: false }); continue; }
+    pool.push({ s, v: s.total, chrom: false });
+  }
+  for (const s of rest) {
+    if (s.spice! < SPICY_FLOOR || (s.spice! < SPICY_MIN && !s.vouch)) continue;
+    pool.push({ s, v: s.spice!, chrom: true });
+  }
+  pool.sort((a, x) => x.v - a.v);
+  fill.sort((a, x) => x.v - a.v);
+  const groups = MOODS.map((mood) => ({ mood, picked: [] as P[] }));
+  const taken: Cand[] = [];
+  let pulls = 0;
+  for (const p of pool) {
+    const g = groups[MOODS.indexOf(moodOf(p.s.c, k, follow, b))];
+    if (g.picked.length >= MOOD_MAX) continue;
+    if (taken.some((x) => x.t === p.s.t || (x.c.root === p.s.c.root && fam(x.c) === fam(p.s.c)))) continue; // Bb or Bb7, not both
+    if (p.chrom && g.picked.filter((x) => x.chrom).length >= 2) continue;         // keep the key's own chords in sight
+    const r = roleOf(p.s.c, k).role;
+    const pull = ['secondary', 'leading', 'tonic7'].includes(r);
+    if (pull && pulls >= 3) continue;
+    // a third idea in a group only when it is a good one
+    if (g.picked.length >= 2 && p.v < (p.chrom ? SPICY_MIN : NATURAL_MIN)) continue;
+    if (pull) pulls++;
+    g.picked.push(p);
+    taken.push(p.s);
+  }
+  for (const p of fill) {
+    const g = groups[MOODS.indexOf(moodOf(p.s.c, k, follow, b))];
+    if (g.picked.length || taken.some((x) => x.t === p.s.t)) continue;
+    g.picked.push(p);
+    taken.push(p.s);
+  }
+  const flat = groups.flatMap((g) => g.picked.map((p) => p.s.c));
+  const thens = assignThens(flat, ctx);
+  let i = 0;
+  return groups.filter((g) => g.picked.length).map((g) => ({
+    mood: g.mood,
+    ideas: g.picked.map((p) => ideaOut(p.s, thens[i++], ctx, lo)),
   }));
 }
 // rows: Natural shows ideas down to 0.5 (a second row down to -0.5 when something speaks for it); Spicy down to 0.3
@@ -1276,6 +1451,7 @@ function whyAfter(X: EChord, s: Cand, ctx: Ctx): string {
 export function thenFor(progression: (string | EChord)[], key: EngineKeyInput, idea: string | EChord, opts: AfterOpts = {}): EngineThen | null {
   const ctx = afterContext(progression, key, opts);
   if (!ctx) return null;
+  ctx.fam = familyAffinity(ctx.Pc, ctx.k, ctx.st, libIndex(ctx.k, ctx.st.blues));
   return assignThens([parse(idea)], ctx)[0];
 }
 

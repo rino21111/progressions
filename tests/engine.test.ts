@@ -2,7 +2,7 @@
 // reference/theory/engine.js run with node on the same battery).
 import { describe, expect, it } from 'vitest';
 import golden from './golden/engine.json';
-import { StyleName, afterIdeas, diatonicSet, starts } from '../src/theory/engine';
+import { EngineIdea, StyleName, afterIdeas, diatonicSet, nextByMood, starts } from '../src/theory/engine';
 
 type GoldenKey = { tonic: number; mode: 'major' | 'minor'; name: string };
 
@@ -18,6 +18,18 @@ describe('engine port matches the reference', () => {
         then: x.then && { name: x.then.name, chords: x.then.chords, numerals: x.then.numerals, lanes: x.then.lanes, returnsHome: x.then.returnsHome },
       }));
       expect(got).toEqual(c.ideas);
+    });
+  }
+  const slim = (x: EngineIdea) => ({
+    chord: x.chord, numeral: x.numeral, lane: x.lane, tag: x.tag, why: x.why,
+    then: x.then && { name: x.then.name, chords: x.then.chords, numerals: x.then.numerals, lanes: x.then.lanes, returnsHome: x.then.returnsHome },
+  });
+  for (const m of golden.moods as { key: GoldenKey; prog: string; at?: number; style?: StyleName; groups: unknown[] }[]) {
+    it(`by feeling: ${m.key.name} ${m.key.mode}: ${m.prog}${m.at != null ? ` at ${m.at}` : ''}${m.style ? ` (${m.style})` : ''}`, () => {
+      const opts: { at?: number; style?: StyleName } = {};
+      if (m.at != null) opts.at = m.at;
+      if (m.style) opts.style = m.style;
+      expect(nextByMood(m.prog.split(' '), m.key, opts).map((g) => ({ mood: g.mood, ideas: g.ideas.map(slim) }))).toEqual(m.groups);
     });
   }
   for (const s of golden.starts) {

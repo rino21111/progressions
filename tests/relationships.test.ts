@@ -39,7 +39,7 @@ describe('after ideas and start with (site bridge to the engine)', () => {
     expect(dm.then!.chords[1]).toBe(prog[0]);
     expect(names(thenPhrase(dm), C)).toEqual(['Dm', 'G']);
     const spicy = afterIdeas(prog, C, { spice: true });
-    expect(names(spicy.map((i) => i.chord), C)).toEqual(['D7', 'F#dim7', 'Fm', 'A7']);
+    expect(names(spicy.map((i) => i.chord), C)).toEqual(['Fm', 'D7', 'E7', 'A7']);
     expect(afterIdeas([], C, { spice: false })).toEqual([]);
   });
   it('the style control reaches the engine', () => {
@@ -48,7 +48,7 @@ describe('after ideas and start with (site bridge to the engine)', () => {
     expect(at('sevenths')).toEqual(['Cmaj7', 'G7', 'Dm7']);
     expect(at('triads')).toEqual(['C', 'G', 'Dm']);
     expect(at('ninths')).toEqual(['Cmaj9', 'G13', 'Dm9']);
-    expect(at('add9')).toEqual(['Cadd9', 'Gadd9', 'Dm(add9)']);
+    expect(at('add9')).toEqual(['Cadd9', 'Gsus4', 'Dm(add9)']); // add9 reads as post-rock: V is suspended
   });
   it('the Key band follows the style', () => {
     expect(names(keyChords(C, 'ninths').map((d) => d.chord), C)).toEqual(['Cmaj9', 'Dm9', 'Em7', 'Fmaj9', 'G13', 'Am9', 'Bm7b5']);
@@ -107,8 +107,8 @@ describe('after ideas and start with (site bridge to the engine)', () => {
 describe("the engine's spelling reaches the page", () => {
   const read = (symbols: string) => symbols.split(' ').map((x) => parseChordName(x)!);
   const root = (symbol: string) => /^[A-G][#b]?/.exec(symbol)![0];
-  it('after Dm9 G13 in 9ths, Spicy offers G#dim7 (#v°7), leading to Am, not Abdim7', () => {
-    const spicy = afterIdeas(read('Dm9 G13'), C, { spice: true, style: 'ninths' });
+  it('after Dm7 G7, Spicy offers G#dim7 (#v°7), leading to Am, not Abdim7', () => {
+    const spicy = afterIdeas(read('Dm7 G7'), C, { spice: true });
     const dim = spicy.find((i) => i.chord.template.id === 'dim7')!;
     expect(chordSymbolInKey(dim.chord, C)).toBe('G#dim7');
     expect(romanNumeral(dim.chord, C)).toBe('#v°7');
