@@ -24,6 +24,8 @@ export interface TabEvent {
   muted?: boolean;
   /** A later strum in the bar whose strings were all already written in it. */
   faded?: boolean;
+  /** Tremolo-picked through its length (written once, with slashes on its stem). */
+  tremolo?: boolean;
 }
 
 /** One rhythm value under the staff: a note (from an onset) or a rest, in eighths. */
@@ -80,7 +82,7 @@ export function tabBars(fingerings: Fingering[], settings: TabSettings): TabBar[
       return {
         slot: Math.round(e.beat * 2), notes: tabNotes,
         ...(strum ? { strum } : {}), ...(e.roll ? { roll: true } : {}), ...(e.lengthBeats !== undefined && strum ? { short: true } : {}),
-        ...(e.muted ? { muted: true } : {}), ...(faded ? { faded: true } : {}),
+        ...(e.muted ? { muted: true } : {}), ...(faded ? { faded: true } : {}), ...(e.tremolo ? { tremolo: true } : {}),
       };
     });
     out.push({ chord, events, rhythm: rhythm(raw, notes, settings.beats * 2) });

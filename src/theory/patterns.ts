@@ -1,9 +1,9 @@
 // Ways to play a chord over one bar of 4/4 or 3/4: which notes sound on which beat.
-// Four styles (strum, arpeggio, Travis picking, bossa nova), each with a few variants.
+// Five styles (strum, arpeggio, Travis picking, bossa nova, post-rock), each with a few variants.
 
 import { SoundingNote } from './fingering';
 
-export type PlayStyle = 'strum' | 'arpeggio' | 'travis' | 'bossa';
+export type PlayStyle = 'strum' | 'arpeggio' | 'travis' | 'bossa' | 'postrock';
 /** Beats in a bar: 4 for 4/4, 3 for a waltz. */
 export type BeatsPerBar = 3 | 4;
 
@@ -48,18 +48,37 @@ export const PLAY_STYLES: { id: PlayStyle; label: string; short?: string; varian
     variants: [
       { id: 'basic', label: 'Basic' },
       { id: 'twobar', label: 'Two-bar' },
+      { id: 'clave', label: 'Clave' },
+      { id: 'arpeggio', label: 'Arpeggio' },
+    ],
+  },
+  {
+    id: 'postrock',
+    label: 'Post-rock',
+    variants: [
+      { id: 'cascade', label: 'Cascade' },
+      { id: 'pulse', label: 'Pulse' },
+      { id: 'tremolo', label: 'Tremolo' },
     ],
   },
 ];
 
 /** Styles played straight even when swing is on. */
-export const STRAIGHT_STYLES: PlayStyle[] = ['bossa'];
+export const STRAIGHT_STYLES: PlayStyle[] = ['bossa', 'postrock'];
+
+/** Styles that play through the dotted-eighth echo. */
+export const ECHO_STYLES: PlayStyle[] = ['postrock'];
+
+/** Echo settings: delay in beats (a dotted eighth), feedback and wet level against a dry level of 1. */
+export const ECHO = { beats: 0.75, feedback: 0.25, wet: 0.2, highpassHz: 300 };
 
 /** A known variant of the style, or the style's default (its first) if `variant` isn't one of them. */
 export function validVariant(style: PlayStyle, variant: string | undefined): string {
   const variants = PLAY_STYLES.find((s) => s.id === style)!.variants;
   return variants.some((v) => v.id === variant) ? variant! : variants[0].id;
 }
+
+const range = (n: number, step = 1) => Array.from({ length: n }, (_, i) => i * step);
 
 export interface PatternEvent {
   /** Position in the bar, in beats from 0 (beat 1) up to (not including) the bar length. */
@@ -77,9 +96,38 @@ export interface PatternEvent {
   roll?: boolean;
   /** Palm-muted. */
   muted?: boolean;
+  /** Tremolo-picked through its length: the player expands it into fast alternating strikes. */
+  tremolo?: boolean;
 }
 
-const range = (n: number, step = 1) => Array.from({ length: n }, (_, i) => i * step);
+/** Tremolo strikes per beat: about 12 a second at any tempo, never fewer than 4. */
+export const tremoloStrikes = (bpm: number) => Math.max(4, Math.round((12 * 60) / bpm));
+
+/** A tremolo event as the strikes the player sounds: even across its length, alternating down and up, each cutting the last. */
+export function expandTremolo(e: PatternEvent, bpm: number): PatternEvent[] {
+  const n = Math.max(1, Math.round(tremoloStrikes(bpm) * (e.lengthBeats ?? 1)));
+  const step = (e.lengthBeats ?? 1) / n;
+  return range(n).map((i) => ({
+    beat: e.beat + i * step, midis: e.midis, volume: i % 2 ? 0.42 : 0.5, spreadMs: 0, lengthBeats: step,
+    ...(i % 2 ? { up: true } : {}),
+  }));
+}
+
+/**
+ * Where two parts land on the same string at the same beat, it sounds once, at the louder volume.
+ * Parts stay separate events, so a bass note keeps its own volume rather than being shared out.
+ */
+function mergeParts(events: PatternEvent[]): PatternEvent[] {
+  const out = events.map((e) => ({ ...e, midis: [...e.midis] }));
+  for (const e of out) {
+    for (const o of out) {
+      if (o === e || o.beat !== e.beat || o.volume > e.volume || (o.volume === e.volume && out.indexOf(o) > out.indexOf(e))) continue;
+      o.midis = o.midis.filter((m) => !e.midis.includes(m));
+    }
+  }
+  return out.filter((e) => e.midis.length).sort((a, b) => a.beat - b.beat);
+}
+
 
 /**
  * One bar of a style/variant for a chord's sounding notes (sorted here, low string to high).
@@ -112,6 +160,15 @@ export function patternEvents(
   const rest = sorted.slice(2);
   const treble = rest.length ? rest.slice(-3).reverse() : [bass2];
   const t = (i: number) => treble[i % treble.length];
+  // The strings above the root, highest first (a(0) the top string), never the root itself.
+  const above = sorted.slice(1).reverse();
+  const a = (i: number): SoundingNote | undefined => above[i];
+  // Bossa fingers: the three highest strings above the root. The thumb's second note sounds below them:
+  // the fifth if it's there, else the next bass string, else the root again.
+  const fingers = above.slice(0, 3);
+  const firstFinger = fingers.length ? sorted.indexOf(fingers[fingers.length - 1]) : sorted.length;
+  const below = sorted.slice(1, firstFinger);
+  const alt = below.find((n) => n.pc === (bass1.pc + 7) % 12) ?? below[0] ?? bass1;
 
   switch (`${style}:${variant}`) {
     // ---- Strum ----
@@ -130,18 +187,51 @@ export function patternEvents(
       return range(beats).map((b) => ({ beat: b + 0.5, midis: top, volume: 0.8, spreadMs: 12, lengthBeats: 0.2 }));
     // ---- Bossa nova ----
     case 'bossa:basic':
-    case 'bossa:twobar': {
-      // Thumb: root on 1, then the shape's fifth on 3 if it has one on a low string (otherwise the
-      // next bass string), all within the fingering. Fingers pluck the top strings together, short,
-      // on a syncopated pattern; "Two-bar" alternates two comping bars.
-      const fifth = sorted.slice(1, 4).find((n) => n.pc === (bass1.pc + 7) % 12);
-      const thumb2 = (fifth ?? bass2).midi;
-      const pluck = (beat: number): PatternEvent => ({ beat, midis: top.slice(-3), volume: 0.7, spreadMs: 0, lengthBeats: 0.45 });
-      const second = variant === 'twobar' && bar % 2 === 1;
-      const plucks = waltz ? (second ? [0.5, 2] : [0, 1.5]) : second ? [0.5, 2, 3] : [0, 1.5, 3];
-      const thumb: PatternEvent[] = [one(0, bass1, 0.85), { beat: 2, midis: [thumb2], volume: 0.8, spreadMs: 0 }];
-      return [...thumb, ...plucks.map(pluck)].sort((a, b) => a.beat - b.beat);
+    case 'bossa:twobar':
+    case 'bossa:clave': {
+      // Thumb: root on 1, then on 3 the shape's fifth if it sounds below the finger strings (else the
+      // next bass string below them, else the root again). Fingers pluck the three highest strings above
+      // the root together, short. "Two-bar" and "Clave" alternate two comping bars.
+      const pluck = (beat: number): PatternEvent => ({ beat, midis: fingers.map((n) => n.midi).reverse(), volume: 0.7, spreadMs: 0, lengthBeats: 0.45 });
+      const second = bar % 2 === 1;
+      const plucks = variant === 'clave'
+        ? (waltz ? (second ? [1] : [0, 1.5]) : second ? [1, 2.5] : [0, 1.5, 3])
+        : variant === 'twobar' && second
+          ? (waltz ? [0.5, 2] : [0.5, 2, 3])
+          : waltz ? [0, 1.5] : [0, 1.5, 3];
+      return mergeParts([one(0, bass1, 0.85), one(2, alt, 0.8), ...(fingers.length ? plucks.map(pluck) : [])]);
     }
+    case 'bossa:arpeggio': {
+      // Single notes over the thumb; the top string carries the bossa accents on 1, the and of 2, and 4.
+      const at = (beat: number, note: SoundingNote | undefined, volume: number) => (note ? [one(beat, note, volume)] : []);
+      const out = waltz
+        ? [...at(0, bass1, 0.85), ...at(0, a(0), 0.8), ...at(0.5, a(2), 0.6), ...at(1, a(1), 0.6), ...at(1.5, a(0), 0.8), ...at(2, alt, 0.8), ...at(2.5, a(1), 0.6)]
+        : [...at(0, bass1, 0.85), ...at(0, a(0), 0.8), ...at(0.5, a(2), 0.6), ...at(1, a(1), 0.6), ...at(1.5, a(0), 0.8),
+          ...at(2, alt, 0.8), ...at(2.5, a(1), 0.6), ...at(3, a(0), 0.8), ...at(3.5, a(2), 0.6)];
+      return mergeParts(out);
+    }
+
+    // ---- Post-rock (straight, through the echo) ----
+    case 'postrock:cascade': {
+      // A falling 3-3-2 arpeggio over the root; a missing third string falls back to the root.
+      const lo = a(2) ?? bass1;
+      const at = (beat: number, note: SoundingNote | undefined, volume: number) => (note ? [one(beat, note, volume)] : []);
+      const cycle = [a(0), a(1), lo];
+      const steps = range(beats * 2).map((i) => ({ beat: i / 2, note: i === 0 ? a(0) : cycle[i % 3] }));
+      return mergeParts([...at(0, bass1, 0.85), ...steps.flatMap((x) => at(x.beat, x.note, x.note === a(0) ? 0.8 : 0.7))]);
+    }
+    case 'postrock:pulse': {
+      // Open strums on the 3-3-2 points (1, the and of 2, and 4) over a palm-muted root in between.
+      const strums = waltz ? [0, 1.5] : [0, 1.5, 3];
+      const mutes = waltz ? [0.5, 1, 2, 2.5] : [0.5, 1, 2, 2.5, 3.5];
+      return [
+        ...strums.map((b) => down(b, b === 0 ? 1 : 0.9, 15)),
+        ...mutes.map((b) => ({ ...one(b, bass1, 0.55, 0.3), muted: true })),
+      ].sort((x, y) => x.beat - y.beat);
+    }
+    case 'postrock:tremolo':
+      // The root rings under the top string tremolo-picked through every beat.
+      return mergeParts([one(0, bass1, 0.8), ...(a(0) ? range(beats).map((b) => ({ ...one(b, a(0)!, 0.5, 1), tremolo: true })) : [])]);
 
     // ---- Arpeggio ----
     case 'arpeggio:updown': {

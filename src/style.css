@@ -1644,6 +1644,11 @@ main {
   fill: none;
 }
 
+.tab-tremolo {
+  stroke: var(--text-muted);
+  stroke-width: 1.6;
+}
+
 .tab-beam {
   stroke: var(--text-muted);
   stroke-width: 2;

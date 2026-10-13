@@ -63,7 +63,7 @@ describe('tab marks', () => {
 
 describe('tab layout', () => {
   const lay = (bars: TabBar[], extra: Partial<Parameters<typeof layoutTab>[0]> = {}) =>
-    layoutTab({ bars, names, beats: 4, width: 1000, phone: false, loop: true, swing: false, letRing: true, ...extra });
+    layoutTab({ bars, names, beats: 4, width: 1000, phone: false, loop: true, swing: false, letRing: true, echo: false, ...extra });
   it('chord names only where the chord changes and at the start of each line', () => {
     const bars = tabBars(shapes, { style: 'travis', variant: 'basic', beats: 4, barsPerChord: 2 });
     const L = lay(bars);
@@ -121,6 +121,15 @@ describe('note lengths under the staff', () => {
   it('Bossa: bass or trebles keep ringing, so no rests', () => {
     expect(read('bossa', 'basic')).toEqual(every('q. e q q'));
     expect(read('bossa', 'twobar')).toEqual(['q. e q q', 'e q. q q', 'q. e q q', 'e q. q q']);
+    expect(read('bossa', 'clave')).toEqual(['q. e q q', 'q q e q.', 'q. e q q', 'q q e q.']);
+    expect(read('bossa', 'arpeggio')).toEqual(every('e e e e e e e e'));
+  });
+  it('Post-rock: the muted root and the tremolo never leave a silence', () => {
+    expect(read('postrock', 'cascade')).toEqual(every('e e e e e e e e'));
+    expect(read('postrock', 'pulse')).toEqual(every('e e e e e e e e'));
+    expect(read('postrock', 'tremolo')).toEqual(every('q q q q'));
+    expect(read('postrock', 'tremolo', 3)).toEqual(every('q q q'));
+    expect(read('postrock', 'cascade', 3)).toEqual(every('e e e e e e'));
   });
   it('in 3/4 and with 2 bars per chord', () => {
     expect(read('travis', 'basic', 3)).toEqual(every('q e e e e'));
@@ -130,5 +139,19 @@ describe('note lengths under the staff', () => {
     const notes = soundingNotes(shapes[0]);
     const short = [{ beat: 0, midis: [notes[0].midi], volume: 1, spreadMs: 0, lengthBeats: 0.2 }];
     expect(rhythm(short, notes, 8).map((r) => (r.rest ? 'r' : '') + NAME[r.length]).join(' ')).toBe('e re rq rq rq');
+  });
+});
+
+describe('post-rock marks', () => {
+  it('tremolo is written once per beat, not as its strikes', () => {
+    const [bar] = tabBars(shapes, { style: 'postrock', variant: 'tremolo', beats: 4, barsPerChord: 1 });
+    expect(bar.events.filter((e) => e.tremolo).map((e) => e.slot)).toEqual([0, 2, 4, 6]);
+  });
+  it('Pulse marks P.M. only under the muted root, broken by each open strum', () => {
+    const bars = tabBars(shapes.slice(0, 1), { style: 'postrock', variant: 'pulse', beats: 4, barsPerChord: 1 });
+    const L = layoutTab({ bars, names, beats: 4, width: 1000, phone: false, loop: true, swing: false, letRing: false, echo: true });
+    expect(L.lines[0].muted).toHaveLength(3); // 1&-2, 3-3&, 4&
+    const travis = tabBars(shapes.slice(0, 1), { style: 'travis', variant: 'muted', beats: 4, barsPerChord: 1 });
+    expect(layoutTab({ bars: travis, names, beats: 4, width: 1000, phone: false, loop: true, swing: false, letRing: true, echo: false }).lines[0].muted).toHaveLength(1);
   });
 });

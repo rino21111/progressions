@@ -19,7 +19,7 @@ describe('the Inspector during playback', () => {
   it('stays on the selection: playing the progression never changes the selected chord or its shape', async () => {
     vi.useFakeTimers();
     vi.stubGlobal('window', globalThis);
-    vi.doMock('../src/audio', () => ({ createBus: () => ({ disconnect() {} }), now: () => 0, ready: async () => {}, silenceBus() {}, strum() {} }));
+    vi.doMock('../src/audio', () => ({ createSessionBus: () => ({ input: {}, output: { disconnect() {} }, setEcho() {} }), now: () => 0, ready: async () => {}, silenceBus() {}, strum() {} }));
     const { state, update } = await import('../src/state');
     const { play, stop, currentPlayback } = await import('../src/player');
     update({ progression, selectedCard: null, fingering: selection, selected: makeChord(2, 'maj') });
@@ -45,7 +45,7 @@ describe("the Inspector's Play and Loop", () => {
     vi.resetModules();
     vi.useFakeTimers();
     vi.stubGlobal('window', globalThis);
-    vi.doMock('../src/audio', () => ({ createBus: () => ({ disconnect() {} }), now: () => Date.now() / 1000, ready: async () => {}, silenceBus() {}, strum() {} }));
+    vi.doMock('../src/audio', () => ({ createSessionBus: () => ({ input: {}, output: { disconnect() {} }, setEcho() {} }), now: () => Date.now() / 1000, ready: async () => {}, silenceBus() {}, strum() {} }));
     const { state, update } = await import('../src/state');
     const { play, stop, currentPlayback } = await import('../src/player');
     update({ progression, fingering: selection, loop: true, chordLoop: false, bpm: 120 });
@@ -76,7 +76,7 @@ describe('playback follows the cards when the progression changes', () => {
     vi.resetModules();
     vi.useFakeTimers();
     vi.stubGlobal('window', globalThis);
-    vi.doMock('../src/audio', () => ({ createBus: () => ({ disconnect() {} }), now: () => Date.now() / 1000, ready: async () => {}, silenceBus() {}, strum() {} }));
+    vi.doMock('../src/audio', () => ({ createSessionBus: () => ({ input: {}, output: { disconnect() {} }, setEcho() {} }), now: () => Date.now() / 1000, ready: async () => {}, silenceBus() {}, strum() {} }));
     const { state, update } = await import('../src/state');
     const { play, stop, currentPlayback, remapSteps } = await import('../src/player');
     const { moveIndex } = await import('../src/yourChords');

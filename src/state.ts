@@ -83,7 +83,7 @@ const defaults: AppState = {
   keyChoice: null,
   addMode: 'suggested',
   playPattern: 'strum',
-  playVariants: { strum: 'whole', arpeggio: 'up', travis: 'basic', bossa: 'basic' },
+  playVariants: { strum: 'whole', arpeggio: 'up', travis: 'basic', bossa: 'basic', postrock: 'cascade' },
   loop: false,
   chordLoop: false,
   bpm: 80,

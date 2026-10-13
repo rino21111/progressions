@@ -7,7 +7,7 @@ import { PROGRESSION_ID, cardShape } from '../playback';
 import { Playback, currentPlayback, onPlayback } from '../player';
 import { state, subscribe } from '../state';
 import { chordSymbolInKey } from '../theory/keys';
-import { STRAIGHT_STYLES } from '../theory/patterns';
+import { ECHO_STYLES, STRAIGHT_STYLES } from '../theory/patterns';
 import { RhythmItem, TabBar, tabBars, tabPasses } from '../theory/tab';
 import { h, s } from './dom';
 import { LaidBar, LaidLine, TabLayout, layoutTab, slotX, stringY } from './tabLayout';
@@ -43,7 +43,8 @@ export function createTab(): { el: HTMLElement; refresh: () => void } {
     const swing = state.swing && !STRAIGHT_STYLES.includes(style);
     layout = layoutTab({
       bars, names: slots.map((x) => chordSymbolInKey(x.chord, key)), beats: state.beatsPerBar,
-      width, phone: phone.matches, loop: state.loop, swing, letRing: style !== 'strum',
+      width, phone: phone.matches, loop: state.loop, swing,
+      letRing: style !== 'strum' && !(style === 'postrock' && settings.variant === 'pulse'), echo: ECHO_STYLES.includes(style),
     });
     card.replaceChildren(draw(layout));
     shownLine = -1;
@@ -60,7 +61,7 @@ export function createTab(): { el: HTMLElement; refresh: () => void } {
       atSlot.set(k, [...(atSlot.get(k) ?? []), el]);
       return el;
     };
-    const marks = [L.letRing ? 'let ring' : null, L.swing ? 'Swing' : null].filter(Boolean).join('   ');
+    const marks = [L.letRing ? 'let ring' : null, L.swing ? 'Swing' : null, L.echo ? 'Echo' : null].filter(Boolean).join('   ');
     if (marks) svg.append(s('text', { class: 'tab-swing', x: 0, y: 10 }, marks));
     const last = L.lines[L.lines.length - 1];
     L.lines.forEach((line) => {
@@ -100,9 +101,12 @@ export function createTab(): { el: HTMLElement; refresh: () => void } {
         }
       });
       if (line.muted) {
+        // One "P.M." for the line, then a dashed line under each run of muted notes.
         const y = line.mutedY;
-        svg.append(s('text', { class: 'tab-pm', x: line.muted[0], y: y + 3.5 }, 'P.M.'));
-        svg.append(s('line', { class: 'tab-pm-line', x1: line.muted[0] + 24, x2: line.muted[1], y1: y, y2: y }));
+        const [first, ...rest] = line.muted;
+        svg.append(s('text', { class: 'tab-pm', x: first[0], y: y + 3.5 }, 'P.M.'));
+        if (first[1] > first[0] + 28) svg.append(s('line', { class: 'tab-pm-line', x1: first[0] + 24, x2: first[1], y1: y, y2: y }));
+        for (const [x1, x2] of rest) svg.append(s('line', { class: 'tab-pm-line', x1, x2, y1: y, y2: y }));
       }
       if (line !== last) barline(right);
       else endSign(svg, L, line, right);
@@ -231,6 +235,13 @@ function drawRhythm(svg: SVGSVGElement, tb: TabBar, b: LaidBar, line: LaidLine, 
       const prev = items[items.indexOf(r) - 1];
       const px = slotX(b, prev.slot);
       svg.append(s('path', { class: 'tab-tie', d: `M${px + 2},${y1 + 3} Q${(px + x) / 2},${y1 + 8} ${x - 2},${y1 + 3}` }));
+    }
+    // Tremolo: three slashes across the stem.
+    if (tb.events.some((e) => e.slot === r.slot && e.tremolo)) {
+      for (let i = 0; i < 3; i++) {
+        const y = y0 + 4 + i * 3.5;
+        svg.append(s('line', { class: 'tab-tremolo', x1: x - 3.5, x2: x + 3.5, y1: y + 1.5, y2: y - 1.5 }));
+      }
     }
     if (r.length !== 1) continue;
     if (beamed(r)) {

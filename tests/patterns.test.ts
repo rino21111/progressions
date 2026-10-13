@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseFingering, soundingNotes } from '../src/theory/fingering';
-import { PLAY_STYLES, patternEvents, validVariant } from '../src/theory/patterns';
+import { ECHO_STYLES, PLAY_STYLES, STRAIGHT_STYLES, expandTremolo, patternEvents, validVariant } from '../src/theory/patterns';
 import { chordForBar, clampBpm, swingBeat } from '../src/theory/timing';
 
 const notes = (shape: string) => soundingNotes(parseFingering(shape)!);
@@ -14,9 +14,11 @@ const beatsOf = (style: Parameters<typeof patternEvents>[0], variant: string, be
   patternEvents(style, variant, C, beats).map((e) => e.beat);
 
 describe('play patterns', () => {
-  it('offers strum, arpeggio, Travis and bossa, each with variants', () => {
-    expect(PLAY_STYLES.map((s) => s.id)).toEqual(['strum', 'arpeggio', 'travis', 'bossa']);
-    expect(PLAY_STYLES.map((s) => s.variants[0].id)).toEqual(['whole', 'up', 'basic', 'basic']);
+  it('offers strum, arpeggio, Travis, bossa and post-rock, each with variants', () => {
+    expect(PLAY_STYLES.map((s) => s.id)).toEqual(['strum', 'arpeggio', 'travis', 'bossa', 'postrock']);
+    expect(PLAY_STYLES.map((s) => s.variants[0].id)).toEqual(['whole', 'up', 'basic', 'basic', 'cascade']);
+    expect(PLAY_STYLES.find((s) => s.id === 'bossa')!.variants.map((v) => v.label)).toEqual(['Basic', 'Two-bar', 'Clave', 'Arpeggio']);
+    expect(PLAY_STYLES.find((s) => s.id === 'postrock')!.variants.map((v) => v.label)).toEqual(['Cascade', 'Pulse', 'Tremolo']);
   });
 
   it('keeps every variant inside the bar and in time order, in 4/4 and 3/4', () => {
@@ -128,10 +130,10 @@ describe('player timing', () => {
 });
 
 describe('bossa', () => {
-  it('bossa: root on 1, the shape\'s fifth on 3, short top-string plucks on a syncopated pattern', () => {
+  it('bossa: root on 1, a bass note below the fingers on 3, short top-string plucks on a syncopated pattern', () => {
     const events = patternEvents('bossa', 'basic', C);
     const thumb = events.filter((e) => e.midis.length === 1);
-    expect(thumb.map((e) => [e.beat, e.midis[0]])).toEqual([[0, 48], [2, 55]]); // C, then the shape's G
+    expect(thumb.map((e) => [e.beat, e.midis[0]])).toEqual([[0, 48], [2, 52]]); // C, then E (the G is a finger string)
     const plucks = events.filter((e) => e.midis.length > 1);
     expect(plucks.map((e) => e.beat)).toEqual([0, 1.5, 3]);
     expect(plucks.every((e) => e.lengthBeats! < 0.5 && e.midis.join() === '55,60,64')).toBe(true);
@@ -164,5 +166,82 @@ describe('playing only the fingering shown', () => {
         }
       }
     }
+  });
+});
+
+describe('shared string rules (bossa and post-rock)', () => {
+  const name = (n: { string: number; fret: number }) => `${6 - n.string}/${n.fret}`;
+  const roles = (shape: string) => {
+    const ns = notes(shape);
+    const at = (beat: number) => patternEvents('bossa', 'arpeggio', ns, 4, 0).filter((e) => e.beat === beat).flatMap((e) => e.midis.map((m) => name(ns.find((x) => x.midi === m)!)));
+    const plucks = patternEvents('bossa', 'basic', ns).filter((e) => e.lengthBeats !== undefined)[0];
+    return { alt: at(2), fingers: plucks ? plucks.midis.map((m) => name(ns.find((x) => x.midi === m)!)).sort() : [] };
+  };
+  it('the fingers are the three highest strings above the root; the thumb on 3 sounds below them', () => {
+    // 3x343x: G B G A? no: G (6/3), D (4/3), G (3/4), B (2/3). Fingers B G D; nothing below but the root.
+    expect(roles('3x343x')).toEqual({ alt: ['6/3'], fingers: ['2/3', '3/4', '4/3'] });
+    // xx0232: D A D F#. Fingers F# D A; the root again on 3.
+    expect(roles('xx0232')).toEqual({ alt: ['4/0'], fingers: ['1/2', '2/3', '3/2'] });
+    // x32010: C E G C E. Fingers E C G; the fifth is a finger string, so E on 3.
+    expect(roles('x32010')).toEqual({ alt: ['4/2'], fingers: ['1/0', '2/1', '3/0'] });
+    // 022100: E B E G# B E. Fingers E B G#; the fifth B sounds below them.
+    expect(roles('022100')).toEqual({ alt: ['5/2'], fingers: ['1/0', '2/0', '3/1'] });
+  });
+  it('a string never sounds twice at one beat; bass and fingers keep their own volumes', () => {
+    for (const shape of ['3x343x', 'xx0232', 'x32010', '022100', 'xx023x']) {
+      for (const variant of ['basic', 'twobar', 'clave', 'arpeggio']) {
+        for (const bar of [0, 1]) {
+          const ev = patternEvents('bossa', variant, notes(shape), 4, bar);
+          for (const beat of new Set(ev.map((e) => e.beat))) {
+            const ms = ev.filter((e) => e.beat === beat).flatMap((e) => e.midis);
+            expect(new Set(ms).size).toBe(ms.length);
+          }
+          expect(ev.find((e) => e.beat === 0 && e.midis.length === 1)?.volume).toBe(0.85);
+        }
+      }
+    }
+  });
+});
+
+describe('new bossa and post-rock variants', () => {
+  const show = (style: Parameters<typeof patternEvents>[0], variant: string, beats: 3 | 4 = 4, bar = 0) =>
+    patternEvents(style, variant, C, beats, bar).map((e) => `${e.beat}:${e.midis.join('+')}`).join(' ');
+  it('bossa clave: plucks at 1, the and of 2, 4, then 2 and the and of 3', () => {
+    const plucks = (bar: number, beats: 3 | 4 = 4) => patternEvents('bossa', 'clave', C, beats, bar).filter((e) => e.lengthBeats !== undefined).map((e) => e.beat);
+    expect(plucks(0)).toEqual([0, 1.5, 3]);
+    expect(plucks(1)).toEqual([1, 2.5]);
+    expect(plucks(0, 3)).toEqual([0, 1.5]);
+    expect(plucks(1, 3)).toEqual([1]);
+  });
+  it('bossa arpeggio: the top string on 1, the and of 2 and 4', () => {
+    expect(show('bossa', 'arpeggio')).toBe('0:48 0:64 0.5:55 1:60 1.5:64 2:52 2.5:60 3:64 3.5:55');
+    expect(show('bossa', 'arpeggio', 3)).toBe('0:48 0:64 0.5:55 1:60 1.5:64 2:52 2.5:60');
+  });
+  it('cascade: a falling 3-3-2 over the root', () => {
+    expect(show('postrock', 'cascade')).toBe('0:48 0:64 0.5:60 1:55 1.5:64 2:60 2.5:55 3:64 3.5:60');
+    expect(show('postrock', 'cascade', 3)).toBe('0:48 0:64 0.5:60 1:55 1.5:64 2:60 2.5:55');
+    // a two-string shape falls back to the root for the missing third string
+    expect(patternEvents('postrock', 'cascade', notes('x35xxx')).map((e) => e.midis[0])).toContain(48);
+  });
+  it('pulse: open strums on the 3-3-2 points over a palm-muted root', () => {
+    const ev = patternEvents('postrock', 'pulse', C);
+    expect(ev.filter((e) => e.muted).map((e) => e.beat)).toEqual([0.5, 1, 2, 2.5, 3.5]);
+    expect(ev.filter((e) => !e.muted).map((e) => e.beat)).toEqual([0, 1.5, 3]);
+    expect(ev.filter((e) => e.muted).every((e) => e.midis.join() === '48' && e.lengthBeats === 0.3)).toBe(true);
+  });
+  it('tremolo: the root rings under the top string picked about 12 times a second at any tempo', () => {
+    const ev = patternEvents('postrock', 'tremolo', C);
+    expect(ev.filter((e) => e.tremolo).map((e) => `${e.beat}:${e.midis}`)).toEqual(['0:64', '1:64', '2:64', '3:64']);
+    for (const bpm of [40, 80, 120, 200]) {
+      const strikes = expandTremolo(ev.find((e) => e.tremolo)!, bpm);
+      const perSecond = strikes.length / (60 / bpm);
+      expect(perSecond).toBeGreaterThan(11);
+      expect(perSecond).toBeLessThan(14);
+      expect(strikes.map((x) => !!x.up)).toEqual(strikes.map((_, i) => i % 2 === 1));
+    }
+  });
+  it('bossa and post-rock stay straight; only post-rock plays through the echo', () => {
+    expect(STRAIGHT_STYLES).toEqual(['bossa', 'postrock']);
+    expect(ECHO_STYLES).toEqual(['postrock']);
   });
 });

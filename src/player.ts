@@ -1,9 +1,9 @@
 // Plays a chord or a list of chords bar by bar in the chosen pattern, optionally looping.
 
-import { createBus, now, ready, silenceBus, strum } from './audio';
+import { SessionBus, createSessionBus, now, ready, silenceBus, strum } from './audio';
 import { state } from './state';
 import { Fingering, soundingNotes } from './theory/fingering';
-import { STRAIGHT_STYLES, patternEvents } from './theory/patterns';
+import { ECHO_STYLES, STRAIGHT_STYLES, expandTremolo, patternEvents } from './theory/patterns';
 import { chordForBar, swingBeat } from './theory/timing';
 
 /** How far ahead (in seconds) bars are handed to the audio clock. */
@@ -29,7 +29,7 @@ interface Session {
   chords: () => Fingering[];
   perChord: boolean;
   loop: () => boolean;
-  bus: GainNode;
+  bus: SessionBus;
   /** Bar within the chord list (resets when looping), and bars played in total. */
   bar: number;
   /** The chord of the bar scheduled last (null before the first). */
@@ -73,7 +73,10 @@ function scheduleBar(s: Session, step: number, fingering: Fingering, start: numb
   const style = state.playPattern;
   const swing = state.swing && !STRAIGHT_STYLES.includes(style);
   const p: Playback = { id: s.id, step, bar: { start, beat, beats: state.beatsPerBar, swing, inPass: s.bar, played: s.played } };
-  const events = patternEvents(style, state.playVariants[style], notes, state.beatsPerBar, s.played);
+  // Tremolo notes sound as fast alternating strikes; post-rock plays through the echo.
+  const events = patternEvents(style, state.playVariants[style], notes, state.beatsPerBar, s.played)
+    .flatMap((e) => (e.tremolo ? expandTremolo(e, state.bpm) : [e]));
+  s.bus.setEcho(ECHO_STYLES.includes(style), beat, start);
   const tell = (delay: number, strings: number[]) =>
     s.timers.push(window.setTimeout(() => session === s && noteListeners.forEach((fn) => fn(strings, p)), Math.max(0, delay)));
 
@@ -81,7 +84,7 @@ function scheduleBar(s: Session, step: number, fingering: Fingering, start: numb
     const at = start + swingBeat(e.beat, swing) * beat;
     const length = e.lengthBeats === undefined ? undefined : e.lengthBeats * beat;
     const strings = e.midis.map((m) => notes.find((n) => n.midi === m)!.string);
-    strum(e.midis, { at, delayMs: e.spreadMs, up: e.up, volume: e.volume, bus: s.bus, strings, length });
+    strum(e.midis, { at, delayMs: e.spreadMs, up: e.up, volume: e.volume, bus: s.bus.input, strings, length });
     // Tell listeners when each string sounds, following the strum's order and spread.
     const order = [...e.midis].sort((a, b) => (e.up ? b - a : a - b));
     order.forEach((midi, i) => {
@@ -110,7 +113,7 @@ export function play(id: string, chords: () => Fingering[], options: PlayOptions
   if (!chords().length) return;
   const s: Session = {
     id, chords, perChord: options.perChord ?? false, loop: options.loop ?? (() => state.loop),
-    bus: createBus(), bar: 0, lastStep: null, played: 0, nextTime: now() + 0.05, ticker: 0, timers: [],
+    bus: createSessionBus(), bar: 0, lastStep: null, played: 0, nextTime: now() + 0.05, ticker: 0, timers: [],
   };
   session = s;
   announce({ id, step: null });
@@ -134,7 +137,7 @@ function start(s: Session) {
         // Let the last bar finish, then report that playback is over.
         clearInterval(s.ticker);
         s.timers.push(window.setTimeout(() => endSession(s), Math.max(0, (s.nextTime - now()) * 1000)));
-        setTimeout(() => s.bus.disconnect(), (s.nextTime - now() + 5) * 1000);
+        setTimeout(() => s.bus.output.disconnect(), (s.nextTime - now() + 5) * 1000);
         return;
       }
       s.lastStep = step;
@@ -175,6 +178,6 @@ export function remapSteps(id: string, map: (i: number) => number | null, length
 export function stop() {
   const s = session;
   if (!s) return;
-  silenceBus(s.bus);
+  silenceBus(s.bus.output);
   endSession(s);
 }

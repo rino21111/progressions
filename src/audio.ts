@@ -2,6 +2,7 @@
 // through a little room reverb and a limiter so full strums don't clip.
 
 import { firstAudible, nearestSample, SAMPLE_NOTES } from './sampleMap';
+import { ECHO } from './theory/patterns';
 
 export type Tone = 'steel' | 'nylon' | 'electric';
 
@@ -178,12 +179,61 @@ export function strum(midis: number[], options: StrumOptions = {}) {
   notes.forEach((n, i) => playNote(n.midi, start + i * delay, volume, options.bus ?? m, n.string, options.length));
 }
 
-/** A volume control that a group of notes can share, so they can all be silenced at once. */
-export function createBus(): GainNode {
+/**
+ * One playback's own sound path: notes go into `input` and out through `output` (which can be silenced
+ * at once, echo tail and all). An echo can be switched in: a dotted-eighth delay that follows the
+ * tempo, with feedback and a high-pass on the echoes only.
+ *
+ *   input -> output -> master
+ *   input -> send -> high-pass -> delay -> wet -> output
+ *                                 delay <-> feedback
+ */
+export interface SessionBus {
+  input: GainNode;
+  output: GainNode;
+  /** Echo on or off from `at`, its delay set for this tempo (gliding when it changes). */
+  setEcho: (on: boolean, beatSeconds: number, at: number) => void;
+}
+
+export function createSessionBus(): SessionBus {
   const { ctx: c, master: m } = audio();
-  const bus = c.createGain();
-  bus.connect(m);
-  return bus;
+  const output = c.createGain();
+  output.connect(m);
+  const input = c.createGain();
+  input.connect(output);
+  const send = c.createGain();
+  send.gain.value = 0;
+  const highpass = c.createBiquadFilter();
+  highpass.type = 'highpass';
+  highpass.frequency.value = ECHO.highpassHz;
+  const delay = c.createDelay(2);
+  const feedback = c.createGain();
+  feedback.gain.value = 0;
+  const wet = c.createGain();
+  wet.gain.value = 0;
+  input.connect(send);
+  send.connect(highpass);
+  highpass.connect(delay);
+  delay.connect(feedback);
+  feedback.connect(delay);
+  delay.connect(wet);
+  wet.connect(output);
+  let on = false;
+  let timed = false;
+  const setEcho = (next: boolean, beatSeconds: number, at: number) => {
+    const time = Math.min(2, ECHO.beats * beatSeconds);
+    if (!timed) {
+      delay.delayTime.value = time;
+      timed = true;
+    } else delay.delayTime.setTargetAtTime(time, at, 0.05);
+    if (next === on) return;
+    on = next;
+    // Switching off silences the tail too, so nothing echoes into a style that has no echo.
+    send.gain.setTargetAtTime(next ? 1 : 0, at, 0.01);
+    feedback.gain.setTargetAtTime(next ? ECHO.feedback : 0, at, 0.02);
+    wet.gain.setTargetAtTime(next ? ECHO.wet : 0, at, 0.02);
+  };
+  return { input, output, setEcho };
 }
 
 /** Silence everything on a bus right away (with a tiny fade so it doesn't click), including notes not yet started. */

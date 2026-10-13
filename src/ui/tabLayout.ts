@@ -47,8 +47,11 @@ export interface LaidLine {
   /** y of the high e string (the E string is 5 gaps below). */
   staff: number;
   bars: LaidBar[];
-  /** The palm-mute mark's span and y, when the line has muted notes (between the staff and the rhythm). */
-  muted: [number, number] | null;
+  /**
+   * The palm-mute mark's spans and their y (between the staff and the rhythm): one span per run of
+   * muted notes, broken by an open strum or where the muted string rings open again.
+   */
+  muted: [number, number][] | null;
   mutedY: number;
   /** Where the rhythm stems start and end. */
   stemTop: number;
@@ -68,6 +71,8 @@ export interface TabLayout {
   swing: boolean;
   /** "let ring" for picking styles. */
   letRing: boolean;
+  /** "Echo" for styles that play through it. */
+  echo: boolean;
   beats: number;
   m: TabMetrics;
 }
@@ -82,6 +87,7 @@ export interface LayoutInput {
   loop: boolean;
   swing: boolean;
   letRing: boolean;
+  echo: boolean;
 }
 
 /** x of a slot's centre in a laid bar. */
@@ -109,7 +115,7 @@ export function layoutTab(input: LayoutInput): TabLayout {
 
   const muted = (b: TabBar) => b.events.some((e) => e.muted);
   const lines: LaidLine[] = [];
-  let y = input.swing || input.letRing ? 14 : 0;
+  let y = input.swing || input.letRing || input.echo ? 14 : 0;
   for (let i = 0; i < bars.length; i += perLine) {
     const group = bars.slice(i, i + perLine);
     const last = i + perLine >= bars.length;
@@ -134,15 +140,38 @@ export function layoutTab(input: LayoutInput): TabLayout {
       const name = b.chord >= 0 && changed ? input.names[b.chord] ?? null : null;
       return { index, x, width: barWidth, pad, slotWidth: (barWidth - pad - right) / slots, name };
     });
-    const mutedBars = laid.filter((b) => muted(bars[b.index]));
+    // Runs of muted notes: a run ends at an open strum, or where a muted string rings open again.
+    const spans: [number, number][] = [];
+    let run: [number, number] | null = null;
+    let strings = new Set<number>();
+    for (const b of laid) {
+      const half = b.slotWidth / 2;
+      const onsets = [...new Set(bars[b.index].events.map((e) => e.slot))].sort((p, q) => p - q);
+      for (const slot of onsets) {
+        const here = bars[b.index].events.filter((e) => e.slot === slot);
+        const mutedHere = here.filter((e) => e.muted);
+        const open = here.filter((e) => !e.muted).some((e) => !!e.strum || e.notes.some((n) => strings.has(n.string)));
+        if (open && run) {
+          spans.push(run);
+          run = null;
+        }
+        if (mutedHere.length) {
+          const x = slotX(b, slot);
+          if (!run) run = [x - half, x + half];
+          else run[1] = x + half;
+          strings = new Set(mutedHere.flatMap((e) => e.notes.map((n) => n.string)));
+        }
+      }
+    }
+    if (run) spans.push(run);
     lines.push({
       top, staff, bars: laid, stemTop, stemEnd, arrow, chordName, mutedY,
-      muted: mutedBars.length ? [mutedBars[0].x + mutedBars[0].pad / 2, mutedBars[mutedBars.length - 1].x + barWidth - RIGHT] : null,
+      muted: spans.length ? spans : null,
     });
     y = stemEnd + 22;
   }
   return {
     width: m.labels + staffWidth, height: y - 16, slots, lines, end: input.loop ? 'repeat' : 'final',
-    swing: input.swing, letRing: input.letRing, beats: input.beats, m,
+    swing: input.swing, letRing: input.letRing, echo: input.echo, beats: input.beats, m,
   };
 }
