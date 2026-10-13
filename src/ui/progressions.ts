@@ -5,7 +5,7 @@
 import { Chord } from '../theory/chords';
 import { ALL_KEYS, Key, chordFitInKey, chordSymbolInKey, keyId, keyName, rankKeys, romanNumeral } from '../theory/keys';
 import { sameFunction } from '../theory/progressions';
-import { AfterIdea, StartGroup, StartItem, StyleName, collapseRepeats, degreeOf, ideaReason, keyChords, nextByMood, starts, thenPhrase } from '../theory/ideas';
+import { AfterIdea, StartGroup, StartItem, StyleName, collapseRepeats, degreeOf, startSettings, ideaReason, keyChords, nextByMood, starts, thenPhrase } from '../theory/ideas';
 import { state, subscribe, update } from '../state';
 import { currentKey, currentKeyGuess } from '../key';
 import { Playback, currentPlayback, onPlayback, play } from '../player';
@@ -201,10 +201,10 @@ export function createProgressions(): HTMLElement {
         h('button', {
           class: 'icon', title: 'Add these chords to the progression', 'aria-label': `Add ${item.name} to the progression`,
           onclick: () => {
-            // Starting from nothing, the style follows the entry (a bossa start lands in 9ths).
+            // Starting from nothing, the style and key follow the entry (a bossa start lands in 9ths).
             const empty = !state.progression.length;
             addToProgression(...chords);
-            if (empty) update({ style: item.style });
+            if (empty) update(startSettings(item));
           },
         }, '+'),
       );

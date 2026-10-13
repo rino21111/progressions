@@ -3,7 +3,7 @@
 // engine (engine.ts) decides; this turns the site's chords into its symbols and back.
 
 import { Chord } from './chords';
-import { Key, romanNumeral, spellRootInKey, tonicName } from './keys';
+import { Key, keyId, romanNumeral, spellRootInKey, tonicName } from './keys';
 import { Lane } from './progressionMap';
 import { parseChordName } from './search';
 import * as engine from './engine';
@@ -157,6 +157,10 @@ export function starts(key: Key): StartGroup[] {
   };
   return engine.starts(engineKey(key)).map((g) => ({ name: g.name, items: g.items.map(item), more: g.more.map(item) }));
 }
+
+/** What adding a start to an empty progression also sets: its style, and the key it's listed in. */
+export const startSettings = (item: StartItem): { style: engine.StyleName; keyChoice: string } =>
+  ({ style: item.style, keyChoice: keyId(item.key) });
 
 /** Runs of the same chord in a row become one column with a count (12-bar: C7 x4, F7 x2...). */
 export function collapseRepeats<T>(chords: T[], same: (a: T, b: T) => boolean): { chord: T; count: number; first: number }[] {

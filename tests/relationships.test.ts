@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ideaTag } from '../src/theory/progressions';
 import { CHORD_TEMPLATES, Chord, chordSymbol, makeChord } from '../src/theory/chords';
-import { StyleName, afterIdeas, collapseRepeats, engineSymbol, ideaReason, keyChords, siteChord, starts, thenPhrase } from '../src/theory/ideas';
+import { StyleName, afterIdeas, collapseRepeats, engineSymbol, ideaReason, keyChords, siteChord, startSettings, starts, thenPhrase } from '../src/theory/ideas';
 import * as engine from '../src/theory/engine';
 import { showsReturn } from '../src/theory/progressionMap';
 import { Key, chordSymbolInKey, keyName, romanNumeral } from '../src/theory/keys';
@@ -147,5 +147,18 @@ describe("the engine's spelling reaches the page", () => {
         });
       });
     }
+  });
+});
+
+describe('a start added to an empty progression sets its key', () => {
+  const C: Key = { tonic: 0, mode: 'major' };
+  const all = starts(C).flatMap((g) => [...g.items, ...g.more]);
+  it('IV–V–vi climb: C major, add9', () => {
+    const climb = all.find((x) => x.id === 'pr-iv-v-vi-climb')!;
+    expect(startSettings(climb)).toEqual({ style: 'add9', keyChoice: '0-major' });
+  });
+  it('i–VI drone (listed in a minor key): A minor', () => {
+    const drone = starts({ tonic: 9, mode: 'minor' }).flatMap((g) => [...g.items, ...g.more]).find((x) => x.id === 'pr-i-vi-drone')!;
+    expect(startSettings(drone).keyChoice).toBe('9-minor');
   });
 });
