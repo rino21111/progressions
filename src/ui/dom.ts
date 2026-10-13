@@ -1,7 +1,7 @@
 // Tiny helpers for building DOM and SVG without a framework.
 
 type Attrs = Record<string, string | number | boolean | null | undefined | EventListener>;
-type Child = Node | string | number | null | undefined | false | Child[];
+export type Child = Node | string | number | null | undefined | false | Child[];
 
 function append(el: Element, children: Child[]) {
   for (const child of children) {

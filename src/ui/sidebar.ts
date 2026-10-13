@@ -1,5 +1,6 @@
-// The Progression sidebar (a dock at the bottom on phones): the transport, then the chord chart
-// with a diagram per chord (drag to reorder), the selected card marked, and the add card at the end.
+// The Progression sidebar (a dock at the bottom on phones): Play and a menu (Loop, Clear, Hide), then
+// the chord chart with a diagram per chord (drag to reorder), the selected card marked, the add card at
+// the end, and Shared notes folded under it. On phones the dock rests as a strip of chord chips.
 
 import { currentKey } from '../key';
 import { currentPlayback, onNote, onPlayback } from '../player';
@@ -16,7 +17,8 @@ import {
 } from './common';
 import { enableReorder } from './dragReorder';
 import { createProgressionMap } from './progressionMap';
-import { chevronIcon } from './icons';
+import { chevronIcon, moreIcon } from './icons';
+import { checkbox, menuItem, popover } from './menu';
 import { h, toneClass } from './dom';
 
 
@@ -28,22 +30,41 @@ export function labelledBox(chord: Chord, fingering: NonNullable<ReturnType<type
 }
 
 /**
- * The sidebar's own header (title, Play and Loop, Clear) and its body (the chart). On phones the
- * header is hidden and Play and Loop move to the dock's bottom row.
+ * The sidebar's own header (title, Play, the menu) and its body (the chart). On phones the header is
+ * hidden and Play and the menu move to the dock's row.
  */
-export function createSidebar(transport: HTMLElement): { header: HTMLElement; body: HTMLElement } {
-  const clearButton = h('button', { class: 'text-btn side-clear', onclick: clearProgression }, 'Clear');
+export function createSidebar(play: HTMLElement, hide: () => void): { header: HTMLElement; body: HTMLElement } {
+  const menuButton = h('button', { class: 'player-btn toggle-btn menu-btn', title: 'Progression menu', 'aria-label': 'Progression menu' }, moreIcon());
+  const loop = checkbox('Loop', () => state.loop, (on) => update({ loop: on }));
+  let close = () => {};
+  const clearItem = menuItem('Clear', clearProgression, () => close());
+  const menu = popover(menuButton, h('div', { class: 'pop-row' }, loop.el), clearItem, menuItem('Hide', hide, () => close()));
+  close = menu.close;
+  menu.el.classList.add('side-menu');
   const title = h('h2', {}, 'Progression');
-  const header = h('div', { class: 'side-header' }, title, clearButton);
+  const header = h('div', { class: 'side-header' });
   const chart = h('div', { class: 'chart' });
-  // The shared-notes map (toggled below the chart; a tab on top of the dock on phones). On phones the
-  // map and the cards share one horizontal scroller, so each column stays over its card.
+  // Shared notes, folded under the chart (on phones the map and the cards share one horizontal
+  // scroller, so each column stays over its card).
   const map = createProgressionMap((i) => selectCard(i));
   const scroller = h('div', { class: 'chart-scroll' }, map.el, chart);
   const mapToggle = h('button', {
-    class: 'map-toggle', title: 'Shared notes', 'aria-label': 'Shared notes', 'aria-controls': 'progression-map',
+    class: 'map-toggle', 'aria-controls': 'progression-map',
     onclick: () => update({ showMap: !state.showMap }),
-  }, chevronIcon());
+  }, chevronIcon(), 'Shared notes');
+  // Phones: the dock rests as one row (chord chips, Play, the menu); the handle or a chip opens it.
+  const strip = h('div', { class: 'strip-chips' });
+  const handle = h('button', { class: 'dock-handle', onclick: () => setFull(!full) }, chevronIcon());
+  const dockRow = h('div', { class: 'dock-row' });
+  let full = false;
+  const setFull = (on: boolean) => {
+    full = on;
+    sidebar.classList.toggle('strip', !full);
+    handle.title = full ? 'Fold the progression' : 'Open the progression';
+    handle.setAttribute('aria-label', handle.title);
+    handle.setAttribute('aria-expanded', String(full));
+    queueMicrotask(measureDock);
+  };
   const phone = window.matchMedia('(max-width: 999px)');
   let cards: HTMLElement[] = [];
   let shownSelected = -1;
@@ -82,7 +103,8 @@ export function createSidebar(transport: HTMLElement): { header: HTMLElement; bo
     const { key } = currentKey();
     const n = state.progression.length;
     const selected = cardIndex(n, state.selectedCard);
-    clearButton.hidden = !n;
+    clearItem.disabled = !n;
+    loop.sync();
     drag.cancel();
     // Click a card to select and hear it; double-click duplicates it right after itself; drag to move it.
     cards = state.progression.map((chord, i) => {
@@ -115,6 +137,13 @@ export function createSidebar(transport: HTMLElement): { header: HTMLElement; bo
       );
     });
     chart.replaceChildren(...cards, addCard());
+    strip.replaceChildren(...state.progression.map((chord, i) => h('button', {
+      class: `strip-chip${i === selected ? ' selected' : ''}`,
+      onclick: () => {
+        setFull(true);
+        selectCard(i);
+      },
+    }, chordSymbol(chord))));
     renderMap();
     // A newly selected card (arrow keys, or a column of the map) is scrolled into view.
     if (selected !== shownSelected && cards[selected]) cards[selected].scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -153,6 +182,7 @@ export function createSidebar(transport: HTMLElement): { header: HTMLElement; bo
   onPlayback((p) => {
     const step = p?.id === PROGRESSION_ID ? p.step : null;
     cards.forEach((el, i) => el.classList.toggle('playing', step === i));
+    [...strip.children].forEach((el, i) => el.classList.toggle('playing', step === i));
     if (step !== null && phone.matches) cards[step]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     renderMap();
   });
@@ -164,11 +194,20 @@ export function createSidebar(transport: HTMLElement): { header: HTMLElement; bo
   subscribe(render);
   render();
 
-  sidebar.append(scroller, mapToggle);
-  const place = () => (phone.matches ? sidebar.prepend(transport) : title.after(transport));
+  const place = () => {
+    if (phone.matches) {
+      sidebar.replaceChildren(handle, scroller, dockRow);
+      dockRow.replaceChildren(play, strip, mapToggle, h('span', { class: 'spacer' }), menu.el);
+      header.replaceChildren();
+    } else {
+      sidebar.replaceChildren(scroller, mapToggle);
+      header.replaceChildren(title, play, h('span', { class: 'spacer' }), menu.el);
+    }
+  };
   phone.addEventListener('change', place);
-  window.addEventListener('resize', place);
+  window.addEventListener('resize', () => phone.matches === sidebar.contains(dockRow) || place());
   place();
+  setFull(false);
   // The page leaves room for the dock, however tall it is (it grows when the map is open): measured
   // after every render, and whenever its size changes.
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureDock).observe(sidebar);

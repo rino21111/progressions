@@ -91,7 +91,7 @@ How strongly the user's chords read as each Start with family (Classical and fol
 - top is the strongest affinity. rel(E) = max over families g of aff(g) × near(g, family of E), where near is 1 for the same family and otherwise FAMILY_NEAR (Post-rock: Ballad and pop 0.25, Blues and rock 0.3, Classical and folk 0.2; Jazz ↔ Bossa nova 0.8; Blues and rock: Ballad and pop 0.4, Classical and folk 0.35, Post-rock 0.3, Jazz 0.2; Ballad and pop: Blues and rock 0.4, Classical and folk 0.3, Post-rock 0.3, Jazz 0.2; Classical and folk: Ballad and pop 0.3, Blues and rock 0.2, Flamenco 0.2; Flamenco: Classical and folk 0.3, Blues and rock 0.2). lead(E) is the same over only the leading families (aff > top − 0.25).
 - Distinct read: top ≥ 0.8 and neither Classical and folk nor Ballad and pop leads (both ≤ top − 0.25). Pop and folk loops are the shared language and keep every phrase.
 - N-gram: a same-mode entry's weight × (1 + 0.5 × rel(E)).
-- Post-rock read: Post-rock and cinematic ≥ 0.8, equal to top, and Jazz and soul and Bossa nova ≤ top − 0.25. Then the V in both pools is suspended (G or G7 → Gsus4, not in a blues), Natural dominant 7ths and diminished chords take −1.0, and chromatic pulls, dominant 7ths and diminished chords take −1.5 on their Spicy value.
+- Post-rock read: Post-rock and cinematic ≥ 0.8, equal to top, and Jazz and soul and Bossa nova ≤ top − 0.25. Then the V in both pools is suspended (G or G7 → Gsus4, not in a blues), Natural dominant 7ths and diminished chords take −1.0, chromatic pulls, dominant 7ths and diminished chords take −1.5 on their Spicy value, and I7 is not offered.
 
 ## Next by feeling
 

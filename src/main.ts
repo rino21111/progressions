@@ -102,20 +102,18 @@ const undoButton = h('button', { class: 'icon-btn undo-btn', title: 'Undo (Cmd/C
 subscribe(() => (undoButton.disabled = !canUndo()));
 undoButton.disabled = !canUndo();
 
-const sidebar = createSidebar(player.el);
-
 // Two columns on desktop: the page (scrolling) and the Progression sidebar (scrolling on its own),
 // under one header line. On phones the sidebar becomes a dock at the bottom.
 const app = h('div', { class: 'app' });
 const panel = createPanel(app);
-sidebar.header.append(panel.hideButton);
+const sidebar = createSidebar(player.el, panel.toggle);
 add(app,
     h('header', { class: 'main-header' },
       h('div', { class: 'brand', role: 'img', 'aria-label': 'progressions', title: 'progressions' }, h('span', { class: 'logo' }, fretIcon(22))),
       h('nav', { class: 'tabs', role: 'tablist' }, tabs),
       h('span', { class: 'spacer' }),
-      player.settings,
       undoButton,
+      player.settings,
       panel.showButton,
     ),
     sidebar.header,

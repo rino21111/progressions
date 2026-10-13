@@ -1232,7 +1232,7 @@ function afterPool(ctx: Ctx): { nat: Cand[]; rest: Cand[]; reason: (s: Cand) => 
         if (!inPalette(X) && !fits && !ivTo && !s.ngs.best && !expectHit(X, c, k) && c.root !== X.root) { extra -= 0.5; s.astray = true; }
       }
     }
-    if (r.role === 'tonic7' && !open && semisOf(follow, k) !== 5) continue; // I7 only on its way to IV
+    if (r.role === 'tonic7' && (cine || (!open && semisOf(follow, k) !== 5))) continue; // I7 only on its way to IV, and never in post-rock
     if (r.role === 'picardy') {
       if (isDominantOfTonic(X, k) && at === n) extra += 0.4;
       else if (!(semisOf(follow, k) === 5 && fam(follow) === 'm')) continue; // otherwise only as V of iv

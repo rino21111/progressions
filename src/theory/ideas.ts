@@ -3,9 +3,8 @@
 // engine (engine.ts) decides; this turns the site's chords into its symbols and back.
 
 import { Chord } from './chords';
-import { Key, chordSymbolInKey, romanNumeral, spellRootInKey, tonicName } from './keys';
-import { Lane, laneInfo } from './progressionMap';
-import { ideaTag, secondaryTarget } from './progressions';
+import { Key, romanNumeral, spellRootInKey, tonicName } from './keys';
+import { Lane } from './progressionMap';
 import { parseChordName } from './search';
 import * as engine from './engine';
 
@@ -80,38 +79,42 @@ export function keyChords(key: Key, style: engine.StyleName): { chord: Chord; bo
   return engine.diatonicSet(k, style).map((c, i) => ({ chord: supplied(c.symbol, engine.numeral(c, k), key), borrowed: key.mode === 'minor' && i === 7 }));
 }
 
+/** An engine idea as the site shows it; a then phrase that returns home ends on the progression's own first chord. */
+function siteIdea(x: engine.EngineIdea, key: Key, first: Chord): AfterIdea {
+  const t = x.then;
+  let then: ThenPhrase | null = null;
+  if (t) {
+    const chords = t.chords.map((sym, i) => supplied(sym, t.numerals[i], key));
+    if (t.returnsHome) chords[chords.length - 1] = first;
+    then = { name: t.name, genre: t.genre, mood: t.mood, chords, numerals: t.numerals, lanes: t.lanes, returnsHome: t.returnsHome };
+  }
+  const chord = supplied(x.chord, x.numeral, key);
+  return { chord, numeral: chord.numeral!, lane: x.lane, tag: x.tag || null, why: x.why, then };
+}
+
 /** Up to four ideas for after the progression's last chord (Natural, or Spicy from outside the key). */
 export function afterIdeas(progression: Chord[], key: Key, opts: { spice: boolean; style?: engine.StyleName }): AfterIdea[] {
   if (!progression.length) return [];
-  const first = progression[0];
-  return engine.afterIdeas(progression.map((c) => engineSymbol(c, key)), engineKey(key), { spice: opts.spice, style: opts.style }).map((x) => {
-    const t = x.then;
-    let then: ThenPhrase | null = null;
-    if (t) {
-      const chords = t.chords.map((sym, i) => supplied(sym, t.numerals[i], key));
-      // the return is the progression's own first chord, as played
-      if (t.returnsHome) chords[chords.length - 1] = first;
-      then = { name: t.name, genre: t.genre, mood: t.mood, chords, numerals: t.numerals, lanes: t.lanes, returnsHome: t.returnsHome };
-    }
-    const chord = supplied(x.chord, x.numeral, key);
-    return { chord, numeral: chord.numeral!, lane: x.lane, tag: x.tag || null, why: x.why, then };
-  });
+  return engine.afterIdeas(progression.map((c) => engineSymbol(c, key)), engineKey(key), { spice: opts.spice, style: opts.style })
+    .map((x) => siteIdea(x, key, progression[0]));
 }
+
+export type Mood = engine.Mood;
+
+/** What could come after the progression, grouped by how the move feels (Resolve, Lift, Drift, Darken, Tension). */
+export function nextByMood(progression: Chord[], key: Key, style?: engine.StyleName): { mood: Mood; ideas: AfterIdea[] }[] {
+  if (!progression.length) return [];
+  return engine.nextByMood(progression.map((c) => engineSymbol(c, key)), engineKey(key), { style })
+    .map((g) => ({ mood: g.mood, ideas: g.ideas.map((x) => siteIdea(x, key, progression[0])) }));
+}
+
+/** The degree alone (I for Cadd9, II for D7, #v for G#dim7), for a chip. */
+export const degreeOf = (numeral: string): string => DEGREE.exec(numeral)?.[0] ?? numeral;
 
 /** The reason for an idea's title: its tag, then its why, less an "As in" that only repeats the tag. */
 export function ideaReason(idea: AfterIdea): string {
   const why = idea.why.split('; ').filter((w) => w !== `As in ${idea.tag}`).join('; ');
   return [idea.tag, why].filter(Boolean).join('. ');
-}
-
-/** An idea row for any chord after `x` (a key-band chord picked to compare). */
-export function ideaFor(x: Chord, c: Chord, key: Key, first: Chord): AfterIdea {
-  // A secondary dominant (or leading-tone chord) reads as leading to its target, as its tag says.
-  const target = secondaryTarget(c, key);
-  const plain = laneInfo(c, key, first);
-  const aimed = target ? laneInfo(c, key, target) : plain;
-  const to = aimed.lane === plain.lane ? plain : { lane: aimed.lane, reason: `${romanNumeral(c, key)}, leads to ${chordSymbolInKey(target!, key)}` };
-  return { chord: c, numeral: romanNumeral(c, key), lane: to.lane, tag: ideaTag(x, c, key), why: to.reason.replace(/^[^,]+, /, ''), then: null };
 }
 
 export interface StartItem {

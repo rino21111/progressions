@@ -159,19 +159,10 @@ body {
   margin-left: auto;
 }
 
-/* Play and Loop sit in the side header on desktop. */
-.side-header .transport {
-  display: flex;
-  padding: 0;
-  border: none;
-}
-
-/* Tempo, how to play and settings: in the main header, for every Play. */
-.player-settings {
+/* A button and its popover (settings, the panel's menu, View). */
+.pop-wrap {
   position: relative;
   display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .side-header h2 {
@@ -237,23 +228,20 @@ main {
   order: 2;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 28px;
-  padding: 0;
+  gap: 6px;
+  margin: 0 16px;
+  padding: 8px 0;
   border: none;
   border-top: 1px solid var(--border);
   border-radius: 0;
   background: none;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text-muted);
 }
 
-.map-toggle svg {
-  transition: transform 0.15s ease;
-}
-
-.map-toggle[aria-expanded="true"] svg {
-  transform: rotate(180deg);
+.map-toggle:hover {
+  color: var(--text);
 }
 
 .pmap {
@@ -417,33 +405,80 @@ main {
   pointer-events: none;
 }
 
-/* Transport: Play, Loop, tempo, how to play, settings. */
-.transport {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 10px;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
-}
-
-.transport-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-}
-
-.transport .play-btn {
+/* Play in the side header (and the phone dock). */
+.side-header .play-btn,
+.dock-row .play-btn {
   width: 44px;
-  height: 36px;
+  height: 34px;
 }
 
-.transport .variant-combo {
+.player-pop .variant-combo {
   flex: 1;
   min-width: 0;
 }
 
+/* A menu's actions: plain rows. */
+.menu-item {
+  padding: 4px 0;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 13px;
+}
+
+.menu-item:hover:not(:disabled) {
+  color: var(--accent);
+}
+
+.menu-item:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.side-menu .player-pop {
+  min-width: 160px;
+}
+
+/* A quiet line that opens what's under it (Other shapes). */
+.disclose > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.disclose > summary::-webkit-details-marker {
+  display: none;
+}
+
+.disclose > summary:hover {
+  color: var(--text);
+}
+
+.disclose > summary svg,
+.map-toggle svg {
+  transform: rotate(-90deg);
+  transition: transform 0.15s ease;
+}
+
+.disclose[open] > summary svg,
+.map-toggle[aria-expanded="true"] svg {
+  transform: none;
+}
+
+.disclose[open] > summary {
+  margin-bottom: 10px;
+}
+
+/* The phone dock's handle and strip; not on desktop. */
+.dock-handle,
+.strip-chips {
+  display: none;
+}
 
 /* Double-clicking a chord adds it; don't let it select text too. */
 .chart-card,
@@ -636,13 +671,6 @@ main {
   line-height: 1.15;
 }
 
-.phone-only {
-  display: none;
-}
-
-.clear-progression {
-  padding: 2px 0;
-}
 
 
 
@@ -1093,17 +1121,23 @@ main {
 .name-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
 }
 
 .chord-play {
   display: flex;
   flex: none;
-  gap: 6px;
 }
 
-/* A long name shrinks (then wraps) rather than running into Play and Loop. */
+.chord-play .play-btn {
+  border-radius: 50%;
+}
+
+.view-btn {
+  font-weight: 600;
+}
+
+/* A long name shrinks (then wraps) rather than running into Play. */
 .name-row .chord-name {
   min-width: 0;
   font-size: clamp(28px, 10vw, 44px) !important;
@@ -1792,12 +1826,6 @@ main {
   }
 }
 
-/* A group's further Start with entries: a quiet text control after its row. */
-.ex-more {
-  margin-top: 6px;
-  padding: 4px 0;
-}
-
 /* Hidden always wins over a display rule (the Relationships page is a flex column). */
 [hidden] {
   display: none !important;
@@ -1809,10 +1837,6 @@ main {
   display: flex;
   flex-direction: column;
   gap: 14px;
-}
-
-.page.progressions .card-head .segmented {
-  margin-left: auto;
 }
 
 /* The tab's chord chip: symbol over numeral. */
@@ -1843,148 +1867,205 @@ main {
   color: var(--tone-ext);
 }
 
-/* Key band: each chord of the key above its lane (D, PD, T). */
-.kb-grid {
-  display: grid;
-  grid-template-columns: 84px repeat(var(--cols), minmax(0, 1fr));
-}
-
-.kb-top {
+/* Key: the pickers, then the key's chords on one line (yours tinted). */
+.key-line {
   display: flex;
-  justify-content: center;
-  padding: 4px 2px 8px;
-  border-radius: 8px 8px 0 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
 }
 
-.kb-chip {
+.key-selects {
+  display: flex;
+  gap: 6px;
+}
+
+.kb-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.kb-chip,
+.idea-chip,
+.start-chip {
   padding: 0;
   border: none;
   background: none;
-}
-
-.kb-chip.selected .rchip,
-.idea-row.selected .rchip {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1.5px var(--accent);
-}
-
-.kb-gutter,
-.kb-strip {
-  height: 42px;
-  background: color-mix(in srgb, var(--text) 4%, transparent);
-}
-
-.kb-gutter {
-  display: grid;
-  grid-template-rows: repeat(3, 14px);
-  align-items: center;
-  padding-left: 6px;
-  border-radius: 6px 0 0 6px;
-}
-
-.kb-lane {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-.kb-lane .abbr {
-  display: none;
-}
-
-.kb-strip {
-  position: relative;
-}
-
-.kb-strip:last-child {
-  border-radius: 0 6px 6px 0;
-}
-
-.kb-node {
-  position: absolute;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--text-muted);
-  border: 1.5px solid var(--bg);
-  transform: translate(-50%, -50%);
-}
-
-.kb-node.lane-D { top: 7px; }
-.kb-node.lane-PD { top: 21px; }
-.kb-node.lane-T { top: 35px; }
-
-.kb-top.yours,
-.kb-strip.yours {
-  background-color: color-mix(in srgb, var(--accent) 12%, transparent);
-}
-
-.kb-top.playing,
-.kb-strip.playing {
-  background-color: color-mix(in srgb, var(--accent) 14%, transparent);
-}
-
-/* The minor key's major V, after a hairline. */
-.kb-top.borrowed,
-.kb-strip.borrowed {
-  border-left: 1px solid var(--border);
-}
-
-/* After: one idea per line, and on the same line the chords that often follow it. */
-.idea-grid {
-  display: flex;
-  flex-direction: column;
-}
-
-.idea-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 4px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.idea-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: none;
-  padding: 2px 6px;
-  border-radius: 6px;
-  cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
 }
 
-.idea-row > .rchip {
-  width: 50px;
-  min-width: 0;
-}
-
-.idea-row:hover,
-.then-line:hover {
-  background: color-mix(in srgb, var(--text) 4%, transparent);
-}
-
-.idea-row.yours .rchip {
+.kb-chip.yours .rchip,
+.idea-chip.yours .rchip {
   background: color-mix(in srgb, var(--accent) 12%, var(--bg));
 }
 
-.then-line {
+.kb-chip.playing .rchip,
+.start-chip.playing .rchip {
+  background: color-mix(in srgb, var(--accent) 22%, var(--bg));
+}
+
+/* The minor key's major V, after a hairline. */
+.kb-chip:has(.harmonic) {
+  padding-left: 4px;
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+}
+
+.kb-chip.selected .rchip,
+.idea-chip.selected .rchip {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1.5px var(--accent);
+}
+
+.kb-chip:hover .rchip,
+.idea-chip:hover .rchip,
+.start-chip:hover .rchip {
+  border-color: var(--text-muted);
+}
+
+/* After: one row per feeling, a label then its chips; the open chip's detail under its row. */
+.mood-grid {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.mood {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.mood-chips {
   display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.idea-detail {
+  grid-column: 2;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.idea-detail .chord-box {
+  flex: none;
+  width: 64px;
+}
+
+.idea-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.idea-why {
+  margin: 0;
+  font-size: 13px;
+}
+
+.idea-adds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.idea-adds button {
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Start with: one family at a time, an entry per row. */
+.family-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.pill {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.pill.active {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+
+.start-row {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 200px) auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.start-row:last-child {
+  border-bottom: none;
+}
+
+.start-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.start-chips {
+  display: flex;
+  gap: 4px;
+}
+
+.start-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.start-count {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.start-mood {
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* "then" and the chords that often follow (click to hear them as one phrase). */
+.then-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
   min-width: 0;
-  margin-left: 8px;
-  padding: 6px 10px;
+  margin-left: -8px;
+  padding: 4px 8px;
   border-radius: 6px;
   font-size: 12px;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+}
+
+.then-line:hover {
+  background: color-mix(in srgb, var(--text) 4%, transparent);
 }
 
 .then-line.selected {
@@ -2000,12 +2081,9 @@ main {
   color: var(--text-muted);
 }
 
-/* Room for three chips, so every phrase name starts at the same x. */
 .then-chips {
   display: flex;
   gap: 4px;
-  flex: none;
-  width: 128px;
 }
 
 .rchip.mini {
@@ -2018,11 +2096,6 @@ main {
   border-style: dashed;
   border-color: var(--text-muted);
   background: transparent;
-}
-
-.idea-row .rchip .sym.long {
-  font-size: 12px;
-  letter-spacing: -0.02em;
 }
 
 .idea-none {
@@ -2038,173 +2111,18 @@ main {
   font-size: 9px;
 }
 
-.then-text {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: 10px;
-  min-width: 0;
-  line-height: 1.3;
-}
-
-.then-name {
-  font-weight: 600;
-  white-space: nowrap;
-}
-
 .then-meta {
   color: var(--text-muted);
   white-space: nowrap;
 }
 
-.voice-pic {
-  display: block;
-  overflow: visible;
-}
-
-.vp-move {
-  stroke: var(--tone);
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-.vp-enter {
-  stroke-dasharray: 2 3;
-}
-
-.vp-step {
-  font-size: 8px;
-  fill: var(--text-muted);
-  text-anchor: middle;
-}
-
-.vp-name {
-  font-size: 10px;
-  fill: var(--text-muted);
-}
-
-.vp-name.left {
-  text-anchor: end;
-  opacity: 0.75;
-}
-
-/* The chord before is greyed, so the eye follows the idea on the right. */
-.vp-prior circle {
-  fill: color-mix(in srgb, var(--tone-other) 50%, var(--bg));
-}
-
-.vp-name.new {
-  fill: var(--text);
-  font-weight: 700;
-}
-
-.vp-name.out,
-.pm-ghost-name {
-  fill: var(--tone-ext);
-}
-
 .pm-ghost-name {
   font-size: 9px;
 }
 
-
-/* Examples: small Shared notes maps, in groups. */
-.example-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.ex-group h3 {
-  margin: 0 0 8px;
-  font-size: 14px;
-}
-
-.ex-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.ex-card {
-  min-width: 0;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: transparent;
-}
-
-.ex-card.wide {
-  grid-column: span 2;
-}
-
-.ex-card.yours {
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
-}
-
-.ex-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.ex-head h4 {
-  margin: 0;
-  font-size: 14px;
-}
-
-.ex-map {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-.ex-num {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 9px;
-  fill: var(--text-muted);
-  text-anchor: middle;
-}
-
-.ex-num.out {
-  fill: var(--tone-ext);
-}
-
-.ex-count {
-  font-size: 8px;
-  fill: var(--text-muted);
-  text-anchor: middle;
-}
-
-.pm-row-label.ex-rowlabel {
-  font-size: 9px;
-}
-
-.ex-tint {
-  opacity: 0;
-}
-
-.ex-tint.on {
-  opacity: 1;
-}
 
 .pm-node.playing {
   fill: var(--accent);
-}
-
-.ex-genre {
-  margin: 6px 0 0;
-  font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.ex-genre .muted {
-  color: var(--text-muted);
 }
 
 /* A narrower main column: stack the Inspector cards; examples two to a row. */
@@ -2212,15 +2130,12 @@ main {
   .results {
     grid-template-columns: minmax(0, 1fr);
   }
-  .ex-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 /*
- * Below 1000 px (phones): a 52 px top bar (logo, tabs, undo), the page, and the Progression as a
- * dock fixed to the bottom: a sideways strip of cards (with the add card and Clear), then the
- * transport (Play, Loop, style, tempo, settings). Settings opens upwards.
+ * Below 1000 px (phones): a 52 px top bar (logo, tabs, undo, settings), one column, and the
+ * Progression as a dock fixed to the bottom. At rest the dock is one row (chord chips, Play, the
+ * menu); its handle or a chip opens it to the cards, with Shared notes in the row. Its menu opens upwards.
  */
 @media (max-width: 999px) {
   body {
@@ -2286,75 +2201,38 @@ main {
   .page.progressions .after-card {
     order: -1;
   }
-  .kb-grid {
-    grid-template-columns: 26px repeat(var(--cols), minmax(0, 1fr));
-  }
-  .kb-gutter {
-    padding-left: 4px;
-  }
-  .kb-lane .word {
-    display: none;
-  }
-  .kb-lane .abbr {
-    display: inline;
-    font-size: 9px;
-  }
   .rchip {
-    min-width: 0;
-    padding: 2px 4px;
+    min-width: 40px;
+    padding: 2px 5px;
   }
-  .kb-grid .rchip .sym {
-    font-size: 12px;
+  /* Start with: name and mood over the chips. */
+  .start-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    row-gap: 4px;
   }
-  .kb-chip,
-  .kb-grid .rchip {
-    width: 100%;
-  }
-  .kb-grid .rchip {
-    padding: 2px 1px;
-  }
-  .kb-grid .rchip .sym.long {
-    font-size: 9.5px;
-    letter-spacing: -0.03em;
-  }
-  .kb-top {
-    padding: 4px 1px 8px;
-  }
-  /* The then line wraps to its own line under the idea. */
-  .idea-item {
+  .start-chips {
+    grid-column: 2;
+    grid-row: 2;
     flex-wrap: wrap;
   }
-  .then-line {
-    flex-basis: 100%;
-    margin: 0 0 4px;
+  .start-mood {
+    grid-column: 2;
+    grid-row: 3;
   }
-  .idea-row > .rchip {
-    width: 46px;
+  .start-row > .icon:last-child {
+    grid-column: 3;
+    grid-row: 1;
   }
-  .then-text {
-    flex-direction: column;
-    gap: 0;
-    line-height: 1.3;
+  .mood-grid {
+    grid-template-columns: 64px minmax(0, 1fr);
   }
-  /* Each group of examples scrolls sideways, a card at a time. */
-  .ex-row {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+  .idea-detail {
+    grid-column: 1 / -1;
   }
-  .ex-card,
-  .ex-card.wide {
-    flex: 0 0 85%;
-    scroll-snap-align: start;
-  }
-  /* Inspector controls in two rows: search (growing), All muted, All open; then the toggles. */
+  /* The search grows; View stays at the right. */
   .search {
     flex: 1 1 120px;
     width: auto;
-  }
-  .phone-only {
-    display: flex;
   }
   .sidebar {
     position: fixed;
@@ -2417,20 +2295,25 @@ main {
   .pmap-gutter .pm-row-label {
     font-size: 9px;
   }
-  /* Shared notes: a tab on top of the dock; the chevron points up to open. */
-  .map-toggle {
+  /* The handle: a tab on top of the dock; the chevron points up to open. */
+  .dock-handle {
     position: absolute;
     top: -20px;
     left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 48px;
     height: 20px;
+    padding: 0;
     transform: translateX(-50%);
     background: var(--bg);
+    color: var(--text-muted);
     border: 1px solid var(--border);
     border-bottom: none;
     border-radius: 9px 9px 0 0;
   }
-  .map-toggle::before {
+  .dock-handle::before {
     content: '';
     position: absolute;
     left: 0;
@@ -2438,11 +2321,65 @@ main {
     top: -12px;
     bottom: -12px;
   }
-  .map-toggle svg {
+  .dock-handle svg {
     transform: rotate(180deg);
   }
-  .map-toggle[aria-expanded="true"] svg {
+  .dock-handle[aria-expanded="true"] svg {
     transform: none;
+  }
+  .dock-row {
+    order: 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .dock-row .player-pop {
+    top: auto;
+    bottom: calc(100% + 8px);
+  }
+  .map-toggle {
+    order: 0;
+    margin: 0;
+    border: none;
+  }
+  /* At rest: one 76px row of chord chips between Play and the menu. */
+  .sidebar.strip .chart-scroll,
+  .sidebar.strip .map-toggle {
+    display: none !important;
+  }
+  .sidebar.strip .dock-row {
+    height: 75px;
+    padding: 0 16px;
+    border-top: none;
+  }
+  .sidebar.strip .strip-chips {
+    display: flex;
+    flex: 1;
+    gap: 6px;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .sidebar.strip .spacer {
+    display: none;
+  }
+  .strip-chip {
+    flex: none;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .strip-chip.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .strip-chip.playing {
+    background: color-mix(in srgb, var(--accent) 14%, var(--bg));
+  }
+  .key-selects {
+    margin-left: auto;
   }
   .chart-card,
   .add-card {
@@ -2472,19 +2409,6 @@ main {
   }
   .card-top .numeral {
     font-size: 10px;
-  }
-  .transport {
-    order: 3;
-    position: static;
-    padding: 8px 16px;
-    border-bottom: none;
-    border-top: 1px solid var(--border);
-  }
-  .transport .play-btn {
-    width: 44px;
-  }
-  .player-pop .variant-combo {
-    flex: 1;
   }
   .chord-name {
     font-size: 36px !important;

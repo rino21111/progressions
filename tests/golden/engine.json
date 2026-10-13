@@ -78,12 +78,27 @@
      "then": null
     },
     {
-     "chord": "C7",
-     "numeral": "I7",
-     "lane": "D",
-     "tag": "Leads to F",
-     "why": "Turns back to Fadd9 at bar 4; Keeps C, E and G",
-     "then": null
+     "chord": "Abadd9",
+     "numeral": "bVIadd9",
+     "lane": "PD",
+     "tag": "From C minor",
+     "why": "Tonic to predominant",
+     "then": {
+      "name": "bVI–bVII–I",
+      "chords": [
+       "Bbadd9",
+       "Cadd9"
+      ],
+      "numerals": [
+       "bVIIadd9",
+       "Iadd9"
+      ],
+      "lanes": [
+       "D",
+       "T"
+      ],
+      "returnsHome": false
+     }
     }
    ]
   },

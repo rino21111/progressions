@@ -68,3 +68,11 @@ export const panelIcon = (size = 14) =>
     s('rect', { x: 1.75, y: 2.75, width: 12.5, height: 10.5, rx: 1.5 }),
     s('path', { d: 'M10 3v10' }),
   );
+
+/** Three dots in a row, for a menu. */
+export const moreIcon = (size = 14) =>
+  glyph(size,
+    s('circle', { cx: 3.5, cy: 8, r: 1.3, fill: 'currentColor', stroke: 'none' }),
+    s('circle', { cx: 8, cy: 8, r: 1.3, fill: 'currentColor', stroke: 'none' }),
+    s('circle', { cx: 12.5, cy: 8, r: 1.3, fill: 'currentColor', stroke: 'none' }),
+  );

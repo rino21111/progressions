@@ -34,8 +34,6 @@ export const openAfter = (open: boolean, before: number, after: number) => (befo
 export interface Panel {
   /** For the main header: icon, "Progression" and the count (shown while the panel is hidden). */
   showButton: HTMLButtonElement;
-  /** For the side header: icon only (shown while the panel is open). */
-  hideButton: HTMLButtonElement;
   isOpen: () => boolean;
   toggle: () => void;
 }
@@ -47,9 +45,6 @@ export function createPanel(app: HTMLElement): Panel {
   const countEl = h('span', { class: 'panel-count' });
   const showButton = h('button', { class: 'panel-btn show', onclick: () => toggle() },
     panelIcon(), h('span', { class: 'panel-label' }, 'Progression'), countEl);
-  const hideButton = h('button', {
-    class: 'icon-btn panel-btn hide', title: 'Hide progression', 'aria-label': 'Hide progression', onclick: () => toggle(),
-  }, panelIcon());
 
   const apply = () => {
     app.classList.toggle('panel-closed', !open);
@@ -82,5 +77,5 @@ export function createPanel(app: HTMLElement): Panel {
     apply();
   });
   apply();
-  return { showButton, hideButton, isOpen: () => open, toggle };
+  return { showButton, isOpen: () => open, toggle };
 }

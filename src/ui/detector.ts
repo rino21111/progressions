@@ -15,7 +15,8 @@ import { chordBox } from './chordBox';
 import { addSelection, onShapeClick, playFingering, selectChord, setFingering } from './common';
 import { currentPlayback, onNote, onPlayback, play, stop } from '../player';
 import { INSPECTOR_ID, chordFingerings } from '../playback';
-import { loopIcon, playIcon, stopIcon } from './icons';
+import { playIcon, stopIcon } from './icons';
+import { checkbox, disclosure, menuItem, popover } from './menu';
 import { add, clear, h, toneClass } from './dom';
 import { Fretboard, Mark } from './fretboard';
 import { toneArea } from './toneStrip';
@@ -53,10 +54,10 @@ export function focusSearch() {
   searchInput?.select();
 }
 
-/** The Inspector's Play: one bar of the fretboard's chord in the sidebar's style (looping if its Loop is on), or stop. */
+/** The Inspector's Play: one bar of the fretboard's chord in the sidebar's style, or stop. */
 export function toggleChordPlay() {
   if (currentPlayback()?.id === INSPECTOR_ID) stop();
-  else play(INSPECTOR_ID, () => chordFingerings(state), { loop: () => state.chordLoop });
+  else play(INSPECTOR_ID, () => chordFingerings(state));
 }
 
 export function createDetector(): HTMLElement {
@@ -93,40 +94,36 @@ export function createDetector(): HTMLElement {
     if (e.key === 'Enter') applyInput();
   });
 
+  // How the fretboard is labelled and drawn, and the two quick resets: one click away, in View.
   const modeButtons = (['interval', 'note'] as const).map((mode) =>
     h('button', { class: 'seg', 'data-mode': mode, onclick: () => update({ labelMode: mode }) },
-      mode === 'interval' ? 'Intervals' : 'Note names'),
+      mode === 'interval' ? 'Intervals' : 'Notes'),
   );
-  const neckToggle = h('input', {
-    type: 'checkbox',
-    onchange: (e: Event) => update({ showNeck: (e.target as HTMLInputElement).checked }),
-  });
-
-
+  const neck = checkbox('All chord tones', () => state.showNeck, (on) => update({ showNeck: on }));
+  let close = () => {};
+  const view = popover(h('button', { class: 'text-btn view-btn' }, 'View'),
+    h('div', { class: 'pop-row' }, h('span', {}, 'Labels'), h('div', { class: 'segmented small', role: 'group', 'aria-label': 'Labels' }, modeButtons)),
+    h('div', { class: 'pop-row' }, neck.el),
+    menuItem('Mute all strings', () => setFingering([null, null, null, null, null, null]), () => close()),
+    menuItem('Open all strings', () => setFingering([0, 0, 0, 0, 0, 0]), () => close()),
+  );
+  close = view.close;
 
   const controls = h('div', { class: 'controls' },
     h('label', { class: 'search' }, searchIcon(), input),
-    h('button', { onclick: () => setFingering([null, null, null, null, null, null]) }, 'All muted'),
-    h('button', { onclick: () => setFingering([0, 0, 0, 0, 0, 0]) }, 'All open'),
-    h('div', { class: 'segmented', role: 'group', 'aria-label': 'Label notes by' }, modeButtons),
-    h('label', { class: 'check' }, neckToggle, 'All chord tones'),
+    h('span', { class: 'spacer' }),
+    view.el,
   );
 
-  // Play and Loop for the chord on the fretboard, separate from the progression's. The shape is read
-  // each bar, so editing it while it plays is heard straight away.
+  // Play for the chord on the fretboard, separate from the progression's. The shape is read as it
+  // plays, so editing it is heard straight away.
   const playButton = h('button', { class: 'player-btn play-btn', onclick: toggleChordPlay });
-  const loopButton = h('button', {
-    class: 'player-btn toggle-btn loop-btn', title: 'Loop this chord', 'aria-label': 'Loop this chord',
-    onclick: () => update({ chordLoop: !state.chordLoop }),
-  }, loopIcon());
-  const chordControls = h('div', { class: 'chord-play' }, playButton, loopButton);
+  const chordControls = h('div', { class: 'chord-play' }, playButton);
   const refreshControls = () => {
     const playing = currentPlayback()?.id === INSPECTOR_ID;
     playButton.replaceChildren(playing ? stopIcon() : playIcon());
     playButton.title = playing ? 'Stop this chord' : 'Play this chord';
     playButton.setAttribute('aria-label', playButton.title);
-    loopButton.classList.toggle('active', state.chordLoop);
-    loopButton.setAttribute('aria-pressed', String(state.chordLoop));
   };
   onPlayback(refreshControls);
   onNote((strings, p) => p.id === INSPECTOR_ID && fretboard.pluck(strings));
@@ -150,8 +147,11 @@ export function createDetector(): HTMLElement {
       input.classList.remove('invalid');
       inputHint.textContent = '';
     }
-    modeButtons.forEach((b) => b.classList.toggle('active', b.dataset.mode === state.labelMode));
-    neckToggle.checked = state.showNeck;
+    modeButtons.forEach((b) => {
+      b.classList.toggle('active', b.dataset.mode === state.labelMode);
+      b.setAttribute('aria-pressed', String(b.dataset.mode === state.labelMode));
+    });
+    neck.sync();
 
     const text = (pc: number) => (state.labelMode === 'interval' ? labelFor(analysis, pc) : noteNameFor(analysis, pc));
     const marks: Mark[] = analysis.notes.map((n) => ({
@@ -229,12 +229,11 @@ function renderVoicings(card: HTMLElement, analysis: FingeringAnalysis, shown: F
     card.hidden = true;
     return;
   }
-  card.hidden = false;
   const current = formatFingering(shown);
   // The tile matching the fretboard's shape (if it's among them) gets an accent border.
   const voicings = findVoicings(chord, 6);
-  add(card,
-    h('div', { class: 'eyebrow' }, `Other ways to play ${chordSymbol(chord)}`),
+  card.hidden = !voicings.length;
+  add(card, disclosure('guitar-theory-other-shapes', `Other shapes (${voicings.length})`,
     h('div', { class: 'voicing-list' },
       voicings.map((v) => {
         const labels = fingeringToneLabels(chord, v.fingering).map((label) =>
@@ -251,6 +250,5 @@ function renderVoicings(card: HTMLElement, analysis: FingeringAnalysis, shown: F
         );
       }),
     ),
-  );
-  if (!voicings.length) add(card, h('p', { class: 'muted' }, 'No other compact shapes found.'));
+  ));
 }
