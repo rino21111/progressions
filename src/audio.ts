@@ -32,6 +32,9 @@ const loaded = new Map<Tone, Map<number, Sample>>();
 
 function audio(): { ctx: AudioContext; master: GainNode } {
   if (!ctx) {
+    // iOS mutes Web Audio when the ringer switch is on silent unless the page asks to play as media.
+    const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
+    if (session) session.type = 'playback';
     ctx = new AudioContext();
     master = ctx.createGain();
     master.gain.value = 0.8;
@@ -51,7 +54,8 @@ function audio(): { ctx: AudioContext; master: GainNode } {
     limiter.connect(ctx.destination);
     void loadTone(tone);
   }
-  if (ctx.state === 'suspended') void ctx.resume();
+  // iOS also leaves the context 'interrupted' after a call or switching apps, not just 'suspended'.
+  if (ctx.state !== 'running') void ctx.resume();
   return { ctx, master: master! };
 }
 
@@ -253,4 +257,6 @@ export function now(): number {
 if (typeof document !== 'undefined') {
   document.addEventListener('pointerdown', () => void ready(), { once: true, capture: true });
   document.addEventListener('keydown', () => void ready(), { once: true, capture: true });
+  // iOS only lets audio start from the end of a tap, not its start.
+  document.addEventListener('touchend', () => void ready(), { capture: true });
 }
