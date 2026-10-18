@@ -2,7 +2,7 @@
 
 export const MIN_BPM = 40;
 export const MAX_BPM = 200;
-export const DEFAULT_BPM = 80;
+export const DEFAULT_BPM = 160;
 
 /** Turn whatever was typed into a usable tempo: a whole number between 40 and 200. */
 export function clampBpm(value: number): number {

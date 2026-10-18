@@ -107,7 +107,7 @@ describe('player timing', () => {
     expect(clampBpm(95.4)).toBe(95);
     expect(clampBpm(10)).toBe(40);
     expect(clampBpm(400)).toBe(200);
-    expect(clampBpm(NaN)).toBe(80);
+    expect(clampBpm(NaN)).toBe(160);
   });
 
   it('swing pushes only the offbeat eighths late', () => {

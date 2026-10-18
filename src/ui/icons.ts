@@ -76,3 +76,10 @@ export const moreIcon = (size = 14) =>
     s('circle', { cx: 8, cy: 8, r: 1.3, fill: 'currentColor', stroke: 'none' }),
     s('circle', { cx: 12.5, cy: 8, r: 1.3, fill: 'currentColor', stroke: 'none' }),
   );
+
+/** A box with an arrow leaving it upwards, for sharing a link. */
+export const shareIcon = (size = 14) =>
+  glyph(size,
+    s('path', { d: 'M8 10V2.5M5 5.5l3-3 3 3', 'stroke-linejoin': 'round' }),
+    s('path', { d: 'M5 7.5H4a1 1 0 0 0-1 1v4.5a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8.5a1 1 0 0 0-1-1h-1' }),
+  );

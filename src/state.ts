@@ -5,6 +5,7 @@ import { Chord, makeChord } from './theory/chords';
 import { Fingering } from './theory/fingering';
 import { BeatsPerBar, PLAY_STYLES, PlayStyle, validVariant } from './theory/patterns';
 import type { Tone } from './audio';
+import { DEFAULT_BPM } from './theory/timing';
 
 export type LabelMode = 'interval' | 'note';
 /** Which list of chords to add is showing on the progressions page. */
@@ -104,7 +105,7 @@ const defaults: AppState = {
   playVariants: { strum: 'whole', arpeggio: 'up', travis: 'basic', bossa: 'basic', postrock: 'cascade' },
   loop: true,
   chordLoop: false,
-  bpm: 160,
+  bpm: DEFAULT_BPM,
   barsPerChord: 1,
   swing: false,
   beatsPerBar: 4,

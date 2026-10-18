@@ -19,6 +19,8 @@ import { state, subscribe } from './state';
 import { setTone } from './audio';
 import { PROGRESSION_ID, progressionFingerings } from './playback';
 import { OLD_TAB_HASHES, TAB_HASHES, TAB_LABELS } from './tabs';
+import { readShare } from './share';
+import { applyShare } from './ui/share';
 
 type Tab = 'detector' | 'progressions' | 'tab';
 
@@ -122,8 +124,21 @@ add(app,
 );
 document.querySelector('#app')!.append(app);
 
-// Old links (#progressions) still open Relationships.
-const hashName = location.hash.slice(1);
-const fromHash = (Object.keys(TAB_HASHES) as Tab[]).find((t) => TAB_HASHES[t] === hashName)
-  ?? OLD_TAB_HASHES[hashName as keyof typeof OLD_TAB_HASHES];
-show(fromHash ?? 'detector');
+// A shared link (#v=1&p=...) replaces the progression or chord and the settings, then opens its page;
+// the page's own hash takes the link's place, so a reload doesn't apply it again. Old links
+// (#progressions) still open Relationships.
+function openHash() {
+  const shared = readShare(location.hash);
+  if (shared) {
+    applyShare(shared);
+    history.replaceState(null, '', location.pathname);
+    show(shared.page ?? 'detector');
+    return;
+  }
+  const hashName = location.hash.slice(1);
+  const fromHash = (Object.keys(TAB_HASHES) as Tab[]).find((t) => TAB_HASHES[t] === hashName)
+    ?? OLD_TAB_HASHES[hashName as keyof typeof OLD_TAB_HASHES];
+  show(fromHash ?? 'detector');
+}
+window.addEventListener('hashchange', () => readShare(location.hash) && openHash());
+openHash();
