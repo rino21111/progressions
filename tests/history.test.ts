@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { History } from '../src/history';
+import { migrateDefaults, state } from '../src/state';
 
 describe('undo history', () => {
   it('steps back through earlier values and forward again', () => {
@@ -30,5 +31,17 @@ describe('undo history', () => {
     const h = new History<number>(3);
     [1, 2, 3, 4, 5].forEach((n) => h.record(n));
     expect([h.undo(6), h.undo(5), h.undo(4), h.undo(3)]).toEqual([5, 4, 3, undefined]);
+  });
+});
+
+describe('new defaults (160 bpm, looping)', () => {
+  it('a save made under the old defaults picks them up once; a chosen tempo stays', () => {
+    expect(migrateDefaults({ bpm: 80, loop: false })).toEqual({});
+    expect(migrateDefaults({ bpm: 96, loop: false })).toEqual({ bpm: 96 });
+    expect(migrateDefaults({ v: 2, bpm: 80, loop: false })).toEqual({ bpm: 80, loop: false });
+  });
+  it('defaults to 160 bpm with looping on', () => {
+    expect(state.bpm).toBe(160);
+    expect(state.loop).toBe(true);
   });
 });

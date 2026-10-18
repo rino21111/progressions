@@ -71,6 +71,22 @@ export interface AppState {
 }
 
 const STORAGE_KEY = 'guitar-theory-state-v1';
+/** Bumped when a default changes, so a save made under the old defaults can pick up the new ones. */
+const SAVE_VERSION = 2;
+
+/**
+ * A save from before 160 bpm and looping became the defaults: a value equal to the old default (80
+ * bpm, no loop) counts as unset, once. A tempo chosen on purpose stays.
+ */
+export function migrateDefaults(data: Record<string, unknown>): Record<string, unknown> {
+  const out = { ...data };
+  if (out.v !== SAVE_VERSION) {
+    if (out.bpm === 80) delete out.bpm;
+    if (out.loop === false) delete out.loop;
+  }
+  delete out.v;
+  return out;
+}
 
 const defaults: AppState = {
   selected: makeChord(0, 'maj'),
@@ -86,9 +102,9 @@ const defaults: AppState = {
   addMode: 'suggested',
   playPattern: 'strum',
   playVariants: { strum: 'whole', arpeggio: 'up', travis: 'basic', bossa: 'basic', postrock: 'cascade' },
-  loop: false,
+  loop: true,
   chordLoop: false,
-  bpm: 80,
+  bpm: 160,
   barsPerChord: 1,
   swing: false,
   beatsPerBar: 4,
@@ -99,7 +115,7 @@ function load(): AppState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { ...defaults };
-    const data = JSON.parse(raw);
+    const data = migrateDefaults(JSON.parse(raw)) as any;
     // Older saves had a 7th-chords switch.
     if (!STYLES.includes(data.style)) data.style = data.sevenths ? 'sevenths' : 'triads';
     delete data.sevenths;
@@ -129,6 +145,7 @@ function load(): AppState {
 function save(state: AppState) {
   try {
     const data = {
+      v: SAVE_VERSION,
       ...state,
       progression: storeProgression(state.progression),
       selected: state.selected && { root: state.selected.root, type: state.selected.template.id, bass: state.selected.bass },
