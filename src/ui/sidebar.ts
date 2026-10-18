@@ -19,9 +19,6 @@ import { enableReorder } from './dragReorder';
 import { createProgressionMap } from './progressionMap';
 import { chevronIcon, moreIcon } from './icons';
 import { checkbox, menuItem, popover } from './menu';
-import { shareButton } from './share';
-import { Page, progressionHash } from '../share';
-import { TAB_HASHES } from '../tabs';
 import { h, toneClass } from './dom';
 
 
@@ -44,8 +41,6 @@ export function createSidebar(play: HTMLElement, hide: () => void): { header: HT
   const menu = popover(menuButton, h('div', { class: 'pop-row' }, loop.el), clearItem, menuItem('Hide', hide, () => close()));
   close = menu.close;
   menu.el.classList.add('side-menu');
-  const page = (): Page => (Object.keys(TAB_HASHES) as Page[]).find((p) => `#${TAB_HASHES[p]}` === location.hash) ?? 'detector';
-  const share = shareButton('Share this progression', () => (state.progression.length ? progressionHash(state, page()) : null));
   const title = h('h2', {}, 'Progression');
   const header = h('div', { class: 'side-header' });
   const chart = h('div', { class: 'chart' });
@@ -109,7 +104,6 @@ export function createSidebar(play: HTMLElement, hide: () => void): { header: HT
     const n = state.progression.length;
     const selected = cardIndex(n, state.selectedCard);
     clearItem.disabled = !n;
-    share.disabled = !n;
     loop.sync();
     drag.cancel();
     // Click a card to select and hear it; double-click duplicates it right after itself; drag to move it.
@@ -203,11 +197,11 @@ export function createSidebar(play: HTMLElement, hide: () => void): { header: HT
   const place = () => {
     if (phone.matches) {
       sidebar.replaceChildren(handle, scroller, dockRow);
-      dockRow.replaceChildren(play, strip, mapToggle, h('span', { class: 'spacer' }), share, menu.el);
+      dockRow.replaceChildren(play, strip, mapToggle, h('span', { class: 'spacer' }), menu.el);
       header.replaceChildren();
     } else {
       sidebar.replaceChildren(scroller, mapToggle);
-      header.replaceChildren(title, play, share, h('span', { class: 'spacer' }), menu.el);
+      header.replaceChildren(title, play, h('span', { class: 'spacer' }), menu.el);
     }
   };
   phone.addEventListener('change', place);

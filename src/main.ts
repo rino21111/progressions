@@ -18,9 +18,8 @@ import { undoIcon } from './ui/icons';
 import { state, subscribe } from './state';
 import { setTone } from './audio';
 import { PROGRESSION_ID, progressionFingerings } from './playback';
-import { OLD_TAB_HASHES, TAB_HASHES, TAB_LABELS } from './tabs';
-import { readShare } from './share';
-import { applyShare } from './ui/share';
+import { TAB_LABELS } from './tabs';
+import { Page, openFromHash, syncHash } from './share';
 
 type Tab = 'detector' | 'progressions' | 'tab';
 
@@ -39,6 +38,12 @@ const tabs = (Object.keys(pages) as Tab[]).map((tab) =>
 const target: PlayerTarget = { id: PROGRESSION_ID, perChord: true, chords: () => progressionFingerings(state) };
 const player = createPlayer(() => target);
 
+let current: Tab = 'detector';
+// Edits update the address 300ms after the last change, in place: Back never steps through them.
+const writeHash = syncHash(() => current as Page, (hash) => {
+  if (location.hash !== `#${hash}`) history.replaceState(null, '', `#${hash}`);
+});
+
 function show(tab: Tab) {
   for (const [name, page] of Object.entries(pages)) page.hidden = name !== tab;
   tabs.forEach((b) => {
@@ -46,8 +51,8 @@ function show(tab: Tab) {
     b.classList.toggle('active', active);
     b.setAttribute('aria-selected', String(active));
   });
-  const hash = `#${TAB_HASHES[tab]}`;
-  if (location.hash !== hash) history.replaceState(null, '', hash);
+  current = tab;
+  writeHash();
   window.scrollTo({ top: 0 });
   if (tab === 'tab') tabPage.refresh();
 }
@@ -124,21 +129,8 @@ add(app,
 );
 document.querySelector('#app')!.append(app);
 
-// A shared link (#v=1&p=...) replaces the progression or chord and the settings, then opens its page;
-// the page's own hash takes the link's place, so a reload doesn't apply it again. Old links
-// (#progressions) still open Relationships.
-function openHash() {
-  const shared = readShare(location.hash);
-  if (shared) {
-    applyShare(shared);
-    history.replaceState(null, '', location.pathname);
-    show(shared.page ?? 'detector');
-    return;
-  }
-  const hashName = location.hash.slice(1);
-  const fromHash = (Object.keys(TAB_HASHES) as Tab[]).find((t) => TAB_HASHES[t] === hashName)
-    ?? OLD_TAB_HASHES[hashName as keyof typeof OLD_TAB_HASHES];
-  show(fromHash ?? 'detector');
-}
-window.addEventListener('hashchange', () => readShare(location.hash) && openHash());
-openHash();
+// The address carries the state (#next&p=C.G.Am.F&bpm=120), so copying it shares it. A shared one
+// replaces the progression and settings (Undo takes it back); a bare one keeps the saved state.
+window.addEventListener('hashchange', () => show(openFromHash(location.hash, current)));
+window.addEventListener('pagehide', writeHash);
+show(openFromHash(location.hash, 'detector'));

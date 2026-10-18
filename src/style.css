@@ -2441,32 +2441,3 @@ main {
   }
 }
 
-/* "Link copied": a short note at the bottom of the window. */
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: calc(var(--dock-h, 0px) + 24px);
-  z-index: 30;
-  padding: 8px 14px;
-  border-radius: 8px;
-  background: var(--text);
-  color: var(--bg);
-  font-size: 13px;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 6px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-.toast.on {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-
-.chord-play {
-  gap: 6px;
-}
-
-.chord-play .share-btn {
-  border-radius: 50%;
-}

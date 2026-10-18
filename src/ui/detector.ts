@@ -17,8 +17,6 @@ import { currentPlayback, onNote, onPlayback, play, stop } from '../player';
 import { INSPECTOR_ID, chordFingerings } from '../playback';
 import { playIcon, stopIcon } from './icons';
 import { checkbox, disclosure, menuItem, popover } from './menu';
-import { shareButton } from './share';
-import { chordHash } from '../share';
 import { add, clear, h, toneClass } from './dom';
 import { Fretboard, Mark } from './fretboard';
 import { toneArea } from './toneStrip';
@@ -120,9 +118,7 @@ export function createDetector(): HTMLElement {
   // Play for the chord on the fretboard, separate from the progression's. The shape is read as it
   // plays, so editing it is heard straight away.
   const playButton = h('button', { class: 'player-btn play-btn', onclick: toggleChordPlay });
-  let shownChord: Chord | null = null;
-  const share = shareButton('Share this chord', () => (shownChord ? chordHash(shownChord, state.fingering, state) : null));
-  const chordControls = h('div', { class: 'chord-play' }, playButton, share);
+  const chordControls = h('div', { class: 'chord-play' }, playButton);
   const refreshControls = () => {
     const playing = currentPlayback()?.id === INSPECTOR_ID;
     playButton.replaceChildren(playing ? stopIcon() : playIcon());
@@ -146,7 +142,6 @@ export function createDetector(): HTMLElement {
     const shown = state.fingering;
     const analysis = withPreferredFirst(analyzeFingering(shown), state.selected);
     const chord = analysis.matches[0];
-    shownChord = chord ?? null;
     if (document.activeElement !== input) {
       input.value = formatFingering(shown);
       input.classList.remove('invalid');

@@ -89,7 +89,7 @@ export function migrateDefaults(data: Record<string, unknown>): Record<string, u
   return out;
 }
 
-const defaults: AppState = {
+export const DEFAULTS: AppState = {
   selected: makeChord(0, 'maj'),
   fingering: [null, 3, 2, 0, 1, 0],
   labelMode: 'interval',
@@ -115,7 +115,7 @@ const defaults: AppState = {
 function load(): AppState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { ...defaults };
+    if (!raw) return { ...DEFAULTS };
     const data = migrateDefaults(JSON.parse(raw)) as any;
     // Older saves had a 7th-chords switch.
     if (!STYLES.includes(data.style)) data.style = data.sevenths ? 'sevenths' : 'triads';
@@ -130,16 +130,16 @@ function load(): AppState {
       PLAY_STYLES.map((s) => [s.id, validVariant(s.id, data.playVariants?.[s.id])]),
     ) as Record<PlayStyle, string>;
     return {
-      ...defaults,
+      ...DEFAULTS,
       ...data,
       playPattern: style,
       playVariants: variants,
       progression: loadProgression(data.progression ?? []),
-      selected: data.selected === undefined ? defaults.selected
+      selected: data.selected === undefined ? DEFAULTS.selected
         : data.selected && makeChord(data.selected.root, data.selected.type, data.selected.bass),
     };
   } catch {
-    return { ...defaults };
+    return { ...DEFAULTS };
   }
 }
 
