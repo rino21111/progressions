@@ -10,7 +10,7 @@ import { state, subscribe, update } from '../state';
 import { currentKey, currentKeyGuess } from '../key';
 import { Playback, currentPlayback, onPlayback, play } from '../player';
 import { PROGRESSION_ID } from '../playback';
-import { bestVoicing } from '../theory/voicings';
+import { smoothShape, withSmoothShapes } from '../theory/smooth';
 import { afterChord } from '../yourChords';
 import { addToProgression, isSelected, onChordClick, selectChord, selectPhrase, selectedPhrase } from './common';
 import { chordClickAction } from '../interaction';
@@ -119,7 +119,8 @@ export function createProgressions(): HTMLElement {
           const isOpen = !shown && (open?.at === at ? open.source === source
             : state.selectedCard === null && !!state.selected && same(state.selected, c));
           if (isOpen) shown = idea;
-          const to = bestVoicing(c);
+          // The idea's shape: the one that moves least from the chord it follows.
+          const to = smoothShape(c, from);
           // A click selects the idea and plays the change; a double-click adds it.
           const click = onChordClick(c, () => {
             selectChord(c, to ?? undefined, false);
@@ -145,8 +146,8 @@ export function createProgressions(): HTMLElement {
   /** Under the moods: the neck strip, the moves, why, the then line, and the adds. */
   const detail = (x: Chord, from: Fingering, idea: AfterIdea, key: Key) => {
     const c = idea.chord;
-    const to = bestVoicing(c);
-    const phrase = thenPhrase(idea);
+    const to = smoothShape(c, from);
+    const phrase = withSmoothShapes(thenPhrase(idea), to);
     const names = (list: Chord[]) => list.map((p) => chordSymbolInKey(p, key)).join(' ');
     if (to) strip.show({ chord: x, fingering: from }, { chord: c, fingering: to }, key);
     const line = to ? movesLine(x, from, c, to) : { held: [], moves: [] };
@@ -167,10 +168,10 @@ export function createProgressions(): HTMLElement {
         h('button', { class: 'replay', title: 'Hear it again', onclick: () => void strip.play() },
           playIcon(), h('span', { class: 'moves' }, parts.flatMap((p, i) => (i ? [sep(), ...p] : p)))),
         why ? h('p', { class: 'idea-why' }, why) : null,
-        idea.then ? thenLine(idea, key) : null,
+        idea.then ? thenLine(idea, phrase, key) : null,
       ),
       h('div', { class: 'idea-adds' },
-        h('button', { onclick: () => addToProgression(c) }, `+ ${names([c])}`),
+        h('button', { onclick: () => addToProgression(to ? { ...c, fingering: to } : c) }, `+ ${names([c])}`),
         phrase.length > 1 ? h('button', { onclick: () => addToProgression(...phrase) }, `+ ${names(phrase)}`) : null,
       ),
     );
@@ -180,9 +181,8 @@ export function createProgressions(): HTMLElement {
    * "then Bb7 → C · Backdoor ii–V · Jazz": the chords that often follow (a return home stays muted).
    * A click hears the change and the phrase; a double-click adds them.
    */
-  const thenLine = (idea: AfterIdea, key: Key) => {
+  const thenLine = (idea: AfterIdea, chords: Chord[], key: Key) => {
     const then = idea.then!;
-    const chords = thenPhrase(idea);
     const home = then.returnsHome ? then.chords.length - 1 : -1;
     const source = `then:${[idea.chord, ...then.chords].map((c) => chordSymbolInKey(c, key)).join(' ')}`;
     return h('button', {
@@ -215,7 +215,8 @@ export function createProgressions(): HTMLElement {
       return h('div', { class: 'start-row' },
         h('button', {
           class: 'icon', title: 'Play this progression', 'aria-label': `Play ${item.name}`,
-          onclick: () => play(id, () => chords.map((c) => bestVoicing(c)).filter((f) => f !== null), { perChord: true }),
+          // Played and added in smooth shapes: the first as usual, each next one moving least.
+          onclick: () => play(id, () => withSmoothShapes(chords).map((c) => c.fingering).filter((f) => !!f) as Fingering[], { perChord: true }),
         }, playIcon()),
         h('span', { class: 'start-name', title: item.note }, item.name),
         h('span', { class: 'start-chips' }, chips),
@@ -225,7 +226,7 @@ export function createProgressions(): HTMLElement {
           onclick: () => {
             // Starting from nothing, the style and key follow the entry (a bossa start lands in 9ths).
             const empty = !state.progression.length;
-            addToProgression(...chords);
+            addToProgression(...withSmoothShapes(chords));
             if (empty) update(startSettings(item));
           },
         }, '+'),

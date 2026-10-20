@@ -209,3 +209,23 @@ describe('undo covers what you built, not what you looked at', () => {
     expect(state.fingering).toEqual([null, 0, 2, 2, 1, 0]);
   });
 });
+
+describe('smooth shapes when adding from the Chord page', () => {
+  const fmt = (f: unknown) => (f as (number | null)[]).map((x) => (x === null ? 'x' : x)).join('');
+  it('a chord picked by name goes in the shape that moves least from the last card', () => {
+    update({ progression: [Dm], selectedCard: null });
+    selectChord(G);
+    addSelection();
+    expect(fmt(state.progression[1].fingering)).toBe('320033');
+  });
+  it('a shape the player picked is kept as it is', () => {
+    update({ progression: [Dm], selectedCard: null });
+    selectChord(G, parseFingering('320003'));
+    addSelection();
+    expect(fmt(state.progression[1].fingering)).toBe('320003');
+    update({ progression: [Dm], selectedCard: null });
+    setFingering(parseFingering('355433')!);
+    addSelection();
+    expect(fmt(state.progression[1].fingering)).toBe('355433');
+  });
+});

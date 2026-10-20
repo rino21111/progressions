@@ -8,6 +8,7 @@ import { Chord, TEMPLATE_BY_ID, chordSymbol } from '../theory/chords';
 import { Fingering, analyzeFingering, soundingNotes } from '../theory/fingering';
 import { rootName } from '../theory/notes';
 import { bestVoicing } from '../theory/voicings';
+import { smoothShape } from '../theory/smooth';
 import { AppState, ProgressionChord, state, update } from '../state';
 import { PROGRESSION_ID, cardShape } from '../playback';
 import { currentPlayback, remapSteps } from '../player';
@@ -58,7 +59,9 @@ export function playChord(chord: Chord) {
  * it goes in the header box and onto the Inspector's fretboard, and you hear it.
  * Uses the app's usual shape for it unless a fingering is given.
  */
-export function selectChord(chord: Chord, fingering = bestVoicing(chord), play = true, card: number | null = null) {
+export function selectChord(chord: Chord, given?: Fingering | null, play = true, card: number | null = null) {
+  const fingering = given === undefined ? bestVoicing(chord) : given;
+  shapePicked = given !== undefined;
   noteCause('select');
   phrase = null;
   update({ selected: { root: chord.root, template: chord.template, bass: chord.bass }, selectedCard: card, ...(fingering ? { fingering } : {}) });
@@ -67,18 +70,28 @@ export function selectChord(chord: Chord, fingering = bestVoicing(chord), play =
 
 /** Change the Inspector's fingering by hand; the selection becomes whatever chord the shape makes. */
 export function setFingering(fingering: Fingering) {
+  shapePicked = true;
   const found = analyzeFingering(fingering).matches[0];
   noteCause('hand');
   update({ fingering, selectedCard: null, selected: found ? { root: found.root, template: found.template, bass: found.bass } : null });
 }
 
 let justAdded = false;
+/** Whether the Inspector's shape was picked (a shape, a card, frets typed or placed), not just the chord's usual one. */
+let shapePicked = false;
 
-/** Add the Inspector's chord with the exact frets on the fretboard (the + card and A). */
+/**
+ * Add the Inspector's chord (the + card and A): with the exact frets on the fretboard when a shape
+ * was picked; otherwise in the shape that moves least from the last card.
+ */
 export function addSelection() {
   const chords = selectedPhrase();
   if (chords) addToProgression(...chords);
-  else if (state.selected) addToProgression({ ...state.selected, fingering: state.fingering });
+  else if (state.selected) {
+    const last = afterChord(state.progression);
+    const fingering = shapePicked ? state.fingering : smoothShape(state.selected, last && cardShape(last)) ?? state.fingering;
+    addToProgression({ ...state.selected, fingering });
+  }
 }
 
 // A phrase picked on Relationships (an idea and the chords that follow it), for the add card. It
@@ -95,14 +108,14 @@ export function selectedPhrase(): Chord[] | null {
  * Pick a phrase: hear the last chord (as fingered), then each chord of the phrase (usual shapes),
  * and select the whole phrase for the add card. `source` marks the line it was picked from.
  */
-export function selectPhrase(chords: Chord[], source: string, sound: (shapes: Fingering[]) => void = playInTurn) {
+export function selectPhrase(chords: ProgressionChord[], source: string, sound: (shapes: Fingering[]) => void = playInTurn) {
   const last = afterChord(state.progression);
   const from = last && cardShape(last);
   selectedFrom = source;
-  selectChord(chords[0], bestVoicing(chords[0]) ?? undefined, false);
+  selectChord(chords[0], cardShape(chords[0]), false);
   phrase = { chords, progression: state.progression, keyChoice: state.keyChoice };
   update({});
-  const shapes = [from, ...chords.map((c) => bestVoicing(c))].filter((f) => !!f) as Fingering[];
+  const shapes = [from, ...chords.map((c) => cardShape(c))].filter((f) => !!f) as Fingering[];
   sound(shapes);
 }
 
