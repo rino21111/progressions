@@ -2,7 +2,7 @@
 // (the Chord page's Other shapes) that moves least from the shape before it.
 
 import { Chord } from './chords';
-import { Fingering } from './fingering';
+import { Fingering, soundingNotes } from './fingering';
 import { findVoicings } from './voicings';
 
 /** How many of a chord's shapes are in play: the ones the Chord page offers. */
@@ -18,7 +18,7 @@ export const COST = {
   /** Each fret the hand moves (the average of the fretted frets). */
   position: 1,
   /** Each step down the chord's list of shapes, so the usual shape wins ties. */
-  rank: 1.5,
+  rank: 2.5,
 };
 
 const handAt = (f: Fingering) => {
@@ -51,6 +51,21 @@ export function shapesOf(chord: Chord): Fingering[] {
   return list;
 }
 
+/** The pitch class of a shape's lowest note, and whether that note is an open string. */
+const bassOf = (f: Fingering) => {
+  const low = soundingNotes(f).sort((a, b) => a.midi - b.midi)[0];
+  return low ? { pc: low.pc, open: low.fret === 0 } : null;
+};
+
+/**
+ * A shape may not turn the chord over on an open string: an open bass that isn't the chord's bass note,
+ * where the usual shape has the chord's bass at the bottom.
+ */
+function invents(shape: Fingering, usual: Fingering, chord: Chord): boolean {
+  const low = bassOf(shape);
+  return !!low && low.open && low.pc !== chord.bass && bassOf(usual)?.pc === chord.bass;
+}
+
 /** The chord's shape that moves least from `from` (its usual shape when there's nothing before it). */
 export function smoothShape(chord: Chord, from: Fingering | null | undefined): Fingering | null {
   const list = shapesOf(chord);
@@ -58,6 +73,7 @@ export function smoothShape(chord: Chord, from: Fingering | null | undefined): F
   let best = list[0];
   let bestCost = Infinity;
   list.forEach((shape, rank) => {
+    if (rank > 0 && invents(shape, list[0], chord)) return;
     const cost = moveCost(from, shape) + COST.rank * rank;
     if (cost < bestCost) {
       best = shape;

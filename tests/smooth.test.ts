@@ -22,5 +22,8 @@ describe('smooth shapes', () => {
   it('the usual shape wins unless another is clearly closer', () => {
     expect(chain('C D7 G7 C')).toBe('x32010 xx0212 320001 x32010');
     expect(chain('F G Am')).toBe('133211 320003 x02210');
+    // No small F with an open A under it: the barre F stays.
+    expect(chain('C G Am F')).toBe('x32010 320003 x02210 133211');
+    expect(chain('Cadd9 Fadd9 Gsus4 Am7')).toBe('x30010 xx3213 330013 x02013');
   });
 });
