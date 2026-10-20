@@ -1,22 +1,19 @@
-// How the chord sounds (a word or two, and one line on why), then its tones: as chips in degree
-// order, or (behind the chevron) as a stack showing each slot of the chord's structure.
+// A chord's tones: as chips in degree order (a disc with its role, then the note), and as a stack
+// showing each slot of the chord's structure. Hovering a tone lights its dots on the neck.
 
 import { strum } from '../audio';
 import { Chord, chordTones } from '../theory/chords';
-import { chordCharacter, chordReason } from '../theory/character';
 import { chordStructure } from '../theory/structure';
-import { currentKey } from '../key';
 import { Fingering, soundingNotes } from '../theory/fingering';
-import { state, update } from '../state';
 import { h, toneClass } from './dom';
 import { clicksSound } from './common';
-import { chevronIcon } from './icons';
+import { degreeNode, noteNode } from './music';
 
 /**
  * `voicing` is the shape being played (to know which tones are present and which octave to
  * play a tapped tone in); `dots` returns the diagram or fretboard whose dots a hovered tone lights up.
  */
-export function toneArea(chord: Chord, voicing: Fingering | null, dots: () => Element | null, outside: (pc: number) => boolean = () => false): HTMLElement[] {
+export function toneArea(chord: Chord, voicing: Fingering | null, dots: () => Element | null, outside: (pc: number) => boolean = () => false): { chips: HTMLElement; structure: () => HTMLElement } {
   const notes = voicing ? soundingNotes(voicing) : [];
   const present = new Set(notes.map((n) => n.pc));
   const midiFor = (pc: number) => notes.find((n) => n.pc === pc)?.midi ?? 48 + pc;
@@ -40,13 +37,12 @@ export function toneArea(chord: Chord, voicing: Fingering | null, dots: () => El
       const sounding = !voicing || present.has(t.pc);
       return h('button', {
         class: `tone-chip ${toneClass(t.label)}${sounding ? '' : ' omitted'}${outside(t.pc) ? ' out-key' : ''}`,
-        title: `Play ${t.name}`,
+        title: t.pc === chord.bass ? `Play ${t.name} (the bass)` : `Play ${t.name}`,
         onclick: () => clicksSound() && strum([midiFor(t.pc)]),
         ...hover(t.pc),
       },
-        t.pc === chord.bass ? h('span', { class: 'tone-bass' }, 'bass') : null,
-        h('span', { class: 'tone-role' }, t.label),
-        h('span', { class: 'tone-name' }, t.name),
+        h('span', { class: 'deg' }, degreeNode(t.label)),
+        h('span', { class: 'note' }, noteNode(t.name)),
       );
     }),
   );
@@ -84,17 +80,5 @@ export function toneArea(chord: Chord, voicing: Fingering | null, dots: () => El
     return h('div', { class: 'structure' }, cells);
   };
 
-  const open = state.showStructure;
-  const toggle = h('button', {
-    class: 'structure-toggle', 'aria-expanded': String(open),
-    title: open ? 'Show tone chips' : 'Show chord structure',
-    'aria-label': open ? 'Show tone chips' : 'Show chord structure',
-    onclick: () => update({ showStructure: !state.showStructure }),
-  }, chevronIcon());
-
-  return [
-    h('p', { class: 'chord-about' },
-      h('span', { class: 'chord-character' }, `${chordCharacter(chord.template.id) ?? ''}.`), ' ', chordReason(chord, currentKey().key)),
-    h('div', { class: 'tones' }, open ? structure() : chips(), toggle),
-  ];
+  return { chips: chips(), structure };
 }

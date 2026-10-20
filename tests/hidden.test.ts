@@ -1,5 +1,5 @@
-// Tabs hide their pages with the hidden attribute; a page's own display rule (the Relationships page
-// is a flex column) must never override it, or its content shows under the other tab.
+// The Chords | Tab switch hides the desk's columns or the tab with the hidden attribute; their own
+// display rules (grids) must never override it, or both show at once.
 // @ts-expect-error: a Node built-in (tests run in Node; the project has no Node types)
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -7,11 +7,12 @@ import { describe, expect, it } from 'vitest';
 // Read as text: Vitest hands CSS imports back empty.
 const read = (path: string): string => readFileSync(new URL(path, import.meta.url), 'utf8');
 const css = read('../src/style.css');
-const main = read('../src/main.ts');
+const instrument = read('../src/ui/instrument.ts');
 
 describe('hidden pages stay hidden', () => {
-  it('tabs switch pages with the hidden attribute', () => {
-    expect(main).toMatch(/page\.hidden = name !== tab/);
+  it('the switch shows the desk or the tab with the hidden attribute', () => {
+    expect(instrument).toMatch(/deskCols\.hidden = m === 'tab'/);
+    expect(instrument).toMatch(/opts\.tab\.hidden = m !== 'tab'/);
   });
   it('[hidden] beats any display rule', () => {
     expect(css).toMatch(/\[hidden\]\s*\{\s*display:\s*none\s*!important;\s*\}/);

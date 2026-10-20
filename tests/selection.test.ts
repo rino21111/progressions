@@ -35,12 +35,19 @@ beforeEach(() => {
 });
 
 describe('adding, removing, duplicating and the selected card', () => {
-  it('Add appends at the end, whichever card is selected, and selects the new card', () => {
+  it('Add goes in right after your place (the card clicked), and becomes your place', () => {
     selectCard(1); // G
     selectChord(Em);
     addToProgression(state.selected!);
-    expect(names()).toEqual(['C', 'G', 'Am', 'F', 'Em']);
-    expect(state.selectedCard).toBe(4);
+    expect(names()).toEqual(['C', 'G', 'Em', 'Am', 'F']);
+    expect(state.selectedCard).toBe(2);
+  });
+
+  it('with no card clicked, your place is the last card: adds go at the end', () => {
+    update({ selectedCard: null });
+    addToProgression(Em, Dm);
+    expect(names()).toEqual(['C', 'G', 'Am', 'F', 'Em', 'Dm']);
+    expect(state.selectedCard).toBe(5);
   });
 
   it('double-click duplicates a card right after itself, as one undo step', () => {
@@ -143,7 +150,8 @@ describe('clicks are silent while something plays', () => {
     chip({ detail: 1 } as unknown as Event);
     chip({ detail: 2 } as unknown as Event);
     previewChange(Em);
-    expect(names()).toEqual(['C', 'G', 'Am', 'F', 'Dm']);
+    // added right after your place (Am)
+    expect(names()).toEqual(['C', 'G', 'Am', 'Dm', 'F']);
     expect(strum).not.toHaveBeenCalled();
 
     playing = null;
@@ -188,7 +196,7 @@ describe('listening never changes the progression or undo', () => {
     expect(names()).toEqual(['C', 'G', 'Am', 'F']);
     expect(canUndo()).toBe(false);
     expect(chordSymbol(state.selected!)).toBe('F');
-    expect(state.selectedCard).toBeNull(); // a chord picked elsewhere isn't a card
+    expect(state.selectedCard).toBe(2); // looking at other chords never moves your place
   });
 });
 

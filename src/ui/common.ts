@@ -2,7 +2,7 @@
 
 import { now, strum } from '../audio';
 import { noteCause } from '../undo';
-import { afterChord, append, duplicateAt, moveCard, moveIndex, removeAt } from '../yourChords';
+import { afterChord, duplicateAt, insertAfter, moveCard, moveIndex, removeAt } from '../yourChords';
 import { chordClickAction } from '../interaction';
 import { Chord, TEMPLATE_BY_ID, chordSymbol } from '../theory/chords';
 import { Fingering, analyzeFingering, soundingNotes } from '../theory/fingering';
@@ -59,12 +59,13 @@ export function playChord(chord: Chord) {
  * it goes in the header box and onto the Inspector's fretboard, and you hear it.
  * Uses the app's usual shape for it unless a fingering is given.
  */
-export function selectChord(chord: Chord, given?: Fingering | null, play = true, card: number | null = null) {
+export function selectChord(chord: Chord, given?: Fingering | null, play = true, card?: number) {
   const fingering = given === undefined ? bestVoicing(chord) : given;
   shapePicked = given !== undefined;
   noteCause('select');
   phrase = null;
-  update({ selected: { root: chord.root, template: chord.template, bass: chord.bass }, selectedCard: card, ...(fingering ? { fingering } : {}) });
+  // Looking at a chord never moves your place; only a card does.
+  update({ selected: { root: chord.root, template: chord.template, bass: chord.bass }, ...(card !== undefined ? { selectedCard: card } : {}), ...(fingering ? { fingering } : {}) });
   if (fingering && play) playFingering(fingering);
 }
 
@@ -73,7 +74,7 @@ export function setFingering(fingering: Fingering) {
   shapePicked = true;
   const found = analyzeFingering(fingering).matches[0];
   noteCause('hand');
-  update({ fingering, selectedCard: null, selected: found ? { root: found.root, template: found.template, bass: found.bass } : null });
+  update({ fingering, selected: found ? { root: found.root, template: found.template, bass: found.bass } : null });
 }
 
 let justAdded = false;
@@ -88,7 +89,7 @@ export function addSelection() {
   const chords = selectedPhrase();
   if (chords) addToProgression(...chords);
   else if (state.selected) {
-    const last = afterChord(state.progression);
+    const last = afterChord(state.progression, state.selectedCard);
     const fingering = shapePicked ? state.fingering : smoothShape(state.selected, last && cardShape(last)) ?? state.fingering;
     addToProgression({ ...state.selected, fingering });
   }
@@ -109,7 +110,7 @@ export function selectedPhrase(): Chord[] | null {
  * and select the whole phrase for the add card. `source` marks the line it was picked from.
  */
 export function selectPhrase(chords: ProgressionChord[], source: string, sound: (shapes: Fingering[]) => void = playInTurn) {
-  const last = afterChord(state.progression);
+  const last = afterChord(state.progression, state.selectedCard);
   const from = last && cardShape(last);
   selectedFrom = source;
   selectChord(chords[0], cardShape(chords[0]), false);
@@ -125,11 +126,11 @@ function playInTurn(shapes: Fingering[]) {
   shapes.forEach((f, i) => (i ? playFingeringAt(f, PHRASE_GAP * i) : playFingering(f)));
 }
 
-/** Add chords at the end of the progression; the last one added becomes the selected card. */
+/** Add chords right after your place; the last one added becomes your place. */
 export function addToProgression(...chords: ProgressionChord[]) {
   let { progression: list, selectedCard: card } = state;
   // A card keeps the chord and its shape; an engine's spelling and numeral belong to where it was suggested.
-  for (const { spelling: _s, numeral: _n, ...chord } of chords) ({ list, card } = append(list, chord));
+  for (const { spelling: _s, numeral: _n, ...chord } of chords) ({ list, card } = insertAfter(list, card, chord));
   justAdded = true;
   update({ progression: list, selectedCard: card });
 }
@@ -217,7 +218,7 @@ export function clearProgression() {
  * candidate but leaves the progression and the After list alone.
  */
 export function previewChange(chord: Chord) {
-  const last = afterChord(state.progression);
+  const last = afterChord(state.progression, state.selectedCard);
   const from = last && cardShape(last);
   const to = bestVoicing(chord);
   selectChord(chord, to, !from);

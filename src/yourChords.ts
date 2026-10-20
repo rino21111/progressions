@@ -1,14 +1,27 @@
-// Rules for editing the progression and its selected card (the one clicked, or null for none).
-// Adding always appends; the selected card follows its chord when cards are removed or moved.
+// Rules for editing the progression and your place in it: the card clicked (or the last card when
+// none is). Adding goes in right after your place, and your place moves onto what was added; your
+// place follows its chord when cards are removed or moved.
 
 /** The selected card's index, or -1 when none is selected (or it no longer exists). */
 export function cardIndex(length: number, card: number | null): number {
   return card !== null && card >= 0 && card < length ? card : -1;
 }
 
-/** What After follows: the last chord, the one you'd add after (whichever card is selected). */
-export function afterChord<T>(list: T[]): T | undefined {
-  return list[list.length - 1];
+/** Your place: the selected card, or the last card when none is (-1 when the list is empty). */
+export function placeIndex(length: number, card: number | null): number {
+  const current = cardIndex(length, card);
+  return current >= 0 ? current : length - 1;
+}
+
+/** What After follows: the chord at your place, the one you'd add after. */
+export function afterChord<T>(list: T[], card: number | null = null): T | undefined {
+  return list[placeIndex(list.length, card)];
+}
+
+/** Insert right after your place; the new card becomes your place. */
+export function insertAfter<T>(list: T[], card: number | null, item: T): { list: T[]; card: number } {
+  const at = placeIndex(list.length, card) + 1;
+  return { list: [...list.slice(0, at), item, ...list.slice(at)], card: at };
 }
 
 /** Append at the end; the new card is selected. */

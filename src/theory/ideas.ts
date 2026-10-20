@@ -102,10 +102,10 @@ export function afterIdeas(progression: Chord[], key: Key, opts: { spice: boolea
 
 export type Mood = engine.Mood;
 
-/** What could come after the progression, grouped by how the move feels (Resolve, Lift, Drift, Darken, Tension). */
-export function nextByMood(progression: Chord[], key: Key, style?: engine.StyleName): { mood: Mood; ideas: AfterIdea[] }[] {
+/** What could come after the progression (or at `at`, the insert position), grouped by how the move feels (Resolve, Lift, Drift, Darken, Tension). */
+export function nextByMood(progression: Chord[], key: Key, style?: engine.StyleName, at?: number): { mood: Mood; ideas: AfterIdea[] }[] {
   if (!progression.length) return [];
-  return engine.nextByMood(progression.map((c) => engineSymbol(c, key)), engineKey(key), { style })
+  return engine.nextByMood(progression.map((c) => engineSymbol(c, key)), engineKey(key), { style, ...(at !== undefined && at < progression.length ? { at } : {}) })
     .map((g) => ({ mood: g.mood, ideas: g.ideas.map((x) => siteIdea(x, key, progression[0])) }));
 }
 

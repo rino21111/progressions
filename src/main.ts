@@ -1,67 +1,50 @@
 import './style.css';
 // Start tracking undo history before anything else subscribes, so undo buttons see each change.
 import { redo, undo } from './undo';
-import { createDetector, focusSearch } from './ui/detector';
-import { createProgressions } from './ui/progressions';
 import { createTab } from './ui/tab';
 import { add, h } from './ui/dom';
-import { fretIcon } from './ui/icons';
 import { PlayerTarget, createPlayer } from './ui/player';
-import { createSidebar } from './ui/sidebar';
-import { createPanel } from './ui/panel';
+import { Mode, createInstrument } from './ui/instrument';
 import { addSelection, moveProgressionCard, removeFromProgression, selectCard } from './ui/common';
-import { canUndo } from './undo';
 import { shortcutFor } from './interaction';
 import { cardIndex, stepCard } from './yourChords';
 import { isDragging } from './ui/dragReorder';
-import { undoIcon } from './ui/icons';
 import { state, subscribe } from './state';
 import { setTone } from './audio';
 import { PROGRESSION_ID, progressionFingerings } from './playback';
-import { TAB_LABELS } from './tabs';
 import { Page, openFromHash, syncHash } from './share';
 
-type Tab = 'detector' | 'progressions' | 'tab';
-
-const tabPage = createTab();
-const pages: Record<Tab, HTMLElement> = {
-  detector: createDetector(),
-  progressions: createProgressions(),
-  tab: tabPage.el,
-};
-
-const tabs = (Object.keys(pages) as Tab[]).map((tab) =>
-  h('button', { class: 'tab', role: 'tab', 'data-tab': tab, onclick: () => show(tab) }, TAB_LABELS[tab]),
-);
-
-// Play (and Space) always plays the progression, on either page; playback carries on across tabs.
+// Play (and Space) always plays the progression; playback carries on whatever is shown.
 const target: PlayerTarget = { id: PROGRESSION_ID, perChord: true, chords: () => progressionFingerings(state) };
 const player = createPlayer(() => target);
+const tabPage = createTab();
 
-let current: Tab = 'detector';
+// The address carries the state (#chord&p=C.G.Am.F&bpm=120), so copying it shares it. The route is
+// the view: chord (the instrument) or tab.
+let mode: Mode = 'chords';
+const page = (): Page => (mode === 'tab' ? 'tab' : 'detector');
 // Edits update the address 300ms after the last change, in place: Back never steps through them.
-const writeHash = syncHash(() => current as Page, (hash) => {
+const writeHash = syncHash(page, (hash) => {
   if (location.hash !== `#${hash}`) history.replaceState(null, '', `#${hash}`);
 });
 
-function show(tab: Tab) {
-  for (const [name, page] of Object.entries(pages)) page.hidden = name !== tab;
-  tabs.forEach((b) => {
-    const active = b.dataset.tab === tab;
-    b.classList.toggle('active', active);
-    b.setAttribute('aria-selected', String(active));
-  });
-  current = tab;
-  writeHash();
-  window.scrollTo({ top: 0 });
-  if (tab === 'tab') tabPage.refresh();
-}
+const instrument = createInstrument({
+  play: player.el,
+  settings: player.settings,
+  settingsPop: player.settings.querySelector('.player-pop') as HTMLElement,
+  tab: tabPage.el,
+  onMode: (m) => {
+    mode = m;
+    writeHash();
+    if (m === 'tab') tabPage.refresh();
+  },
+});
 
 setTone(state.tone);
 subscribe((s) => setTone(s.tone));
 
 // Keyboard shortcuts (shown in tooltips): A adds the selection, Space plays, Delete removes the
-// selected card, arrows select the next card, Alt+arrows move it, / searches, Cmd/Ctrl+Z undoes
+// card at your place, arrows move your place, Alt+arrows move the card, / searches, Cmd/Ctrl+Z undoes
 // (Shift redoes). Typing in a field is left alone.
 document.addEventListener('keydown', (e) => {
   const typing = e.target instanceof Element && !!e.target.closest('input, select, textarea, [contenteditable]');
@@ -93,8 +76,8 @@ document.addEventListener('keydown', (e) => {
       if (card >= 0) moveProgressionCard(card, card + (action === 'moveLeft' ? -1 : 1));
       break;
     case 'search':
-      show('detector');
-      focusSearch();
+      instrument.setMode('chords');
+      instrument.focusSearch();
       break;
     case 'undo':
       undo();
@@ -105,32 +88,14 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-const undoButton = h('button', { class: 'icon-btn undo-btn', title: 'Undo (Cmd/Ctrl+Z)', 'aria-label': 'Undo', onclick: () => undo() }, undoIcon());
-subscribe(() => (undoButton.disabled = !canUndo()));
-undoButton.disabled = !canUndo();
-
-// Two columns on desktop: the page (scrolling) and the Progression sidebar (scrolling on its own),
-// under one header line. On phones the sidebar becomes a dock at the bottom.
 const app = h('div', { class: 'app' });
-const panel = createPanel(app);
-const sidebar = createSidebar(player.el, panel.toggle);
-add(app,
-    h('header', { class: 'main-header' },
-      h('div', { class: 'brand', role: 'img', 'aria-label': 'progressions', title: 'progressions' }, h('span', { class: 'logo' }, fretIcon(22))),
-      h('nav', { class: 'tabs', role: 'tablist' }, tabs),
-      h('span', { class: 'spacer' }),
-      undoButton,
-      player.settings,
-      panel.showButton,
-    ),
-    sidebar.header,
-    h('main', {}, Object.values(pages)),
-    sidebar.body,
-);
+add(app, instrument.stage, instrument.desk);
 document.querySelector('#app')!.append(app);
 
-// The address carries the state (#next&p=C.G.Am.F&bpm=120), so copying it shares it. A shared one
-// replaces the progression and settings (Undo takes it back); a bare one keeps the saved state.
-window.addEventListener('hashchange', () => show(openFromHash(location.hash, current)));
+// A shared address replaces the progression and settings (Undo takes it back); a bare one keeps
+// the saved state. Old routes (#next, #progressions, #chord) open the instrument.
+const show = (p: Page) => instrument.setMode(p === 'tab' ? 'tab' : 'chords');
+window.addEventListener('hashchange', () => show(openFromHash(location.hash, page())));
 window.addEventListener('pagehide', writeHash);
 show(openFromHash(location.hash, 'detector'));
+writeHash();
