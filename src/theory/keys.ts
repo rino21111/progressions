@@ -178,6 +178,41 @@ const isTonicChord = (chord: Chord, key: Key) =>
   chord.root === mod12(key.tonic) &&
   (key.mode === 'minor' ? chord.template.family === 'minor' : chord.template.family === 'major' || chord.template.family === 'power');
 
+/** A chord that can act as a dominant: major (or 7th) or suspended, so a fifth-down move resolves it. */
+const canDominate = (c: Chord) => c.template.family === 'major' || c.template.family === 'suspended';
+const sameChord = (a: Chord, b: Chord) => a.root === b.root && a.template.id === b.template.id;
+/** A chord that can be landed on: not a major chord with a flat seventh (that one wants to move on). */
+const restful = (c: Chord) => !(c.template.family === 'major' && c.template.tones.some((t) => t.semi === 10));
+
+/**
+ * What a key gets from how the chords lean on it, beyond fitting: the first chord as its tonic, the
+ * chord heard most (when one is), a V resolving to its tonic, and the IV–V and V–vi (V–VI in minor)
+ * moves that only one key explains.
+ */
+function leanScore(chords: Chord[], key: Key): number {
+  let score = 0;
+  if (isTonicChord(chords[0], key)) score += 1.5;
+  if (chords.length > 1 && isTonicChord(chords[chords.length - 1], key)) score += 0.75;
+  if (chords.some((c) => isTonicChord(c, key))) score += 0.5;
+  const counts = chords.map((c) => chords.filter((d) => sameChord(c, d)).length);
+  const most = Math.max(...counts);
+  if (most > 1 && chords.some((c, i) => counts[i] === most && isTonicChord(c, key))) score += 0.5;
+  const degree = (c: Chord) => mod12(c.root - key.tonic);
+  const sixth = key.mode === 'major' ? 9 : 8;
+  // Played round: the last chord leads back into the first (a turnaround's V into I).
+  const at = (i: number) => chords[i % chords.length];
+  const lands = (c: Chord) => isTonicChord(c, key) && restful(c);
+  for (let i = 1; i <= chords.length; i++) {
+    const a = chords[i - 1], b = at(i), next = at(i + 1);
+    if (chords.length > 1 && lands(b) && degree(a) === 7 && canDominate(a)) score += 0.5; // V–I
+    if (i === chords.length) break;
+    // IV–V, unless the V goes on down a fifth to something other than home (then it was a V of V: I–II7–V7)
+    if (degree(a) === 5 && degree(b) === 7 && canDominate(b) && !(mod12(b.root - next.root) === 7 && !lands(next))) score += 1;
+    if (degree(a) === 7 && canDominate(a) && degree(b) === sixth) score += 1.25; // V–vi, the deceptive cadence
+  }
+  return score;
+}
+
 /** Every key ranked by how well it explains the chords, best first. */
 export function rankKeys(chords: Chord[]): KeyFit[] {
   if (!chords.length) return [];
@@ -191,9 +226,7 @@ export function rankKeys(chords: Chord[]): KeyFit[] {
       else score -= chordPitchClasses(chord).filter((pc) => !scale.has(pc)).length;
       return fit;
     });
-    if (isTonicChord(chords[0], key)) score += 1.5;
-    if (chords.length > 1 && isTonicChord(chords[chords.length - 1], key)) score += 0.75;
-    if (chords.some((c) => isTonicChord(c, key))) score += 0.5;
+    score += leanScore(chords, key);
     return { key, score, fits, fitCount: fits.filter((f) => f !== 'outside').length };
   });
   return results.sort((a, b) => b.score - a.score);

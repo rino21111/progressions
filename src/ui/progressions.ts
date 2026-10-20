@@ -207,10 +207,9 @@ export function createProgressions(): HTMLElement {
       const chords = item.chords;
       const cols = collapseRepeats(chords, same);
       const id = `start:${item.id}`;
-      const chips = cols.map((col, i) => h('button', {
-        class: 'start-chip', title: 'Click to hear, double-click to add',
-        onclick: onChordClick(col.chord, undefined, `${id}:${i}`),
-      }, chip(col.chord, item.key, 'mini'), col.count > 1 ? h('span', { class: 'start-count' }, `×${col.count}`) : null));
+      // Plain labels: the row's own play button plays them.
+      const chips = cols.map((col) => h('span', { class: 'start-chip' },
+        chip(col.chord, item.key, 'mini'), col.count > 1 ? h('span', { class: 'start-count' }, `×${col.count}`) : null));
       rows.push({ id, chips, colOfBar: cols.flatMap((col, i) => Array.from({ length: col.count }, () => i)) });
       const named = group.name.toLowerCase().includes(item.genre.toLowerCase());
       return h('div', { class: 'start-row' },

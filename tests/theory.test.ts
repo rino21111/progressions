@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { chordSymbol, chordTones, makeChord } from '../src/theory/chords';
 import { detectCagedShape } from '../src/theory/caged';
 import { analyzeFingering, formatFingering, parseFingering } from '../src/theory/fingering';
-import { chordSymbolInKey, diatonicChords, keyName, rankKeys, romanNumeral, scaleNoteNames } from '../src/theory/keys';
+import { ALL_KEYS, chordSymbolInKey, diatonicChords, keyName, rankKeys, romanNumeral, scaleNoteNames } from '../src/theory/keys';
+import { parseChordName } from '../src/theory/search';
+import { starts } from '../src/theory/ideas';
 import { findVoicings } from '../src/theory/voicings';
 
 const name = (shape: string) => {
@@ -143,6 +145,30 @@ describe('keys', () => {
     expect(keyName(rankKeys(minor)[0].key)).toBe('A minor');
     expect(keyName(rankKeys([makeChord(4, 'min')])[0].key)).toBe('E minor');
     expect(keyName(rankKeys([makeChord(2, 'maj')])[0].key)).toBe('D major');
+  });
+
+  it('weighs what the chords lean on: a progression starting on IV still reads in its key', () => {
+    const guess = (names: string) => keyName(rankKeys(names.split(' ').map((n) => parseChordName(n)!))[0].key);
+    expect(guess('F G Am')).toBe('C major');
+    expect(guess('Fadd9 Gsus4 Am7')).toBe('C major');
+    expect(guess('C G Am F')).toBe('C major');
+    expect(guess('Am F C G')).toBe('A minor');
+    expect(guess('F G C')).toBe('C major');
+    // A V of V (I–II7–V7) and a Monte don't pull the guess to the V's key.
+    expect(guess('C D7 G7')).toBe('C major');
+    expect(guess('C7 F D7 G')).toBe('C major');
+  });
+
+  it('the IV–V–vi climb reads in its own key, and every library start keeps its guess (pinned)', () => {
+    const guesses: Record<string, string> = {};
+    for (const key of ALL_KEYS) {
+      for (const item of starts(key).flatMap((g) => [...g.items, ...g.more])) {
+        const guess = keyName(rankKeys(item.chords)[0].key);
+        if (item.id === 'pr-iv-v-vi-climb') expect(guess).toBe(keyName(item.key));
+        guesses[`${keyName(key)}: ${item.name}`] = guess;
+      }
+    }
+    expect(guesses).toMatchSnapshot();
   });
 });
 

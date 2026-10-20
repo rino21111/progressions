@@ -1921,8 +1921,7 @@ main {
 }
 
 .kb-chip:hover .rchip,
-.idea-chip:hover .rchip,
-.start-chip:hover .rchip {
+.idea-chip:hover .rchip {
   border-color: var(--text-muted);
 }
 
