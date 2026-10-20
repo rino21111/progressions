@@ -1,7 +1,7 @@
 // The address bar carries the state, so copying it shares it: the page route, then the progression
 // (with any card shape that isn't the usual one), the key when one is chosen, the chord style, the
 // playback settings and, on the Chord page, its chord and shape. Values equal to the defaults are
-// left out: #next&p=C.G.Am.F&bpm=120. Unknown or invalid parameters are skipped.
+// left out: #progression&p=C.G.Am.F&bpm=120. Unknown or invalid parameters are skipped.
 
 import { AppState, DEFAULTS, ProgressionChord, state, subscribe, update } from './state';
 import { Chord, chordSymbol } from './theory/chords';
@@ -163,7 +163,7 @@ export function openFromHash(hash: string, fallback: Page): Page {
   return page;
 }
 
-/** Just the route (#next, or an old #relationships). */
+/** Just the route (#progression, or an old #next or #relationships). */
 export function readRoute(hash: string): Page | null {
   const route = hash.replace(/^#/, '').split('&')[0];
   return (Object.keys(TAB_HASHES) as Page[]).find((p) => TAB_HASHES[p] === route)

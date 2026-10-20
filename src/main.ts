@@ -20,9 +20,9 @@ const player = createPlayer(() => target);
 const tabPage = createTab();
 
 // The address carries the state (#chord&p=C.G.Am.F&bpm=120), so copying it shares it. The route is
-// the view: chord, notes (the shared-notes map) or tab.
-let mode: Mode = 'chords';
-const page = (): Page => (mode === 'tab' ? 'tab' : mode === 'notes' ? 'notes' : 'detector');
+// the view: chord, progression, notes (the shared-notes map) or tab.
+let mode: Mode = 'progression';
+const page = (): Page => (mode === 'tab' ? 'tab' : mode === 'notes' ? 'notes' : mode === 'chord' ? 'detector' : 'progressions');
 // Edits update the address 300ms after the last change, in place: Back never steps through them.
 const writeHash = syncHash(page, (hash) => {
   if (location.hash !== `#${hash}`) history.replaceState(null, '', `#${hash}`);
@@ -76,7 +76,7 @@ document.addEventListener('keydown', (e) => {
       if (card >= 0) moveProgressionCard(card, card + (action === 'moveLeft' ? -1 : 1));
       break;
     case 'search':
-      instrument.setMode('chords');
+      // The search is on the stage; the view stays as it is.
       instrument.focusSearch();
       break;
     case 'undo':
@@ -93,9 +93,9 @@ add(app, instrument.stage, instrument.desk);
 document.querySelector('#app')!.append(app);
 
 // A shared address replaces the progression and settings (Undo takes it back); a bare one keeps
-// the saved state. Old routes (#next, #progressions, #chord) open the instrument.
-const show = (p: Page) => instrument.setMode(p === 'tab' ? 'tab' : p === 'notes' ? 'notes' : 'chords');
+// the saved state; with no route it opens on Progression. Old routes (#next, #progressions) open it too.
+const show = (p: Page) => instrument.setMode(p === 'tab' ? 'tab' : p === 'notes' ? 'notes' : p === 'detector' ? 'chord' : 'progression');
 window.addEventListener('hashchange', () => show(openFromHash(location.hash, page())));
 window.addEventListener('pagehide', writeHash);
-show(openFromHash(location.hash, 'detector'));
+show(openFromHash(location.hash, 'progressions'));
 writeHash();

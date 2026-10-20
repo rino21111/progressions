@@ -23,7 +23,7 @@ describe('the address carries the state', () => {
       bpm: 132, beatsPerBar: 3, barsPerChord: 2, tone: 'nylon', swing: true, loop: false,
     };
     const hash = stateHash(s, 'progressions');
-    expect(hash).toBe('next&p=C.G.Am.F%23m7b5.C/E&f=_.355433._._._&key=Am&style=sevenths&play=bossa.clave&bpm=132&time=3&bars=2&tone=nylon&swing=1&loop=0');
+    expect(hash).toBe('progression&p=C.G.Am.F%23m7b5.C/E&f=_.355433._._._&key=Am&style=sevenths&play=bossa.clave&bpm=132&time=3&bars=2&tone=nylon&swing=1&loop=0');
     const back = readShare(`#${hash}`)!;
     expect(back.page).toBe('progressions');
     expect(names(back.patch.progression)).toBe('C G Am F#m7b5 C/E');
@@ -34,7 +34,7 @@ describe('the address carries the state', () => {
     });
   });
   it('defaults are left out: C G Am F at 160 bpm in Triads is just the chords', () => {
-    expect(stateHash({ ...base, progression: [chord('C'), chord('G'), chord('Am'), chord('F')] }, 'progressions')).toBe('next&p=C.G.Am.F');
+    expect(stateHash({ ...base, progression: [chord('C'), chord('G'), chord('Am'), chord('F')] }, 'progressions')).toBe('progression&p=C.G.Am.F');
     expect(stateHash(base, 'tab')).toBe('tab');
     expect(stateHash(base, 'detector')).toBe('chord');
   });
@@ -94,15 +94,15 @@ describe('the address carries the state', () => {
     update({ progression: [chord('C'), chord('F')] });
     expect(written).toEqual([]);
     vi.advanceTimersByTime(300);
-    expect(written).toEqual(['next&p=C.F']);
+    expect(written).toEqual(['progression&p=C.F']);
     vi.useRealTimers();
   });
   it('progression chords are written in the key\'s spelling, and old links in the general spelling still load', () => {
     const ab = ['Ab', 'Db', 'Eb', 'Fm'].map((n) => chord(n));
-    expect(stateHash({ ...base, progression: ab }, 'progressions')).toBe('next&p=Ab.Db.Eb.Fm');
+    expect(stateHash({ ...base, progression: ab }, 'progressions')).toBe('progression&p=Ab.Db.Eb.Fm');
     const old = readShare('#next&p=Ab.C%23.Eb.Fm')!;
     expect(old.patch.progression!.map((c) => c.root)).toEqual([8, 1, 3, 5]);
-    expect(stateHash({ ...base, progression: old.patch.progression! }, 'progressions')).toBe('next&p=Ab.Db.Eb.Fm');
-    expect(stateHash({ ...base, progression: [chord('F#'), chord('C#'), chord('D#m'), chord('B')] }, 'progressions')).toBe('next&p=F%23.C%23.D%23m.B');
+    expect(stateHash({ ...base, progression: old.patch.progression! }, 'progressions')).toBe('progression&p=Ab.Db.Eb.Fm');
+    expect(stateHash({ ...base, progression: [chord('F#'), chord('C#'), chord('D#m'), chord('B')] }, 'progressions')).toBe('progression&p=F%23.C%23.D%23m.B');
   });
 });

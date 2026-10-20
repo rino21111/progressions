@@ -1,6 +1,7 @@
 // One instrument: a dark stage with the neck (the chord on it, or the move into the idea being tried),
 // a caption that names it, and the progression as a track; below, the desk with the chord on the neck
-// and what could come next. Notes swaps the desk for the shared-notes map, Tab for the tab.
+// and what could come next. The desk shows one view: the chord on the neck, the progression (what
+// could come next), the shared-notes map, or the tab.
 
 import { Chord, chordSymbol, chordTones, preferredRootName } from '../theory/chords';
 import { Fingering, FingeringAnalysis, MAX_FRET, analyzeFingering, formatFingering } from '../theory/fingering';
@@ -49,7 +50,7 @@ const same = (a: Chord | null | undefined, b: Chord | null | undefined) => !!a &
 const sameShape = (a: Fingering | null | undefined, b: Fingering | null | undefined) => !!a && !!b && formatFingering(a) === formatFingering(b);
 const pcAt = (str: number, fret: number) => mod12(STANDARD_TUNING[str] + fret);
 
-export type Mode = 'chords' | 'notes' | 'tab';
+export type Mode = 'chord' | 'progression' | 'notes' | 'tab';
 
 export interface Instrument {
   stage: HTMLElement;
@@ -75,7 +76,7 @@ export function createInstrument(opts: {
 }): Instrument {
   const phone = window.matchMedia('(max-width: 760px)');
   const neck = new Neck(setFingering);
-  let mode: Mode = 'chords';
+  let mode: Mode = 'progression';
 
   // ---------------------------------------------------------------- bar
   const keySelect = h('select', { class: 'dd key', 'aria-label': 'Key', onchange: (e: Event) => update({ keyChoice: (e.target as HTMLSelectElement).value || null }) });
@@ -166,7 +167,8 @@ export function createInstrument(opts: {
       update({ playPattern: st, playVariants: { ...state.playVariants, [st]: variant } });
     },
   }, PLAY_STYLES.map((st) => h('optgroup', { label: st.label }, st.variants.map((v) => h('option', { value: `${st.id}:${v.id}` }, `${st.label} · ${v.label}`)))));
-  const modeSeg = (['chords', 'notes', 'tab'] as const).map((m) => h('button', { 'data-mode': m, onclick: () => setMode(m) }, m === 'chords' ? 'Chords' : m === 'notes' ? 'Notes' : 'Tab'));
+  const MODE_NAMES: Record<Mode, string> = { chord: 'Chord', progression: 'Progression', notes: 'Notes', tab: 'Tab' };
+  const modeSeg = (['chord', 'progression', 'notes', 'tab'] as const).map((m) => h('button', { 'data-mode': m, onclick: () => setMode(m) }, MODE_NAMES[m]));
   const seg = h('div', { class: 'tseg', role: 'group', 'aria-label': 'Show the progression as' }, modeSeg);
   const loop = checkbox('Loop', () => state.loop, (on) => update({ loop: on }));
   let closeMore = () => {};
@@ -631,10 +633,8 @@ export function createInstrument(opts: {
     renderCaption(r);
     renderTrack(r);
     renderMap(r);
-    if (mode === 'chords') {
-      renderChordInfo(r);
-      renderNext(r);
-    }
+    if (mode === 'chord') renderChordInfo(r);
+    if (mode === 'progression') renderNext(r);
   };
 
   // While the progression plays, the neck shows each chord as it sounds; nothing else moves.
@@ -684,7 +684,9 @@ export function createInstrument(opts: {
 
   const setMode = (m: Mode) => {
     mode = m;
-    deskCols.hidden = m !== 'chords';
+    deskCols.hidden = m !== 'chord' && m !== 'progression';
+    chordInfo.hidden = m !== 'chord';
+    nextInfo.hidden = m !== 'progression';
     opts.tab.hidden = m !== 'tab';
     opts.onMode(m);
     render();

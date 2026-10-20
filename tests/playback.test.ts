@@ -3,7 +3,7 @@ import { INSPECTOR_ID, PROGRESSION_ID, chordFingerings, progressionFingerings } 
 import { makeChord } from '../src/theory/chords';
 import { parseFingering } from '../src/theory/fingering';
 import { bestVoicing } from '../src/theory/voicings';
-import { TAB_HASHES } from '../src/tabs';
+import { OLD_TAB_HASHES, TAB_HASHES } from '../src/tabs';
 
 const progression = [makeChord(0, 'maj'), makeChord(7, 'maj'), makeChord(9, 'min'), makeChord(5, 'maj')];
 const selection = parseFingering('xx0232')!; // D on the Inspector
@@ -105,7 +105,8 @@ describe('playback follows the cards when the progression changes', () => {
 });
 
 describe('views in the address bar', () => {
-  it('chord (the instrument; next still opens it), notes and tab', () => {
-    expect(Object.values(TAB_HASHES)).toEqual(['chord', 'next', 'notes', 'tab']);
+  it('chord, progression (#next still opens it), notes and tab', () => {
+    expect(Object.values(TAB_HASHES)).toEqual(['chord', 'progression', 'notes', 'tab']);
+    expect(OLD_TAB_HASHES.next).toBe('progressions');
   });
 });
