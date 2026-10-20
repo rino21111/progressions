@@ -34,6 +34,7 @@ export function popover(button: HTMLButtonElement, ...rows: Child[]): { el: HTML
     pop.hidden = !open;
     button.setAttribute('aria-expanded', String(open));
     button.classList.toggle('open', open);
+    if (open) fit(pop, button);
   };
   button.addEventListener('click', () => setOpen(pop.hidden));
   document.addEventListener('click', (e) => {
@@ -46,6 +47,30 @@ export function popover(button: HTMLButtonElement, ...rows: Child[]): { el: HTML
     }
   });
   return { el, close: () => setOpen(false) };
+}
+
+/**
+ * Keep an open popover on screen, 8px from every edge: it opens upward when there's no room below
+ * its button (a menu in the bottom dock), shifts sideways to fit, and scrolls inside if it's still too tall.
+ */
+function fit(pop: HTMLElement, button: HTMLElement) {
+  const M = 8;
+  pop.classList.remove('up');
+  pop.style.transform = '';
+  pop.style.maxHeight = '';
+  const b = button.getBoundingClientRect();
+  let r = pop.getBoundingClientRect();
+  if (r.bottom > window.innerHeight - M && b.top - r.height - M >= M) {
+    pop.classList.add('up');
+    r = pop.getBoundingClientRect();
+  }
+  const dx = r.left < M ? M - r.left : r.right > window.innerWidth - M ? window.innerWidth - M - r.right : 0;
+  if (dx) pop.style.transform = `translateX(${dx}px)`;
+  const room = pop.classList.contains('up') ? b.top - 2 * M : window.innerHeight - r.top - M;
+  if (r.height > room) {
+    pop.style.maxHeight = `${Math.max(120, room)}px`;
+    pop.style.overflowY = 'auto';
+  }
 }
 
 /** A menu action: runs, then the menu closes. */

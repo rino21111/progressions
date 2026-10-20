@@ -141,8 +141,9 @@ export function createInstrument(opts: {
     h('div', { class: 'pop-row' }, h('span', {}, 'Labels'), h('div', { class: 'segmented small', role: 'group', 'aria-label': 'Labels' }, modeButtons)),
     h('div', { class: 'pop-row' }, neckBox.el),
     h('div', { class: 'pop-row' }, keyNotes.el),
-    menuItem('Mute all strings', () => setFingering([null, null, null, null, null, null]), () => closeView()),
-    menuItem('Open all strings', () => setFingering([0, 0, 0, 0, 0, 0]), () => closeView()),
+    h('div', { class: 'pop-row pop-pair' },
+      h('button', { class: 'pop-btn', onclick: () => { closeView(); setFingering([null, null, null, null, null, null]); } }, 'Mute all'),
+      h('button', { class: 'pop-btn', onclick: () => { closeView(); setFingering([0, 0, 0, 0, 0, 0]); } }, 'Open all')),
   );
   const viewSlot = h('div', {});
   const view = popover(h('button', { class: 'dd view-btn' }, 'View', chevronIcon(10)), viewSlot);

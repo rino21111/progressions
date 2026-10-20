@@ -2323,6 +2323,40 @@ sup .acc {
   color: var(--ink-text);
 }
 
+/* View's options stack like the rest of a popover. */
+.view-rows {
+  display: grid;
+  gap: 10px;
+}
+
+/* A pair of equal buttons in a popover (Mute all, Open all). */
+.pop-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.pop-btn {
+  height: 36px;
+  padding: 0 10px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 10px !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pop-btn:hover {
+  background: var(--tile-hi) !important;
+}
+
+/* A popover with no room below its button opens upward. */
+.player-pop.up {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
 /* Notes: the shared-notes map in the desk's place, at a size that reads. */
 .map-wrap {
   margin-bottom: 0;
@@ -2483,6 +2517,44 @@ sup .acc {
   }
   .desk-switch {
     margin-bottom: 18px;
+  }
+  /* The map's note names stay at the left edge while the chord columns scroll under them. */
+  .map-wrap {
+    overflow-x: auto;
+  }
+  .map-wrap .pmap {
+    display: flex;
+    align-items: flex-start;
+    width: max-content;
+    min-width: 100%;
+    padding: 0;
+    overflow: visible;
+  }
+  .map-wrap .pmap-gutter {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    flex: none;
+    width: 18px;
+    margin-right: -18px;
+    background: var(--bg);
+  }
+  .map-wrap .pmap-gutter::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    width: 6px;
+    background: linear-gradient(to right, var(--bg), transparent);
+  }
+  .map-wrap .pmap-gutter svg,
+  .map-wrap .pmap > svg {
+    display: block;
+    flex: none;
+  }
+  .map-wrap .pmap-gutter .pm-row-label {
+    font-size: 9px;
   }
   .desk-switch .tseg {
     display: flex;
