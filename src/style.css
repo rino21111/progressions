@@ -1053,6 +1053,47 @@ main {
   text-anchor: middle;
 }
 
+/* The key backdrop: the key's notes as faint dots in the string colour (the tonic stronger), and a
+   dashed ring around a chord tone outside the key. Inlays step aside while it shows. */
+.key-dot {
+  fill: var(--string);
+  opacity: 0.32;
+  pointer-events: none;
+}
+
+.key-dot.tonic {
+  opacity: 0.6;
+}
+
+.fretboard.keyed .inlay {
+  display: none;
+}
+
+.fretboard g.dot circle.out-ring,
+.change-strip g circle.out-ring {
+  fill: none;
+  stroke: var(--string);
+  stroke-width: 1.6;
+  stroke-dasharray: 3.5 3;
+  pointer-events: none;
+}
+
+.change-strip g circle.out-ring {
+  stroke-width: 0.9;
+  stroke-dasharray: 2 1.6;
+  opacity: 0;
+}
+
+.change-strip g.out circle.out-ring {
+  opacity: 1;
+}
+
+.tone-chip.out-key {
+  border-left-style: dashed;
+  border-right-style: dashed;
+  border-bottom-style: dashed;
+}
+
 /* Interval colours */
 .tone-root { --tone: var(--tone-root); }
 .tone-third { --tone: var(--tone-third); }

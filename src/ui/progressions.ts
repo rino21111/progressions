@@ -148,7 +148,7 @@ export function createProgressions(): HTMLElement {
     const to = bestVoicing(c);
     const phrase = thenPhrase(idea);
     const names = (list: Chord[]) => list.map((p) => chordSymbolInKey(p, key)).join(' ');
-    if (to) strip.show({ chord: x, fingering: from }, { chord: c, fingering: to });
+    if (to) strip.show({ chord: x, fingering: from }, { chord: c, fingering: to }, key);
     const line = to ? movesLine(x, from, c, to) : { held: [], moves: [] };
     const note = (n: string) => h('span', { class: 'note' }, n);
     const sep = () => h('span', { class: 'sep' }, ' · ');

@@ -231,3 +231,9 @@ export function rankKeys(chords: Chord[]): KeyFit[] {
   });
   return results.sort((a, b) => b.score - a.score);
 }
+
+/** The key's scale tones (major, or natural minor): what the key backdrop marks on the neck. */
+export const keyScale = (key: Key): Set<PitchClass> => new Set(scalePitchClasses(key));
+
+/** A chord's tones that the key doesn't hold (the raised 7th counts as in a minor key): ringed on the neck. */
+export const outOfKeyTones = (chord: Chord, key: Key): PitchClass[] => chordPitchClasses(chord).filter((pc) => !pitchInKey(pc, key));

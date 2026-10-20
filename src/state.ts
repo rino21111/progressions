@@ -44,6 +44,8 @@ export interface AppState {
   fingering: Fingering;
   labelMode: LabelMode;
   showNeck: boolean;
+  /** The key backdrop: the key's notes as faint dots on the neck, and chord tones outside it ringed. */
+  keyNotes: boolean;
   /** Show the chord's structure (the stack) instead of the tone chips. A view preference. */
   showStructure: boolean;
   /** Show the shared-notes map under the progression. A view preference. */
@@ -94,6 +96,7 @@ export const DEFAULTS: AppState = {
   fingering: [null, 3, 2, 0, 1, 0],
   labelMode: 'interval',
   showNeck: false,
+  keyNotes: true,
   showStructure: false,
   showMap: false,
   progression: [],

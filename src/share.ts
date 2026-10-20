@@ -52,6 +52,7 @@ export function stateHash(s: AppState, page: Page): string {
   add('tone', s.tone, s.tone === DEFAULTS.tone);
   add('swing', s.swing ? 1 : 0, s.swing === DEFAULTS.swing);
   add('loop', s.loop ? 1 : 0, s.loop === DEFAULTS.loop);
+  add('kn', s.keyNotes ? 1 : 0, s.keyNotes === DEFAULTS.keyNotes);
   if (page === 'detector') {
     const usual = s.selected ? bestVoicing(s.selected) : null;
     const isDefault = sameChord(s.selected, DEFAULTS.selected) && sameShape(s.fingering, DEFAULTS.fingering);
@@ -87,7 +88,7 @@ export function readShare(hash: string): Shared | null {
 
   const patch: Partial<AppState> = {
     style: DEFAULTS.style, keyChoice: null, playPattern: DEFAULTS.playPattern, bpm: DEFAULTS.bpm, beatsPerBar: DEFAULTS.beatsPerBar,
-    barsPerChord: DEFAULTS.barsPerChord, tone: DEFAULTS.tone, swing: DEFAULTS.swing, loop: DEFAULTS.loop, selectedCard: null,
+    barsPerChord: DEFAULTS.barsPerChord, tone: DEFAULTS.tone, swing: DEFAULTS.swing, loop: DEFAULTS.loop, keyNotes: DEFAULTS.keyNotes, selectedCard: null,
   };
   const play = get('play')?.split('.');
   const style = PLAY_STYLES.find((st) => st.id === play?.[0]);
@@ -103,6 +104,7 @@ export function readShare(hash: string): Shared | null {
   if (TONES.includes(get('tone') as Tone)) patch.tone = get('tone') as Tone;
   if (get('swing') === '0' || get('swing') === '1') patch.swing = get('swing') === '1';
   if (get('loop') === '0' || get('loop') === '1') patch.loop = get('loop') === '1';
+  if (get('kn') === '0' || get('kn') === '1') patch.keyNotes = get('kn') === '1';
   if (STYLES.includes(get('style') as StyleName)) patch.style = get('style') as StyleName;
   const key = /^([A-G][#b]?)(m?)$/.exec(get('key') ?? '');
   const tonic = key ? parseNote(key[1]) : null;

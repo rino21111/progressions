@@ -7,6 +7,7 @@ import { Chord, chordSymbol, toneLabelFor } from '../theory/chords';
 import { Fingering, formatFingering, soundingNotes } from '../theory/fingering';
 import { STANDARD_TUNING, STRING_NAMES, mod12 } from '../theory/notes';
 import { StringMove, noteIn, stringMoves } from '../theory/change';
+import { Key, keyId, keyScale, pitchInKey } from '../theory/keys';
 import { createSessionBus, now, ready, silenceBus, strum } from '../audio';
 import { state } from '../state';
 import { PHRASE_GAP, clicksSound } from './common';
@@ -20,6 +21,11 @@ const END_X = W - 4;
 const TOP = 14;
 const GAP = 15;
 const R = 6.5;
+// The key backdrop, scaled to these dots: faint key notes (the tonic stronger), and a dashed ring
+// around a chord tone outside the key.
+const KEY_R = 2;
+const TONIC_R = 2.8;
+const RING_R = R + 3;
 const GLIDE = 0.42;
 const H = TOP + 5 * GAP + GAP / 2 + 16;
 
@@ -36,8 +42,8 @@ export interface Shape {
 interface Voice {
   el: SVGGElement;
   dx: number;
-  from: { text: string; cls: string };
-  to: { text: string; cls: string };
+  from: { text: string; cls: string; out: boolean };
+  to: { text: string; cls: string; out: boolean };
 }
 
 export class ChangeStrip {
@@ -55,9 +61,13 @@ export class ChangeStrip {
     this.element = h('button', { class: 'strip-btn', onclick: () => void this.play() }, this.svg);
   }
 
-  /** Show this change, landed (a new pair stops whatever the last one was doing). */
-  show(from: Shape, to: Shape) {
-    const key = [from, to].map((x) => `${chordSymbol(x.chord)}:${formatFingering(x.fingering)}`).join('>') + state.labelMode;
+  private key: Key | null = null;
+
+  /** Show this change, landed (a new pair stops whatever the last one was doing), over the key's notes. */
+  show(from: Shape, to: Shape, inKey: Key) {
+    const key = [from, to].map((x) => `${chordSymbol(x.chord)}:${formatFingering(x.fingering)}`).join('>')
+      + state.labelMode + (state.keyNotes ? keyId(inKey) : '');
+    this.key = state.keyNotes ? inKey : null;
     this.element.title = `Hear ${chordSymbol(from.chord)} to ${chordSymbol(to.chord)}`;
     this.element.setAttribute('aria-label', this.element.title);
     if (key === this.shown) return;
@@ -138,7 +148,7 @@ export class ChangeStrip {
     this.svg.classList.remove('landed');
     for (const v of this.voices) {
       v.el.removeAttribute('transform');
-      v.el.setAttribute('class', `voice ${v.from.cls}`);
+      v.el.setAttribute('class', `voice ${v.from.cls}${v.from.out ? ' out' : ''}`);
       v.el.querySelector('text')!.textContent = v.from.text;
     }
   }
@@ -152,7 +162,7 @@ export class ChangeStrip {
     for (const v of this.voices) {
       v.el.setAttribute('transform', `translate(${v.dx} 0)`);
       const relabel = v.from.text !== v.to.text || v.from.cls !== v.to.cls;
-      v.el.setAttribute('class', `voice ${v.to.cls}${relabel && v.dx === 0 && !reduced() ? ' pulse' : ''}`);
+      v.el.setAttribute('class', `voice ${v.to.cls}${v.to.out ? ' out' : ''}${relabel && v.dx === 0 && !reduced() ? ' pulse' : ''}`);
       v.el.querySelector('text')!.textContent = v.to.text;
     }
   }
@@ -181,12 +191,30 @@ export class ChangeStrip {
       ]),
     );
 
+    const key = this.key;
+    const pcAt = (str: number, fret: number) => mod12(STANDARD_TUNING[str] + fret);
     const label = (chord: Chord, str: number, fret: number) => {
-      const role = toneLabelFor(chord, mod12(STANDARD_TUNING[str] + fret));
-      return { text: state.labelMode === 'interval' ? role ?? '' : noteIn(chord, str, fret), cls: toneClass(role) };
+      const role = toneLabelFor(chord, pcAt(str, fret));
+      return {
+        text: state.labelMode === 'interval' ? role ?? '' : noteIn(chord, str, fret), cls: toneClass(role),
+        out: !!key && !pitchInKey(pcAt(str, fret), key),
+      };
     };
+    // A dot carries its ring; a voice shows it only while its note is outside the key (CSS: .out).
     const dot = (cls: string, cx: number, y: number, text: string) =>
-      s('g', { class: cls }, s('circle', { cx, cy: y, r: R }), s('text', { x: cx, y: y + 3 }, text));
+      s('g', { class: cls }, s('circle', { class: 'out-ring', cx, cy: y, r: RING_R }), s('circle', { cx, cy: y, r: R }), s('text', { x: cx, y: y + 3 }, text));
+    const taken = new Set([from.fingering, to.fingering].flatMap((f) => f.map((fret, str) => `${str}:${fret}`)));
+    const keyDots: SVGElement[] = [];
+    if (key) {
+      const scale = keyScale(key);
+      for (let str = 0; str < 6; str++) {
+        for (let fret = lo; fret <= hi; fret++) {
+          if (!scale.has(pcAt(str, fret)) || taken.has(`${str}:${fret}`)) continue;
+          const tonic = pcAt(str, fret) === mod12(key.tonic);
+          keyDots.push(s('circle', { class: `key-dot${tonic ? ' tonic' : ''}`, cx: x(fret), cy: stringY(str), r: tonic ? TONIC_R : KEY_R }));
+        }
+      }
+    }
     const cross = (cls: string, y: number) => s('text', { class: `cross ${cls}`, x: OPEN_X, y: y + 4 }, '×');
 
     const trails: SVGElement[] = [];
@@ -203,19 +231,19 @@ export class ChangeStrip {
         if (m.kind === 'glide') {
           trails.push(s('line', { class: `trail post ${b.cls}`, x1: x(m.from!), x2: x(m.to!), y1: y, y2: y, 'stroke-width': R * 2 * 0.67 }));
         }
-        const el = dot(`voice ${a.cls}`, x(m.from!), y, a.text);
+        const el = dot(`voice ${a.cls}${a.out ? ' out' : ''}`, x(m.from!), y, a.text);
         this.voices.push({ el, dx: x(m.to!) - x(m.from!), from: a, to: b });
         return;
       }
       if (m.from !== null) {
         const a = label(from.chord, m.string, m.from);
-        fades.push(dot(`fade pre ${a.cls}`, x(m.from), y, a.text));
+        fades.push(dot(`fade pre ${a.cls}${a.out ? ' out' : ''}`, x(m.from), y, a.text));
       }
       if (m.to !== null) {
         const b = label(to.chord, m.string, m.to);
-        fades.push(dot(`fade post ${b.cls}`, x(m.to), y, b.text));
+        fades.push(dot(`fade post ${b.cls}${b.out ? ' out' : ''}`, x(m.to), y, b.text));
       }
     });
-    this.svg.replaceChildren(board, s('g', {}, trails), s('g', {}, fades), s('g', {}, this.voices.map((v) => v.el)));
+    this.svg.replaceChildren(board, s('g', {}, keyDots), s('g', {}, trails), s('g', {}, fades), s('g', {}, this.voices.map((v) => v.el)));
   }
 }

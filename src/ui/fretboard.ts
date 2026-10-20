@@ -9,6 +9,15 @@ export interface Mark {
   fret: number;
   text: string;
   cls: string;
+  /** Outside the key: a dashed ring around it. */
+  out?: boolean;
+}
+
+/** A key note marked on the neck (the tonic a little stronger). */
+export interface KeyDot {
+  string: number;
+  fret: number;
+  tonic: boolean;
 }
 
 export interface FretboardView {
@@ -17,6 +26,8 @@ export interface FretboardView {
   marks: Mark[];
   /** Faint chord tones elsewhere on the neck. */
   ghosts: Mark[];
+  /** The key backdrop (none when it's off; the inlays show instead). */
+  keyDots: KeyDot[];
 }
 
 const W = 1100;
@@ -143,6 +154,10 @@ export class Fretboard {
   render(view: FretboardView) {
     this.fingering = view.fingering;
     const layer = s('g');
+    this.element.classList.toggle('keyed', view.keyDots.length > 0);
+    for (const k of view.keyDots) {
+      layer.append(s('circle', { class: `key-dot${k.tonic ? ' tonic' : ''}`, cx: noteX(k.fret), cy: stringY(k.string), r: k.tonic ? 5.5 : 4 }));
+    }
     // Open strings sit just left of the nut, filled like fretted notes (or as rings for chord tones).
     const markX = (fret: number) => (fret === 0 ? NUT_X / 2 + 4 : noteX(fret));
     for (const ghost of view.ghosts) {
@@ -168,6 +183,7 @@ export class Fretboard {
       layer.append(
         s('g', { class: `dot ${mark.cls}${mark.fret === 0 ? ' open' : ''}`, 'data-string': mark.string, 'data-pc': pcAt(mark.string, mark.fret) },
           s('circle', { class: 'pluck', cx: x, cy: y, r: 12 }),
+          mark.out ? s('circle', { class: 'out-ring', cx: x, cy: y, r: 17 }) : null,
           s('circle', { cx: x, cy: y, r: 12 }),
           s('text', { x, y: y + 4 }, mark.text),
         ),

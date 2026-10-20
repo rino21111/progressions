@@ -18,7 +18,10 @@ import { INSPECTOR_ID, chordFingerings } from '../playback';
 import { playIcon, stopIcon } from './icons';
 import { checkbox, disclosure, menuItem, popover } from './menu';
 import { add, clear, h, toneClass } from './dom';
-import { Fretboard, Mark } from './fretboard';
+import { Fretboard, KeyDot, Mark } from './fretboard';
+import { currentKey } from '../key';
+import { keyScale, pitchInKey } from '../theory/keys';
+import { STANDARD_TUNING } from '../theory/notes';
 import { toneArea } from './toneStrip';
 import { parseSearch } from '../theory/search';
 import { searchIcon } from './icons';
@@ -100,10 +103,12 @@ export function createDetector(): HTMLElement {
       mode === 'interval' ? 'Intervals' : 'Notes'),
   );
   const neck = checkbox('All chord tones', () => state.showNeck, (on) => update({ showNeck: on }));
+  const keyNotes = checkbox('Key notes', () => state.keyNotes, (on) => update({ keyNotes: on }));
   let close = () => {};
   const view = popover(h('button', { class: 'text-btn view-btn' }, 'View'),
     h('div', { class: 'pop-row' }, h('span', {}, 'Labels'), h('div', { class: 'segmented small', role: 'group', 'aria-label': 'Labels' }, modeButtons)),
     h('div', { class: 'pop-row' }, neck.el),
+    h('div', { class: 'pop-row' }, keyNotes.el),
     menuItem('Mute all strings', () => setFingering([null, null, null, null, null, null]), () => close()),
     menuItem('Open all strings', () => setFingering([0, 0, 0, 0, 0, 0]), () => close()),
   );
@@ -152,6 +157,11 @@ export function createDetector(): HTMLElement {
       b.setAttribute('aria-pressed', String(b.dataset.mode === state.labelMode));
     });
     neck.sync();
+    keyNotes.sync();
+    // The key backdrop: the Next page's key (chosen or guessed), its notes as faint dots wherever no
+    // chord dot sits, and chord tones outside it ringed.
+    const { key } = currentKey();
+    const outside = (pc: number) => state.keyNotes && !pitchInKey(pc, key);
 
     const text = (pc: number) => (state.labelMode === 'interval' ? labelFor(analysis, pc) : noteNameFor(analysis, pc));
     const marks: Mark[] = analysis.notes.map((n) => ({
@@ -159,14 +169,26 @@ export function createDetector(): HTMLElement {
       fret: n.fret,
       text: text(n.pc),
       cls: toneClass(labelFor(analysis, n.pc)),
+      out: outside(n.pc),
     }));
     const ghosts: Mark[] = state.showNeck && chord
       ? chordTonePositions(chord, shown).map((p) => ({ string: p.string, fret: p.fret, text: text(p.pc), cls: toneClass(labelFor(analysis, p.pc)) }))
       : [];
-    fretboard.render({ fingering: shown, marks, ghosts });
+    const taken = new Set([...marks, ...ghosts].map((m) => `${m.string}:${m.fret}`));
+    const scale = keyScale(key);
+    const keyDots: KeyDot[] = [];
+    if (state.keyNotes) {
+      for (let string = 0; string < 6; string++) {
+        for (let fret = 1; fret <= MAX_FRET; fret++) {
+          const pc = mod12(STANDARD_TUNING[string] + fret);
+          if (scale.has(pc) && !taken.has(`${string}:${fret}`)) keyDots.push({ string, fret, tonic: pc === mod12(key.tonic) });
+        }
+      }
+    }
+    fretboard.render({ fingering: shown, marks, ghosts, keyDots });
 
     refreshControls();
-    renderName(nameCard, analysis, shown, fretboard.element, chordControls);
+    renderName(nameCard, analysis, shown, fretboard.element, chordControls, outside);
     renderVoicings(voicingsCard, analysis, shown);
   }
 
@@ -175,7 +197,7 @@ export function createDetector(): HTMLElement {
   return page;
 }
 
-function renderName(card: HTMLElement, analysis: FingeringAnalysis, shown: Fingering, board: Element, controls: HTMLElement) {
+function renderName(card: HTMLElement, analysis: FingeringAnalysis, shown: Fingering, board: Element, controls: HTMLElement, outside: (pc: number) => boolean) {
   clear(card);
   const chord = analysis.matches[0];
   if (!analysis.notes.length) {
@@ -214,7 +236,7 @@ function renderName(card: HTMLElement, analysis: FingeringAnalysis, shown: Finge
         }, '+')),
       controls),
     h('p', { class: 'chord-long' }, `(${preferredRootName(chord.root, chord.template.family)} ${chord.template.name})`),
-    toneArea(chord, shown, () => board),
+    toneArea(chord, shown, () => board, outside),
     alternates.length
       ? h('p', { class: 'small' }, 'Alternate names: ',
           alternates.map((m, i) => [i ? ', ' : '', h('strong', {}, chordSymbol(m))]))

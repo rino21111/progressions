@@ -16,7 +16,7 @@ import { chevronIcon } from './icons';
  * `voicing` is the shape being played (to know which tones are present and which octave to
  * play a tapped tone in); `dots` returns the diagram or fretboard whose dots a hovered tone lights up.
  */
-export function toneArea(chord: Chord, voicing: Fingering | null, dots: () => Element | null): HTMLElement[] {
+export function toneArea(chord: Chord, voicing: Fingering | null, dots: () => Element | null, outside: (pc: number) => boolean = () => false): HTMLElement[] {
   const notes = voicing ? soundingNotes(voicing) : [];
   const present = new Set(notes.map((n) => n.pc));
   const midiFor = (pc: number) => notes.find((n) => n.pc === pc)?.midi ?? 48 + pc;
@@ -39,7 +39,7 @@ export function toneArea(chord: Chord, voicing: Fingering | null, dots: () => El
     chordTones(chord).map((t) => {
       const sounding = !voicing || present.has(t.pc);
       return h('button', {
-        class: `tone-chip ${toneClass(t.label)}${sounding ? '' : ' omitted'}`,
+        class: `tone-chip ${toneClass(t.label)}${sounding ? '' : ' omitted'}${outside(t.pc) ? ' out-key' : ''}`,
         title: `Play ${t.name}`,
         onclick: () => clicksSound() && strum([midiFor(t.pc)]),
         ...hover(t.pc),
