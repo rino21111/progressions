@@ -1946,36 +1946,190 @@ main {
   gap: 6px;
 }
 
+/* The open idea, under all the moods (so no chip moves): the neck strip, the words, the adds. */
 .idea-detail {
-  grid-column: 2;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 10px 12px;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 16px;
+  margin-top: 4px;
+  padding: 12px;
   border: 1px solid var(--border);
   border-radius: 10px;
 }
 
-.idea-detail .chord-box {
-  flex: none;
-  width: 64px;
+.strip-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.change-strip {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.change-strip .board {
+  fill: var(--wood);
+  stroke: var(--wood-edge);
+}
+
+.change-strip .fret {
+  stroke: var(--fret);
+  stroke-width: 1.5;
+}
+
+.change-strip .nut {
+  fill: var(--nut);
+}
+
+.change-strip .string {
+  stroke: var(--string);
+}
+
+.change-strip .string-name,
+.change-strip .fret-number {
+  fill: var(--text-muted);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.change-strip .fret-number {
+  font-weight: 400;
+  text-anchor: middle;
+}
+
+.change-strip .cross {
+  fill: var(--text-muted);
+  font-size: 13px;
+  text-anchor: middle;
+}
+
+.change-strip g circle {
+  fill: var(--tone);
+  stroke: rgba(255, 255, 255, 0.92);
+  stroke-width: 1.5;
+}
+
+.change-strip g text {
+  fill: #fff;
+  font-size: 7.5px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.change-strip .trail {
+  stroke: var(--tone);
+  stroke-linecap: round;
+}
+
+/* Before the idea sounds: the first chord's marks; after: the idea's, and the trails. */
+.change-strip .pre,
+.change-strip .post {
+  transition: opacity 0.15s ease;
+}
+
+.change-strip .post,
+.change-strip.landed .pre {
+  opacity: 0;
+}
+
+.change-strip .pre,
+.change-strip.landed .post {
+  opacity: 1;
+}
+
+.change-strip.landed .trail {
+  opacity: 0.4;
+}
+
+.change-strip .voice.pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.change-strip .voice.pulse circle,
+.change-strip .voice.pulse text {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: land-pulse 0.25s ease-out;
+}
+
+@keyframes land-pulse {
+  40% {
+    transform: scale(1.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .change-strip .pre,
+  .change-strip .post {
+    transition: none;
+  }
+  .change-strip .voice.pulse circle,
+  .change-strip .voice.pulse text {
+    animation: none;
+  }
 }
 
 .idea-body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
 }
 
-.idea-why {
+/* Replay: a play icon and the moves line; 32px to tap without moving the layout. */
+.replay {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  margin: -8px -8px;
+  padding: 8px 8px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  text-align: left;
+}
+
+.replay:hover {
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+}
+
+.replay .glyph {
+  flex: none;
+  color: var(--accent);
+}
+
+.moves .note {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.moves .sep {
+  color: var(--text-muted);
+}
+
+.idea-why,
+.then-line {
   margin: 0;
   font-size: 13px;
+  color: var(--text-muted);
+}
+
+.then-line b {
+  font-weight: 700;
+  color: var(--text);
 }
 
 .idea-adds {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 6px;
 }
 
@@ -1983,6 +2137,7 @@ main {
   padding: 4px 10px;
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Start with: one family at a time, an entry per row. */
@@ -2047,55 +2202,10 @@ main {
   text-overflow: ellipsis;
 }
 
-/* "then" and the chords that often follow (click to hear them as one phrase). */
-.then-line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 10px;
-  min-width: 0;
-  margin-left: -8px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.then-line:hover {
-  background: color-mix(in srgb, var(--text) 4%, transparent);
-}
-
-.then-line.selected {
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
-}
-
-.then-line.selected .rchip {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1.5px var(--accent);
-}
-
-.then-word {
-  color: var(--text-muted);
-}
-
-.then-chips {
-  display: flex;
-  gap: 4px;
-}
-
 .rchip.mini {
   width: 40px;
   min-width: 0;
   padding: 1px 2px;
-}
-
-.rchip.mini.home {
-  border-style: dashed;
-  border-color: var(--text-muted);
-  background: transparent;
 }
 
 .idea-none {
@@ -2109,11 +2219,6 @@ main {
 
 .rchip.mini .num {
   font-size: 9px;
-}
-
-.then-meta {
-  color: var(--text-muted);
-  white-space: nowrap;
 }
 
 .pm-ghost-name {
@@ -2226,8 +2331,18 @@ main {
   .mood-grid {
     grid-template-columns: 64px minmax(0, 1fr);
   }
+  /* Phones: the strip across, the words, then the adds side by side. */
   .idea-detail {
-    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .idea-adds {
+    flex-direction: row;
+  }
+  .idea-adds button {
+    flex: 0 0 calc(50% - 3px);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   /* The search grows; View stays at the right. */
   .search {

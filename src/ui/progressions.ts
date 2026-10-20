@@ -5,19 +5,21 @@
 import { Chord } from '../theory/chords';
 import { ALL_KEYS, Key, chordFitInKey, chordSymbolInKey, keyId, keyName, rankKeys, romanNumeral } from '../theory/keys';
 import { sameFunction } from '../theory/progressions';
-import { AfterIdea, StartGroup, StartItem, StyleName, collapseRepeats, degreeOf, startSettings, ideaReason, keyChords, nextByMood, starts, thenPhrase } from '../theory/ideas';
+import { AfterIdea, StartGroup, StartItem, StyleName, collapseRepeats, degreeOf, startSettings, ideaWhy, keyChords, nextByMood, starts, thenPhrase } from '../theory/ideas';
 import { state, subscribe, update } from '../state';
 import { currentKey, currentKeyGuess } from '../key';
 import { Playback, currentPlayback, onPlayback, play } from '../player';
 import { PROGRESSION_ID } from '../playback';
 import { bestVoicing } from '../theory/voicings';
-import { chordClickAction } from '../interaction';
 import { afterChord } from '../yourChords';
-import { addToProgression, isSelected, onChordClick, previewChange, selectChord, selectPhrase, selectedPhrase, selectionSource } from './common';
+import { addToProgression, isSelected, onChordClick, selectChord, selectedPhrase } from './common';
 import { add, clear, h } from './dom';
 import { playIcon } from './icons';
 import { keep, recall } from './menu';
-import { labelledBox } from './sidebar';
+import { ChangeStrip } from './changeStrip';
+import { heldPhrase, movesLine } from '../theory/change';
+import { cardShape } from '../playback';
+import { Fingering } from '../theory/fingering';
 
 const STYLE_CHOICES: { id: StyleName; label: string }[] = [
   { id: 'triads', label: 'Triads' },
@@ -85,93 +87,101 @@ export function createProgressions(): HTMLElement {
     keyLine.replaceChildren(selects, h('div', { class: 'kb-chips' }, keyButtons.map((b) => b.el)));
   };
 
-  // ---- After: one row per feeling; the open chip's detail under its row.
+  // ---- After: one row per feeling, then the open idea's detail under all of them (so no chip moves).
   let open: { at: string; source: string } | null = null;
   let afterHead: HTMLElement | null = null;
+  const strip = new ChangeStrip();
   const renderAfter = (key: Key) => {
+    // A re-render keeps focus on the chip that had it.
+    const active = document.activeElement as HTMLElement | null;
+    const focused = active && afterCard.contains(active) ? active.dataset.source ?? null : null;
     clear(afterCard);
     afterHead = null;
     const x = afterChord(state.progression);
     afterCard.hidden = !x;
-    if (!x) return;
+    if (!x) return strip.stop();
     const at = state.progression.map((c) => chordSymbolInKey(c, key)).join(' ');
     const groups = nextByMood(state.progression, key, state.style);
     const xName = chordSymbolInKey(x, key);
+    const from = cardShape(x);
+    let shown: AfterIdea | undefined;
     afterHead = h('div', { class: 'card-head' }, h('h2', {}, `After ${xName}`));
     add(afterCard, afterHead,
       groups.length ? null : h('p', { class: 'muted idea-none' }, 'Nothing fits here'),
-      h('div', { class: 'mood-grid' }, groups.map((g) => {
-        const shown = g.ideas.find((i) => open?.at === at && open.source === `after:${chordSymbolInKey(i.chord, key)}`);
-        return [
-          h('span', { class: 'mood' }, g.mood),
-          h('div', { class: 'mood-chips' }, g.ideas.map((idea) => {
-            const c = idea.chord;
-            const sym = chordSymbolInKey(c, key);
-            const source = `after:${sym}`;
-            const click = onChordClick(c, () => previewChange(c), source);
-            return h('button', {
-              class: `idea-chip${isSelected(c, source) && !selectedPhrase() ? ' selected' : ''}${state.progression.some((p) => sameFunction(p, c)) ? ' yours' : ''}`,
-              title: `${xName} to ${sym} (${idea.numeral}). Click to hear, double-click to add`,
-              'aria-expanded': String(idea === shown),
-              onclick: (e: Event) => {
-                open = { at, source };
-                click(e);
-              },
-            }, chip(c, key, '', degreeOf(idea.numeral)));
-          })),
-          shown ? detail(x, shown, key) : null,
-        ];
-      })),
+      h('div', { class: 'mood-grid' }, groups.map((g) => [
+        h('span', { class: 'mood' }, g.mood),
+        h('div', { class: 'mood-chips' }, g.ideas.map((idea) => {
+          const c = idea.chord;
+          const sym = chordSymbolInKey(c, key);
+          const source = `after:${sym}`;
+          // The idea picked here, or (on load, after a key change) the selected chord when it's one of the ideas.
+          const isOpen = !shown && (open?.at === at ? open.source === source
+            : state.selectedCard === null && !!state.selected && same(state.selected, c));
+          if (isOpen) shown = idea;
+          const to = bestVoicing(c);
+          // A click selects the idea and plays the change; a double-click adds it.
+          const click = onChordClick(c, () => {
+            selectChord(c, to ?? undefined, false);
+            void strip.play();
+          }, source);
+          return h('button', {
+            class: `idea-chip${isSelected(c, source) && !selectedPhrase() ? ' selected' : ''}${state.progression.some((p) => sameFunction(p, c)) ? ' yours' : ''}`,
+            title: `${xName} to ${sym} (${idea.numeral}). Click to hear, double-click to add`,
+            'aria-expanded': String(isOpen), 'data-source': source,
+            onclick: (e: Event) => {
+              open = { at, source };
+              click(e);
+            },
+          }, chip(c, key, '', degreeOf(idea.numeral)));
+        })),
+      ])),
+      shown && from ? detail(x, from, shown, key) : null,
     );
+    if (!shown || !from) strip.stop();
+    if (focused) (afterCard.querySelector(`[data-source="${CSS.escape(focused)}"]`) as HTMLElement | null)?.focus();
   };
 
-  /** Under a mood row: the chord's shape, why it fits, the chords that often follow it, and its adds. */
-  const detail = (x: Chord, idea: AfterIdea, key: Key) => {
+  /** Under the moods: the neck strip, the moves, why, the then line, and the adds. */
+  const detail = (x: Chord, from: Fingering, idea: AfterIdea, key: Key) => {
     const c = idea.chord;
-    const fingering = bestVoicing(c);
+    const to = bestVoicing(c);
     const phrase = thenPhrase(idea);
     const names = (list: Chord[]) => list.map((p) => chordSymbolInKey(p, key)).join(' ');
+    if (to) strip.show({ chord: x, fingering: from }, { chord: c, fingering: to });
+    const line = to ? movesLine(x, from, c, to) : { held: [], moves: [] };
+    const note = (n: string) => h('span', { class: 'note' }, n);
+    const sep = () => h('span', { class: 'sep' }, ' · ');
+    const parts: Node[][] = [];
+    if (line.held.length) parts.push([...line.held.flatMap((n, i) => [i ? h('span', { class: 'sep' }, i === line.held.length - 1 ? ' and ' : ', ') : null, note(n)].filter((e): e is HTMLElement => !!e)),
+      h('span', { class: 'sep' }, heldPhrase(line.held).endsWith('stays') ? ' stays' : ' stay')]);
+    for (const [a, b] of line.moves) parts.push([note(a), h('span', { class: 'sep' }, '→'), note(b)]);
+    const why = ideaWhy(idea, {
+      after: romanNumeral(x, key),
+      progression: state.progression.map((p) => romanNumeral(p, key)).join('–'),
+      thenRoot: idea.then?.chords[0]?.root ?? null,
+    });
     return h('div', { class: 'idea-detail' },
-      fingering ? labelledBox(c, fingering) : null,
+      to ? strip.element : null,
       h('div', { class: 'idea-body' },
-        h('p', { class: 'muted idea-why' }, ideaReason(idea)),
-        idea.then ? thenLine(x, idea, key) : null,
-        h('div', { class: 'idea-adds' },
-          h('button', { onclick: () => addToProgression(c) }, `+ ${names([c])}`),
-          phrase.length > 1 ? h('button', { onclick: () => addToProgression(...phrase) }, `+ ${names(phrase)}`) : null,
-        ),
+        h('button', { class: 'replay', title: 'Hear it again', onclick: () => void strip.play() },
+          playIcon(), h('span', { class: 'moves' }, parts.flatMap((p, i) => (i ? [sep(), ...p] : p)))),
+        why ? h('p', { class: 'idea-why' }, why) : null,
+        idea.then ? thenLine(idea, key) : null,
+      ),
+      h('div', { class: 'idea-adds' },
+        h('button', { onclick: () => addToProgression(c) }, `+ ${names([c])}`),
+        phrase.length > 1 ? h('button', { onclick: () => addToProgression(...phrase) }, `+ ${names(phrase)}`) : null,
       ),
     );
   };
 
-  /** "then Dm G C  ii–V–I · Jazz": the chords that often follow an idea (click to hear them as one phrase). */
-  const thenLine = (x: Chord, idea: AfterIdea, key: Key) => {
+  /** "then Bb7 → C · Backdoor ii–V · Jazz": the chords that often follow (a return home stays muted). */
+  const thenLine = (idea: AfterIdea, key: Key) => {
     const then = idea.then!;
-    const chords = thenPhrase(idea);
-    const names = [idea.chord, ...then.chords].map((c) => chordSymbolInKey(c, key));
-    const source = `then:${names.join(' ')}`;
-    const selected = selectionSource() === source && !!selectedPhrase();
-    const label = `${then.name}: ${chordSymbolInKey(x, key)}, ${names[0]}, then ${names.slice(1).join(' ')}`;
     const home = then.returnsHome ? then.chords.length - 1 : -1;
-    const click = (e: Event) => {
-      const action = chordClickAction((e as MouseEvent).detail || 1);
-      if (action === 'select') selectPhrase(chords, source);
-      else if (action === 'add') addToProgression(...chords);
-    };
-    return h('div', {
-      class: `then-line${selected ? ' selected' : ''}`, role: 'button', tabindex: 0,
-      title: `${label}. Click to hear, double-click to add`, 'aria-label': label,
-      onclick: click,
-      onkeydown: (e: Event) => {
-        if ((e as KeyboardEvent).key === 'Enter') click(new MouseEvent('click', { detail: 1 }));
-      },
-    },
-      h('span', { class: 'then-word' }, 'then'),
-      h('span', { class: 'then-chips' }, then.chords.map((c, i) => i === home
-        ? Object.assign(chip(c, key, 'mini home'), { title: `Back to ${chordSymbolInKey(c, key)}` })
-        : chip(c, key, 'mini'))),
-      h('span', { class: 'then-meta' }, `${then.name} · ${then.genre}`),
-    );
+    return h('p', { class: 'then-line' }, 'then ',
+      then.chords.map((c, i) => [i ? ' → ' : '', h(i === home ? 'span' : 'b', {}, chordSymbolInKey(c, key))]),
+      ` · ${then.name} · ${then.genre}`);
   };
 
   // ---- Start with (only when the progression is empty): one family at a time, built once per key.

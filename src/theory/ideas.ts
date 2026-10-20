@@ -6,6 +6,7 @@ import { Chord } from './chords';
 import { Key, keyId, romanNumeral, spellRootInKey, tonicName } from './keys';
 import { Lane } from './progressionMap';
 import { parseChordName } from './search';
+import { parseNote } from './notes';
 import * as engine from './engine';
 
 export type { StyleName } from './engine';
@@ -115,6 +116,36 @@ export const degreeOf = (numeral: string): string => DEGREE.exec(numeral)?.[0] ?
 export function ideaReason(idea: AfterIdea): string {
   const why = idea.why.split('; ').filter((w) => w !== `As in ${idea.tag}`).join('; ');
   return [idea.tag, why].filter(Boolean).join('. ');
+}
+
+export interface ReasonContext {
+  /** The numeral of the chord the page says After (the heading already names it). */
+  after: string;
+  /** The progression by numerals, as library names write it ("I–V–vi–IV"). */
+  progression: string;
+  /** The root of the then line's first chord, when there's a then line. */
+  thenRoot: number | null;
+}
+
+const FUNCTION_PHRASE = /^(Stays (tonic|predominant|dominant)|(Tonic|Predominant|Dominant) to (tonic|predominant|dominant))$/;
+
+/**
+ * The reason for the detail panel, without what the panel already shows: the notes kept (the moves line
+ * says them), "Common after" the heading's chord, "As in" the progression itself, "Leads to" where the
+ * then line goes, and the function change when there's a then line. Empty when nothing is left.
+ */
+export function ideaWhy(idea: AfterIdea, ctx: ReasonContext): string {
+  const parts = [idea.tag, ...idea.why.split('; ')].filter((p): p is string => !!p);
+  return parts.filter((p, i) => {
+    if (i > 0 && p === `As in ${idea.tag}`) return false;
+    if (/^Keeps /.test(p)) return false;
+    if (p === `Common after ${ctx.after}`) return false;
+    if (p === `As in ${ctx.progression}`) return false;
+    const lead = /^Leads to ([A-G][#b]?)/.exec(p);
+    if (lead && ctx.thenRoot !== null && parseNote(lead[1]) === ctx.thenRoot) return false;
+    if (ctx.thenRoot !== null && FUNCTION_PHRASE.test(p)) return false;
+    return true;
+  }).join('. ');
 }
 
 export interface StartItem {
