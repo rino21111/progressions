@@ -1899,12 +1899,13 @@ main {
 
 .kb-chip.yours .rchip,
 .idea-chip.yours .rchip {
-  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  background: color-mix(in srgb, var(--accent) 24%, var(--bg));
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
 }
 
 .kb-chip.playing .rchip,
 .start-chip.playing .rchip {
-  background: color-mix(in srgb, var(--accent) 22%, var(--bg));
+  background: color-mix(in srgb, var(--accent) 45%, var(--bg));
 }
 
 /* The minor key's major V, after a hairline. */
