@@ -97,4 +97,12 @@ describe('the address carries the state', () => {
     expect(written).toEqual(['next&p=C.F']);
     vi.useRealTimers();
   });
+  it('progression chords are written in the key\'s spelling, and old links in the general spelling still load', () => {
+    const ab = ['Ab', 'Db', 'Eb', 'Fm'].map((n) => chord(n));
+    expect(stateHash({ ...base, progression: ab }, 'progressions')).toBe('next&p=Ab.Db.Eb.Fm');
+    const old = readShare('#next&p=Ab.C%23.Eb.Fm')!;
+    expect(old.patch.progression!.map((c) => c.root)).toEqual([8, 1, 3, 5]);
+    expect(stateHash({ ...base, progression: old.patch.progression! }, 'progressions')).toBe('next&p=Ab.Db.Eb.Fm');
+    expect(stateHash({ ...base, progression: [chord('F#'), chord('C#'), chord('D#m'), chord('B')] }, 'progressions')).toBe('next&p=F%23.C%23.D%23m.B');
+  });
 });

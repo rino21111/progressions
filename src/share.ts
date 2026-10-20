@@ -6,7 +6,7 @@
 import { AppState, DEFAULTS, ProgressionChord, state, subscribe, update } from './state';
 import { Chord, chordSymbol } from './theory/chords';
 import { Fingering, analyzeFingering, formatFingering, parseFingering } from './theory/fingering';
-import { Key, keyId, tonicName } from './theory/keys';
+import { ALL_KEYS, Key, chordSymbolInKey, keyId, rankKeys, tonicName } from './theory/keys';
 import { parseNote } from './theory/notes';
 import { PLAY_STYLES, PlayStyle } from './theory/patterns';
 import { parseChordName } from './theory/search';
@@ -32,12 +32,18 @@ const sameShape = (a: Fingering | null | undefined, b: Fingering | null | undefi
 const sameChord = (a: Chord | null, b: Chord | null) => !!a && !!b && a.root === b.root && a.template.id === b.template.id && a.bass === b.bass;
 const keyParam = (k: Key) => `${tonicName(k)}${k.mode === 'minor' ? 'm' : ''}`;
 
-/** The hash for the state on a page: the route, then whatever differs from the defaults. */
+/** The key the page uses: the one chosen, or the best guess (as on the Next page). */
+const keyFor = (s: AppState): Key =>
+  ALL_KEYS.find((k) => keyId(k) === s.keyChoice) ?? rankKeys(s.progression)[0]?.key ?? { tonic: 0, mode: 'major' };
+
+/** The hash for the state on a page: the route, then whatever differs from the defaults. Progression chords are spelled in the key, as the page shows them. */
 export function stateHash(s: AppState, page: Page): string {
   const out: string[] = [TAB_HASHES[page]];
+  const inKey = keyFor(s);
+  const name = (c: Chord) => chordSymbolInKey(c, inKey);
   const add = (name: string, value: string | number, isDefault: boolean) => { if (!isDefault) out.push(`${name}=${value}`); };
   if (s.progression.length) {
-    out.push(`p=${s.progression.map((c) => esc(chordSymbol(c))).join('.')}`);
+    out.push(`p=${s.progression.map((c) => esc(name(c))).join('.')}`);
     const shapes = s.progression.map((c) => (c.fingering && !sameShape(c.fingering, bestVoicing(c)) ? formatFingering(c.fingering) : '_'));
     if (shapes.some((f) => f !== '_')) out.push(`f=${shapes.join('.')}`);
   }
