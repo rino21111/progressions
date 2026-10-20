@@ -45,7 +45,6 @@ const GLIDE = 0.42;
 const ease = (p: number) => (p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2);
 const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const MARKERS = [3, 5, 7, 9, 12, 15];
-const GAUGE = [2.9, 2.5, 2.1, 1.7, 1.25, 0.95];
 
 interface Geo {
   W: number;
@@ -120,41 +119,23 @@ export class Neck {
     this.shown = '';
   }
 
+  // The board as on the Chord page fretboard: warm brown wood, light fret lines, plain strings, a
+  // cream nut, and inlays (which step aside while the key's notes show).
   private board(): SVGElement[] {
     const g = this.geo;
     const h = g.bottom - g.top;
-    const defs = s('defs', {},
-      s('linearGradient', { id: 'neck-board', x1: 0, y1: 0, x2: 0, y2: 1 },
-        s('stop', { offset: 0, 'stop-color': '#2a1a12' }), s('stop', { offset: 0.1, 'stop-color': '#573a2a' }),
-        s('stop', { offset: 0.5, 'stop-color': '#462d20' }), s('stop', { offset: 0.9, 'stop-color': '#573a2a' }),
-        s('stop', { offset: 1, 'stop-color': '#2a1a12' })),
-      s('linearGradient', { id: 'neck-fret', x1: 0, y1: 0, x2: 1, y2: 0 },
-        s('stop', { offset: 0, 'stop-color': '#6f737a' }), s('stop', { offset: 0.45, 'stop-color': '#d3d7dc' }), s('stop', { offset: 1, 'stop-color': '#6c7077' })),
-      s('linearGradient', { id: 'neck-nut', x1: 0, y1: 0, x2: 1, y2: 0 },
-        s('stop', { offset: 0, 'stop-color': '#f1ebdf' }), s('stop', { offset: 1, 'stop-color': '#cbc0ab' })),
-      s('filter', { id: 'neck-grain', x: 0, y: 0, width: '100%', height: '100%' },
-        s('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.004 0.32', numOctaves: 3, seed: 11, result: 'n' }),
-        s('feColorMatrix', { in: 'n', type: 'matrix', values: '1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1', result: 'g' }),
-        s('feComposite', { in: 'g', in2: 'SourceGraphic', operator: 'in' })),
-      s('filter', { id: 'neck-glow', x: -1, y: -1, width: 3, height: 3 },
-        s('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 4.5 })),
-    );
-    const out: SVGElement[] = [defs,
-      s('rect', { class: 'board', x: g.x0, y: g.top, width: g.x1 - g.x0, height: h, rx: 5 }),
-      s('rect', { class: 'grain', x: g.x0, y: g.top, width: g.x1 - g.x0, height: h, rx: 5 }),
-    ];
-    const w = Math.max(2, g.sp * 0.085);
+    const out: SVGElement[] = [s('rect', { class: 'board', x: g.x0, y: g.top, width: g.x1 - g.x0, height: h, rx: 3 })];
+    const mid = (a: number, b: number) => (g.y(a) + g.y(b)) / 2;
+    for (const f of [3, 5, 7, 9, 15]) out.push(s('circle', { class: 'inlay', cx: g.x(f), cy: mid(2, 3), r: g.sp * 0.2 }));
+    out.push(s('circle', { class: 'inlay', cx: g.x(12), cy: mid(1, 2), r: g.sp * 0.2 }), s('circle', { class: 'inlay', cx: g.x(12), cy: mid(3, 4), r: g.sp * 0.2 }));
     for (let n = 1; n <= FRETS; n++) {
-      out.push(s('rect', { class: 'fret-sh', x: g.fx(n) + w * 0.5, y: g.top, width: w * 0.9, height: h }));
-      out.push(s('rect', { class: 'fret', x: g.fx(n) - w / 2, y: g.top, width: w, height: h }));
+      out.push(s('line', { class: 'fret', x1: g.fx(n), x2: g.fx(n), y1: g.top, y2: g.bottom, 'stroke-width': g.sp * 0.085 }));
       out.push(s('text', { class: `fnum${MARKERS.includes(n) ? ' mark' : ''}`, x: g.x(n), y: g.bottom + 19 }, n));
     }
     out.push(s('rect', { class: 'nut', x: g.x0, y: g.top, width: g.nut, height: h }));
     for (let str = 0; str < 6; str++) {
-      const gauge = GAUGE[str] * (g.sp / 30);
       const y = g.y(str);
-      out.push(s('line', { class: 'str-sh', x1: g.x0 + g.nut, x2: g.x1, y1: y + gauge * 0.9 + 0.6, y2: y + gauge * 0.9 + 0.6, 'stroke-width': gauge }));
-      out.push(s('line', { class: `str${str < 3 ? ' wound' : ''}`, x1: g.x0, x2: g.x1, y1: y, y2: y, 'stroke-width': gauge }));
+      out.push(s('line', { class: 'str', x1: g.x0, x2: g.x1, y1: y, y2: y, 'stroke-width': (1 + (5 - str) * 0.35) * (g.sp / 30) }));
       out.push(s('text', { class: 'sname', x: 4, y: y + 4 }, STRING_NAMES[str]));
     }
     return out;
@@ -193,7 +174,8 @@ export class Neck {
 
   private keyLayer(dots: KeyDot[]): SVGGElement {
     const g = this.geo;
-    return s('g', {}, dots.map((k) => s('circle', { class: `kd${k.tonic ? ' tonic' : ''}`, cx: g.x(k.fret), cy: g.y(k.string), r: g.R * (k.tonic ? 0.42 : 0.3) })));
+    // As on the Chord page: radius 4 and 5.5 for a dot of 12.
+    return s('g', {}, dots.map((k) => s('circle', { class: `kd${k.tonic ? ' tonic' : ''}`, cx: g.x(k.fret), cy: g.y(k.string), r: g.R * (k.tonic ? 5.5 : 4) / 12 })));
   }
 
   /** A note dot (or an open-string ring) centred at 0,0, placed by its transform. */
@@ -201,10 +183,9 @@ export class Neck {
     const g = this.geo;
     return s('g', { class: `dot ${cls}${fret === 0 ? ' open' : ''}${out ? ' out' : ''}`, 'data-string': str, 'data-pc': mod12(STANDARD_TUNING[str] + fret), transform: `translate(${g.x(fret)} ${g.y(str)})` },
       s('g', { class: 'in' },
-        s('circle', { class: 'out-ring', r: g.R + 5 }),
-        s('circle', { class: 'halo', r: g.R }),
+        s('circle', { class: 'out-ring', r: g.R + 5 * (g.R / 12) }),
         s('circle', { class: 'pluck', r: g.R }),
-        s('circle', { class: 'disc', r: fret === 0 ? g.R - 2 : g.R }),
+        s('circle', { class: 'disc', r: g.R }),
         s('text', { class: text.length > 2 ? 'long' : '' }, signs(text))));
   }
 
@@ -235,6 +216,7 @@ export class Neck {
     });
     for (const m of view.marks) layer.append(this.dot(m.cls, m.string, m.fret, m.text, !!m.out));
     this.element.classList.remove('landed');
+    this.element.classList.toggle('keyed', view.keyDots.length > 0);
     this.element.replaceChildren(...this.board(), this.keyLayer(view.keyDots), layer, this.hits());
     this.layer = layer;
   }
@@ -280,18 +262,17 @@ export class Neck {
     }
     const layer = s('g', { class: 'dots' }, s('g', { class: 'trails' }, trails), fades, this.voices.map((v) => v.el));
     this.element.classList.remove('landed');
+    this.element.classList.toggle('keyed', keyDots.length > 0);
     this.element.replaceChildren(...this.board(), this.keyLayer(keyDots), layer, this.hits());
     this.layer = layer;
     this.land();
   }
 
   private setVoice(v: Voice, side: 'from' | 'to', dx: number, pulse = false) {
-    const g = this.geo;
     const end = v[side];
     v.el.setAttribute('transform', `translate(${v.x + dx} ${v.y})`);
     v.el.setAttribute('class', `dot voice ${end.cls}${end.open ? ' open' : ''}${end.out ? ' out' : ''}${pulse ? ' pulse' : ''}`);
     v.el.querySelector('text')!.textContent = signs(end.text);
-    v.el.querySelector('.disc')!.setAttribute('r', String(end.open ? g.R - 2 : g.R));
   }
 
   private reset() {

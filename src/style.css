@@ -1387,39 +1387,85 @@ sup .acc {
   -webkit-user-select: none;
 }
 
-.neck .board {
-  fill: url(#neck-board);
+/* The neck in the Chord page fretboard's style: warm brown wood, light frets, plain strings. */
+.neck {
+  --wood: #5a3a22;
+  --wood-edge: #3e2614;
+  --fret: #c9c4bb;
+  --string: #e8dcc4;
+  --nut: #f4efe4;
+  --inlay: #e9dfcc;
+  --n-root: #d1453b;
+  --n-third: #2f6fd6;
+  --n-fifth: #2e9a5b;
+  --n-seventh: #8a4fc9;
+  --n-ext: #d48a12;
+  --n-other: #7b756c;
+  --n-on: #ffffff;
+  --n-on-light: #22201c;
 }
 
-.neck .grain {
-  filter: url(#neck-grain);
-  opacity: 0.45;
-  mix-blend-mode: overlay;
-  pointer-events: none;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .neck {
+    --wood: #4a2f1b;
+    --wood-edge: #2c1a0d;
+    --inlay: #7a6650;
+    --n-root: #ef6157;
+    --n-third: #5a91f0;
+    --n-fifth: #45b874;
+    --n-seventh: #a978e0;
+    --n-ext: #e9a53a;
+    --n-other: #8f887d;
+    --n-on: #17150f;
+    --n-on-light: #17150f;
+  }
+}
+
+:root[data-theme="dark"] .neck {
+  --wood: #4a2f1b;
+  --wood-edge: #2c1a0d;
+  --inlay: #7a6650;
+  --n-root: #ef6157;
+  --n-third: #5a91f0;
+  --n-fifth: #45b874;
+  --n-seventh: #a978e0;
+  --n-ext: #e9a53a;
+  --n-other: #8f887d;
+  --n-on: #17150f;
+  --n-on-light: #17150f;
+}
+
+.neck .tone-root { --tone: var(--n-root); --on: var(--n-on); }
+.neck .tone-third { --tone: var(--n-third); --on: var(--n-on); }
+.neck .tone-fifth { --tone: var(--n-fifth); --on: var(--n-on-light); }
+.neck .tone-seventh { --tone: var(--n-seventh); --on: var(--n-on); }
+.neck .tone-ext { --tone: var(--n-ext); --on: var(--n-on-light); }
+.neck .tone-other { --tone: var(--n-other); --on: var(--n-on); }
+
+.neck .board {
+  fill: var(--wood);
+  stroke: var(--wood-edge);
+}
+
+.neck .inlay {
+  fill: var(--inlay);
+  opacity: 0.55;
+}
+
+.neck.keyed .inlay {
+  display: none;
 }
 
 .neck .fret {
-  fill: url(#neck-fret);
-}
-
-.neck .fret-sh {
-  fill: rgba(0, 0, 0, 0.45);
+  stroke: var(--fret);
 }
 
 .neck .nut {
-  fill: url(#neck-nut);
+  fill: var(--nut);
 }
 
 .neck .str {
-  stroke: #e6e9ed;
-}
-
-.neck .str.wound {
-  stroke: #d2bf9a;
-}
-
-.neck .str-sh {
-  stroke: rgba(0, 0, 0, 0.55);
+  stroke: var(--string);
 }
 
 .neck .sname {
@@ -1440,18 +1486,18 @@ sup .acc {
 }
 
 .neck .kd {
-  fill: #f3e8d2;
-  opacity: 0.2;
+  fill: var(--string);
+  opacity: 0.32;
   pointer-events: none;
 }
 
 .neck .kd.tonic {
-  opacity: 0.46;
+  opacity: 0.6;
 }
 
 .neck .vx {
   fill: var(--s-muted);
-  font-size: 16px;
+  font-size: 17px;
   text-anchor: middle;
   pointer-events: none;
 }
@@ -1460,55 +1506,36 @@ sup .acc {
   pointer-events: none;
 }
 
-.neck .dot .halo {
-  fill: var(--tone);
-  filter: url(#neck-glow);
-  opacity: 0.55;
-}
-
 .neck .dot .disc {
   fill: var(--tone);
-  stroke: #15171c;
-  stroke-width: 1.6;
+  /* A light edge so the notes stand out from the wood. */
+  stroke: rgba(255, 255, 255, 0.92);
+  stroke-width: 1.7;
 }
 
 .neck .dot text {
-  fill: #101216;
-  font-size: 13px;
-  font-weight: 800;
+  fill: var(--on, #fff);
+  font-size: 9.5px;
+  font-weight: 700;
   text-anchor: middle;
   dominant-baseline: central;
   font-family: var(--font), 'Gentium Plus';
 }
 
 .neck .dot text.long {
-  font-size: 11px;
-}
-
-.neck .dot.open .halo {
-  opacity: 0;
-}
-
-.neck .dot.open .disc {
-  fill: var(--stage);
-  stroke: var(--tone);
-  stroke-width: 2.4;
-}
-
-.neck .dot.open text {
-  fill: var(--tone);
+  font-size: 8px;
 }
 
 .neck .dot .out-ring {
   fill: none;
-  stroke: #f3e8d2;
+  stroke: var(--string);
   stroke-width: 1.6;
   stroke-dasharray: 3.5 3;
   opacity: 0;
 }
 
 .neck .dot.out .out-ring {
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .neck .dot .pluck {
@@ -1535,16 +1562,17 @@ sup .acc {
   }
 }
 
+/* The chord's tones elsewhere on the neck: a hollow ring in the role colour. */
 .neck .ghost circle {
   fill: var(--stage);
+  fill-opacity: 0.92;
   stroke: var(--tone);
   stroke-width: 1.6;
-  opacity: 0.9;
 }
 
 .neck .ghost text {
   fill: var(--tone);
-  font-size: 10px;
+  font-size: 8px;
   font-weight: 700;
   text-anchor: middle;
   dominant-baseline: central;
@@ -1556,7 +1584,7 @@ sup .acc {
 }
 
 .neck .hit:hover {
-  fill: rgba(255, 255, 255, 0.07);
+  fill: rgba(255, 255, 255, 0.12);
 }
 
 /* Before the idea sounds: the first chord's marks; after: the idea's, and the trails. */
@@ -1806,6 +1834,20 @@ sup .acc {
   width: 38px;
   margin-top: 3px;
 }
+
+/* Track diagrams in the previous dark card style. */
+.tile .chord-box {
+  --text: #efe9df;
+  --text-muted: #a69e91;
+  --on-tone: #17150f;
+}
+
+.tile .chord-box .tone-root { --tone: #ef6157; }
+.tile .chord-box .tone-third { --tone: #5a91f0; }
+.tile .chord-box .tone-fifth { --tone: #45b874; }
+.tile .chord-box .tone-seventh { --tone: #a978e0; }
+.tile .chord-box .tone-ext { --tone: #e9a53a; }
+.tile .chord-box .tone-other { --tone: #8f887d; }
 
 .tile.from {
   box-shadow: inset 0 0 0 1.5px var(--s-text);
@@ -2282,6 +2324,20 @@ sup .acc {
   color: var(--ink-text);
 }
 
+/* Notes: the shared-notes map in the desk's place, at a size that reads. */
+.map-wrap {
+  margin-bottom: 0;
+}
+
+.map-wrap .pmap-svg {
+  width: min(100%, var(--map-w, 100%));
+  height: auto;
+}
+
+.desk-switch:empty {
+  display: none;
+}
+
 /* The tab, in the desk's place. */
 .desk .tab-page {
   padding: 0;
@@ -2426,11 +2482,24 @@ sup .acc {
   .track-tools {
     display: none;
   }
-  .more-seg .tseg {
-    width: 100%;
+  .desk-switch {
+    margin-bottom: 18px;
   }
-  .more-seg .tseg button {
+  .desk-switch .tseg {
+    display: flex;
+    width: 100%;
+    height: 36px;
+    background: color-mix(in srgb, var(--text) 7%, transparent);
+  }
+  .desk-switch .tseg button {
     flex: 1;
+    height: 30px;
+    color: var(--muted);
+  }
+  .desk-switch .tseg button[aria-pressed="true"] {
+    background: var(--surface) !important;
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
   }
   .desk {
     padding: 20px max(16px, env(safe-area-inset-right, 0px)) calc(110px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));

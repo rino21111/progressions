@@ -20,9 +20,9 @@ const player = createPlayer(() => target);
 const tabPage = createTab();
 
 // The address carries the state (#chord&p=C.G.Am.F&bpm=120), so copying it shares it. The route is
-// the view: chord (the instrument) or tab.
+// the view: chord, notes (the shared-notes map) or tab.
 let mode: Mode = 'chords';
-const page = (): Page => (mode === 'tab' ? 'tab' : 'detector');
+const page = (): Page => (mode === 'tab' ? 'tab' : mode === 'notes' ? 'notes' : 'detector');
 // Edits update the address 300ms after the last change, in place: Back never steps through them.
 const writeHash = syncHash(page, (hash) => {
   if (location.hash !== `#${hash}`) history.replaceState(null, '', `#${hash}`);
@@ -94,7 +94,7 @@ document.querySelector('#app')!.append(app);
 
 // A shared address replaces the progression and settings (Undo takes it back); a bare one keeps
 // the saved state. Old routes (#next, #progressions, #chord) open the instrument.
-const show = (p: Page) => instrument.setMode(p === 'tab' ? 'tab' : 'chords');
+const show = (p: Page) => instrument.setMode(p === 'tab' ? 'tab' : p === 'notes' ? 'notes' : 'chords');
 window.addEventListener('hashchange', () => show(openFromHash(location.hash, page())));
 window.addEventListener('pagehide', writeHash);
 show(openFromHash(location.hash, 'detector'));

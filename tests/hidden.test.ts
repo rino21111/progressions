@@ -11,7 +11,7 @@ const instrument = read('../src/ui/instrument.ts');
 
 describe('hidden pages stay hidden', () => {
   it('the switch shows the desk or the tab with the hidden attribute', () => {
-    expect(instrument).toMatch(/deskCols\.hidden = m === 'tab'/);
+    expect(instrument).toMatch(/deskCols\.hidden = m !== 'chords'/);
     expect(instrument).toMatch(/opts\.tab\.hidden = m !== 'tab'/);
   });
   it('[hidden] beats any display rule', () => {

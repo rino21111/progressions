@@ -39,9 +39,19 @@ describe('new defaults (160 bpm, looping)', () => {
     expect(migrateDefaults({ bpm: 80, loop: false })).toEqual({});
     expect(migrateDefaults({ bpm: 96, loop: false })).toEqual({ bpm: 96 });
     expect(migrateDefaults({ v: 2, bpm: 80, loop: false })).toEqual({ bpm: 80, loop: false });
+    expect(migrateDefaults({ v: 3, bpm: 80, loop: false, labelMode: 'interval' })).toEqual({ bpm: 80, loop: false, labelMode: 'interval' });
   });
   it('defaults to 160 bpm with looping on', () => {
     expect(state.bpm).toBe(160);
     expect(state.loop).toBe(true);
+  });
+});
+
+describe('labels default to note names', () => {
+  it('a save holding the old interval default picks up note names once; a later choice stays', () => {
+    expect(state.labelMode).toBe('note');
+    expect(migrateDefaults({ v: 2, labelMode: 'interval' })).toEqual({});
+    expect(migrateDefaults({ labelMode: 'interval', bpm: 96 })).toEqual({ bpm: 96 });
+    expect(migrateDefaults({ v: 3, labelMode: 'interval' })).toEqual({ labelMode: 'interval' });
   });
 });

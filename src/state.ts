@@ -75,18 +75,21 @@ export interface AppState {
 
 const STORAGE_KEY = 'guitar-theory-state-v1';
 /** Bumped when a default changes, so a save made under the old defaults can pick up the new ones. */
-const SAVE_VERSION = 2;
+const SAVE_VERSION = 3;
 
 /**
- * A save from before 160 bpm and looping became the defaults: a value equal to the old default (80
- * bpm, no loop) counts as unset, once. A tempo chosen on purpose stays.
+ * A save made under older defaults picks up the new ones once: a value equal to the old default
+ * counts as unset (80 bpm and no loop before version 2; interval labels before version 3). A choice
+ * made after that stays.
  */
 export function migrateDefaults(data: Record<string, unknown>): Record<string, unknown> {
   const out = { ...data };
-  if (out.v !== SAVE_VERSION) {
+  const v = typeof out.v === 'number' ? out.v : 1;
+  if (v < 2) {
     if (out.bpm === 80) delete out.bpm;
     if (out.loop === false) delete out.loop;
   }
+  if (v < 3 && out.labelMode === 'interval') delete out.labelMode;
   delete out.v;
   return out;
 }
@@ -94,7 +97,7 @@ export function migrateDefaults(data: Record<string, unknown>): Record<string, u
 export const DEFAULTS: AppState = {
   selected: makeChord(0, 'maj'),
   fingering: [null, 3, 2, 0, 1, 0],
-  labelMode: 'interval',
+  labelMode: 'note',
   showNeck: false,
   keyNotes: true,
   showStructure: false,

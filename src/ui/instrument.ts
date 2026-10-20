@@ -1,6 +1,6 @@
 // One instrument: a dark stage with the neck (the chord on it, or the move into the idea being tried),
 // a caption that names it, and the progression as a track; below, the desk with the chord on the neck
-// and what could come next. Tab swaps the desk for the tab of the progression.
+// and what could come next. Notes swaps the desk for the shared-notes map, Tab for the tab.
 
 import { Chord, chordSymbol, chordTones, preferredRootName } from '../theory/chords';
 import { Fingering, FingeringAnalysis, MAX_FRET, analyzeFingering, formatFingering } from '../theory/fingering';
@@ -49,7 +49,7 @@ const same = (a: Chord | null | undefined, b: Chord | null | undefined) => !!a &
 const sameShape = (a: Fingering | null | undefined, b: Fingering | null | undefined) => !!a && !!b && formatFingering(a) === formatFingering(b);
 const pcAt = (str: number, fret: number) => mod12(STANDARD_TUNING[str] + fret);
 
-export type Mode = 'chords' | 'tab';
+export type Mode = 'chords' | 'notes' | 'tab';
 
 export interface Instrument {
   stage: HTMLElement;
@@ -166,15 +166,13 @@ export function createInstrument(opts: {
       update({ playPattern: st, playVariants: { ...state.playVariants, [st]: variant } });
     },
   }, PLAY_STYLES.map((st) => h('optgroup', { label: st.label }, st.variants.map((v) => h('option', { value: `${st.id}:${v.id}` }, `${st.label} · ${v.label}`)))));
-  const modeSeg = (['chords', 'tab'] as const).map((m) => h('button', { 'data-mode': m, onclick: () => setMode(m) }, m === 'chords' ? 'Chords' : 'Tab'));
+  const modeSeg = (['chords', 'notes', 'tab'] as const).map((m) => h('button', { 'data-mode': m, onclick: () => setMode(m) }, m === 'chords' ? 'Chords' : m === 'notes' ? 'Notes' : 'Tab'));
   const seg = h('div', { class: 'tseg', role: 'group', 'aria-label': 'Show the progression as' }, modeSeg);
   const loop = checkbox('Loop', () => state.loop, (on) => update({ loop: on }));
   let closeMore = () => {};
   const clearItem = menuItem('Clear', clearProgression, () => closeMore());
-  const mapItem = menuItem('Shared notes', () => update({ showMap: !state.showMap }), () => closeMore());
-  const moreSlot = h('div', { class: 'more-seg' });
   const more = popover(h('button', { class: 'icon-btn menu-btn', title: 'Progression menu', 'aria-label': 'Progression menu' }, moreIcon(16)),
-    h('div', { class: 'pop-row' }, loop.el), clearItem, mapItem, moreSlot);
+    h('div', { class: 'pop-row' }, loop.el), clearItem);
   closeMore = more.close;
   more.el.classList.add('more');
   const tools = h('div', { class: 'track-tools' },
@@ -194,7 +192,9 @@ export function createInstrument(opts: {
   const chordInfo = h('div', { class: 'chordinfo' });
   const nextInfo = h('div', { class: 'nextinfo' });
   const deskCols = h('div', { class: 'desk-cols' }, chordInfo, nextInfo);
-  const desk = h('section', { class: 'desk' }, mapWrap, deskCols, opts.tab);
+  // On phones the view switch sits at the top of the desk, one tap away.
+  const deskSwitch = h('div', { class: 'desk-switch' });
+  const desk = h('section', { class: 'desk' }, deskSwitch, mapWrap, deskCols, opts.tab);
 
   // ---------------------------------------------------------------- shared reads
   const label = (chord: Chord, analysis: FingeringAnalysis | null) => (str: number, fret: number) => {
@@ -596,15 +596,31 @@ export function createInstrument(opts: {
     keyNotes.sync();
     loop.sync();
     clearItem.disabled = !state.progression.length;
-    mapItem.textContent = state.showMap ? 'Hide shared notes' : 'Shared notes';
   };
 
   const renderMap = (r: Read) => {
-    const on = state.showMap && r.n > 0 && mode === 'chords';
+    const on = mode === 'notes';
     mapWrap.hidden = !on;
     if (!on) return;
     const p = currentPlayback();
     map.render(state.progression, r.key, p?.id === PROGRESSION_ID ? p.step : null, phone.matches, state.loop, r.trying ? [r.trying.idea.chord] : []);
+    if (!phone.matches) fitMap();
+  };
+
+  // On the desk the map is drawn larger, rows up to about 30px, as far as the window allows.
+  const fitMap = () => {
+    const svg = mapWrap.querySelector('svg.pmap-svg') as SVGSVGElement | null;
+    if (!svg || !svg.isConnected) return;
+    svg.removeAttribute('viewBox');
+    svg.style.width = svg.style.height = '';
+    const box = svg.getBBox();
+    const w = box.x + box.width + 4;
+    const h = box.y + box.height + 2;
+    const room = window.innerHeight - svg.getBoundingClientRect().top + window.scrollY - 16;
+    const k = Math.max(1, Math.min(30 / 19, room / h, (mapWrap.clientWidth || w) / w));
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.style.width = `${w * k}px`;
+    svg.style.height = `${h * k}px`;
   };
 
   const render = () => {
@@ -647,7 +663,7 @@ export function createInstrument(opts: {
     if (phone.matches) {
       opts.settingsPop.append(viewRows);
       keyMenuBody.replaceChildren(keyWrap, styleWrap, keyChips);
-      moreSlot.replaceChildren(seg);
+      deskSwitch.replaceChildren(seg);
     } else {
       viewSlot.append(viewRows);
       bar.insertBefore(keyChips, barSpacer);
@@ -668,8 +684,7 @@ export function createInstrument(opts: {
 
   const setMode = (m: Mode) => {
     mode = m;
-    stage.parentElement?.classList.toggle('tab-mode', m === 'tab');
-    deskCols.hidden = m === 'tab';
+    deskCols.hidden = m !== 'chords';
     opts.tab.hidden = m !== 'tab';
     opts.onMode(m);
     render();
