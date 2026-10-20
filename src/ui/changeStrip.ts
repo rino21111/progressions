@@ -9,7 +9,7 @@ import { STANDARD_TUNING, STRING_NAMES, mod12 } from '../theory/notes';
 import { StringMove, noteIn, stringMoves } from '../theory/change';
 import { createSessionBus, now, ready, silenceBus, strum } from '../audio';
 import { state } from '../state';
-import { clicksSound } from './common';
+import { PHRASE_GAP, clicksSound } from './common';
 import { h, s, toneClass } from './dom';
 
 const W = 340;
@@ -105,6 +105,25 @@ export class ChangeStrip {
     this.frame = requestAnimationFrame(tick);
     // Landing also comes on time when frames aren't drawn (a background tab).
     this.landTimer = window.setTimeout(() => this.land(), Math.max(0, (t2 - now()) * 1000));
+  }
+
+  /** A then line's phrase, heard on this strip's sound (so a new tap stops it); the dots stay as they are. */
+  async playPhrase(shapes: Fingering[]) {
+    this.stop();
+    this.land();
+    if (!clicksSound()) return;
+    try {
+      await ready();
+    } catch {
+      return;
+    }
+    const t1 = now() + 0.05;
+    const bus = createSessionBus();
+    this.bus = bus;
+    shapes.forEach((f, i) => {
+      const notes = soundingNotes(f);
+      strum(notes.map((n) => n.midi), { strings: notes.map((n) => n.string), at: t1 + PHRASE_GAP * i, bus: bus.input });
+    });
   }
 
   /** Stop the motion and anything still ringing or scheduled. */

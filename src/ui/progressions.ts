@@ -12,7 +12,8 @@ import { Playback, currentPlayback, onPlayback, play } from '../player';
 import { PROGRESSION_ID } from '../playback';
 import { bestVoicing } from '../theory/voicings';
 import { afterChord } from '../yourChords';
-import { addToProgression, isSelected, onChordClick, selectChord, selectedPhrase } from './common';
+import { addToProgression, isSelected, onChordClick, selectChord, selectPhrase, selectedPhrase } from './common';
+import { chordClickAction } from '../interaction';
 import { add, clear, h } from './dom';
 import { playIcon } from './icons';
 import { keep, recall } from './menu';
@@ -175,13 +176,25 @@ export function createProgressions(): HTMLElement {
     );
   };
 
-  /** "then Bb7 → C · Backdoor ii–V · Jazz": the chords that often follow (a return home stays muted). */
+  /**
+   * "then Bb7 → C · Backdoor ii–V · Jazz": the chords that often follow (a return home stays muted).
+   * A click hears the change and the phrase; a double-click adds them.
+   */
   const thenLine = (idea: AfterIdea, key: Key) => {
     const then = idea.then!;
+    const chords = thenPhrase(idea);
     const home = then.returnsHome ? then.chords.length - 1 : -1;
-    return h('p', { class: 'then-line' }, 'then ',
+    const source = `then:${[idea.chord, ...then.chords].map((c) => chordSymbolInKey(c, key)).join(' ')}`;
+    return h('button', {
+      class: 'then-line', title: 'Click to hear, double-click to add',
+      onclick: (e: Event) => {
+        const action = chordClickAction((e as MouseEvent).detail || 1);
+        if (action === 'select') selectPhrase(chords, source, (shapes) => void strip.playPhrase(shapes));
+        else if (action === 'add') addToProgression(...chords);
+      },
+    }, playIcon(), h('span', {}, 'then ',
       then.chords.map((c, i) => [i ? ' → ' : '', h(i === home ? 'span' : 'b', {}, chordSymbolInKey(c, key))]),
-      ` · ${then.name} · ${then.genre}`);
+      ` · ${then.name} · ${then.genre}`));
   };
 
   // ---- Start with (only when the progression is empty): one family at a time, built once per key.

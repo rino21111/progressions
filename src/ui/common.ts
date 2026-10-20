@@ -95,7 +95,7 @@ export function selectedPhrase(): Chord[] | null {
  * Pick a phrase: hear the last chord (as fingered), then each chord of the phrase (usual shapes),
  * and select the whole phrase for the add card. `source` marks the line it was picked from.
  */
-export function selectPhrase(chords: Chord[], source: string) {
+export function selectPhrase(chords: Chord[], source: string, sound: (shapes: Fingering[]) => void = playInTurn) {
   const last = afterChord(state.progression);
   const from = last && cardShape(last);
   selectedFrom = source;
@@ -103,7 +103,13 @@ export function selectPhrase(chords: Chord[], source: string) {
   phrase = { chords, progression: state.progression, keyChoice: state.keyChoice };
   update({});
   const shapes = [from, ...chords.map((c) => bestVoicing(c))].filter((f) => !!f) as Fingering[];
-  shapes.forEach((f, i) => (i ? playFingeringAt(f, 0.7 * i) : playFingering(f)));
+  sound(shapes);
+}
+
+/** Shapes strummed one after another, 0.7s apart (how a phrase is previewed). */
+export const PHRASE_GAP = 0.7;
+function playInTurn(shapes: Fingering[]) {
+  shapes.forEach((f, i) => (i ? playFingeringAt(f, PHRASE_GAP * i) : playFingering(f)));
 }
 
 /** Add chords at the end of the progression; the last one added becomes the selected card. */
