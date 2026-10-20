@@ -50,8 +50,11 @@ describe('chord reason in the current key', () => {
     expect(chordReason(makeChord(5, 'maj'), C)).toBe('The major 3rd (A) lifts it; often the IV of C.');
     expect(chordReason(makeChord(0, 'maj'), C)).toBe('The major 3rd (E) lifts it; home base in C major.');
   });
-  it('keeps the general wording for chords outside the key', () => {
-    expect(chordReason(makeChord(1, 'min'), C)).toBe(chordReason(makeChord(1, 'min')));
+  it('outside the key, drops the generic role (it would contradict the key\'s numeral)', () => {
+    const general = chordReason(makeChord(1, 'min'));
+    expect(general).toMatch(/; (home base|often the) .+\.$/);
+    expect(chordReason(makeChord(1, 'min'), C)).toBe(general.replace(/; (home base|often the) .+\.$/, '.'));
+    expect(chordReason(makeChord(10, 'maj'), C)).not.toMatch(/home base in Bb/);
   });
 });
 

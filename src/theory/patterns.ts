@@ -7,8 +7,8 @@ export type PlayStyle = 'strum' | 'arpeggio' | 'travis' | 'bossa' | 'postrock';
 /** Beats in a bar: 4 for 4/4, 3 for a waltz. */
 export type BeatsPerBar = 3 | 4;
 
-/** `short` is used where space is tight (phones). The first variant is each style's default. */
-export const PLAY_STYLES: { id: PlayStyle; label: string; short?: string; variants: { id: string; label: string }[] }[] = [
+/** The first variant is each style's default. */
+export const PLAY_STYLES: { id: PlayStyle; label: string; variants: { id: string; label: string }[] }[] = [
   {
     id: 'strum',
     label: 'Strum',
@@ -23,7 +23,6 @@ export const PLAY_STYLES: { id: PlayStyle; label: string; short?: string; varian
   {
     id: 'arpeggio',
     label: 'Arpeggio',
-    short: 'Arp',
     variants: [
       { id: 'up', label: 'Up' },
       { id: 'updown', label: 'Up & down' },

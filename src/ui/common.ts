@@ -237,7 +237,7 @@ function playFingeringAt(fingering: Fingering, delaySeconds: number) {
 export function chordChip(chord: Chord, symbol = chordSymbol(chord), source = `chip:${symbol}`): HTMLElement {
   return h('button', {
     class: `chord-chip${isSelected(chord, source) ? ' selected' : ''}`,
-    title: `${symbol}: click to hear, double-click to add`,
+    title: `${symbol}: click to play, double-click to add`,
     onclick: onChordClick(chord, undefined, source),
   }, symbol);
 }

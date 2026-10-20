@@ -64,11 +64,11 @@ export class ChangeStrip {
   private key: Key | null = null;
 
   /** Show this change, landed (a new pair stops whatever the last one was doing), over the key's notes. */
-  show(from: Shape, to: Shape, inKey: Key) {
+  show(from: Shape, to: Shape, inKey: Key, names: [string, string] = [chordSymbol(from.chord), chordSymbol(to.chord)]) {
     const key = [from, to].map((x) => `${chordSymbol(x.chord)}:${formatFingering(x.fingering)}`).join('>')
       + state.labelMode + (state.keyNotes ? keyId(inKey) : '');
     this.key = state.keyNotes ? inKey : null;
-    this.element.title = `Hear ${chordSymbol(from.chord)} to ${chordSymbol(to.chord)}`;
+    this.element.title = `Play ${names[0]} to ${names[1]}`;
     this.element.setAttribute('aria-label', this.element.title);
     if (key === this.shown) return;
     this.stop();

@@ -106,7 +106,9 @@ describe('after ideas and start with (site bridge to the engine)', () => {
 
 describe("the engine's spelling reaches the page", () => {
   const read = (symbols: string) => symbols.split(' ').map((x) => parseChordName(x)!);
-  const root = (symbol: string) => /^[A-G][#b]?/.exec(symbol)![0];
+  // The site writes the rare roots (Fb, Cb, E#, B#) as their plain enharmonic; everything else as the engine spells it.
+  const PLAIN: Record<string, string> = { Fb: 'E', Cb: 'B', 'E#': 'F', 'B#': 'C' };
+  const root = (symbol: string) => { const r = /^[A-G][#b]?/.exec(symbol)![0]; return PLAIN[r] ?? r; };
   it('after Dm7 G7, Spicy offers G#dim7 (#v°7), leading to Am, not Abdim7', () => {
     const spicy = afterIdeas(read('Dm7 G7'), C, { spice: true });
     const dim = spicy.find((i) => i.chord.template.id === 'dim7')!;
@@ -119,7 +121,7 @@ describe("the engine's spelling reaches the page", () => {
     const ii = natural.find((i) => i.chord.template.id === 'madd9')!;
     expect([chordSymbolInKey(ii.chord, C), ii.numeral]).toEqual(['Dm(add9)', 'ii(add9)']);
   });
-  it('every engine symbol keeps its letter and accidental on the site (ideas, then lines, starts)', () => {
+  it('every engine symbol keeps its letter and accidental on the site, rare roots made plain (ideas, then lines, starts)', () => {
     type G = { key: { tonic: number; mode: 'major' | 'minor' }; prog: string; at?: number; style?: StyleName; spice: boolean;
       ideas: { chord: string; then: { chords: string[]; returnsHome: boolean } | null }[] };
     for (const c of (golden.cases as G[]).filter((x) => x.at == null)) {

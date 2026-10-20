@@ -52,9 +52,29 @@ export function spellRootInKey(key: Key, root: PitchClass): string {
   return spellFrom(tonicName(key), DEGREE_LETTER[semi], root);
 }
 
-/** Chord symbol spelled to suit the key, e.g. A# rather than Bb in F# major. */
+// Roots a learner rarely meets, shown as their plain enharmonic (the numeral stays as written).
+const PLAIN_ROOT: Record<string, string> = { Fb: 'E', Cb: 'B', 'E#': 'F', 'B#': 'C' };
+
+/** Chord symbol spelled to suit the key, e.g. A# rather than Bb in F# major (but E, not Fb). */
 export function chordSymbolInKey(chord: Chord, key: Key): string {
-  return chordSymbol(chord, chord.spelling ?? spellRootInKey(key, chord.root));
+  const root = chord.spelling ?? spellRootInKey(key, chord.root);
+  return chordSymbol(chord, PLAIN_ROOT[root] ?? root);
+}
+
+/**
+ * A numeral as the site shows it: the degree and only a seventh-type mark. Colour tails go
+ * (Iadd9 → I, ii(add9) → ii, Vsus4 → V, ii9 → ii7, V13 → V7); °, °7, ø7, + and maj7 stay.
+ */
+export function numeralLabel(numeral: string): string {
+  const m = /^((?:bb|b|#)?(?:VII|VI|IV|V|III|II|I|vii|vi|iv|v|iii|ii|i))(.*)$/.exec(numeral);
+  if (!m) return numeral;
+  const tail = m[2].replace(/[()]/g, '');
+  const mark = /^°/.test(tail) ? (/7/.test(tail) ? '°7' : '°')
+    : /^ø/.test(tail) ? 'ø7'
+      : /^\+/.test(tail) ? '+'
+        : /^maj(7|9|11|13)/.test(tail) ? 'maj7'
+          : /^(7|9|11|13)/.test(tail) ? '7' : '';
+  return m[1] + mark;
 }
 
 const MAJOR_DEGREE: Record<number, string> = {

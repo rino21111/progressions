@@ -33,7 +33,7 @@ export function createPlayer(target: () => PlayerTarget): { el: HTMLElement; set
       update({ playPattern: style, playVariants: { ...state.playVariants, [style]: variant } });
     },
   }, PLAY_STYLES.map((st) =>
-    h('optgroup', { label: st.label }, st.variants.map((v) => h('option', { value: `${st.id}:${v.id}` }, `${st.short ?? st.label} · ${v.label}`))),
+    h('optgroup', { label: st.label }, st.variants.map((v) => h('option', { value: `${st.id}:${v.id}` }, `${st.label} · ${v.label}`))),
   ));
 
   const setBpm = (value: number) => update({ bpm: clampBpm(value) });

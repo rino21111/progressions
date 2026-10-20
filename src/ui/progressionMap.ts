@@ -4,6 +4,7 @@
 
 import { strum } from '../audio';
 import { Chord, chordSymbol } from '../theory/chords';
+import { chordSymbolInKey } from '../theory/keys';
 import { Key } from '../theory/keys';
 import { Lane, LaneInfo, MapRow, MapTone, columnTones, heldTones, mapRows, laneInfo, monotonePath, progressionLaneInfo, showsReturn, showsStrip } from '../theory/progressionMap';
 import { bestVoicing } from '../theory/voicings';
@@ -108,6 +109,7 @@ export function createProgressionMap(onSelect: (index: number) => void): {
 
   /** One block of columns [from, to): header (desktop), rows, held bars, dots and the function strip. */
   function block(ctx: Context, L: Layout, from: number, to: number, last: boolean): { svg: SVGSVGElement; height: number } {
+    const symbol = (c: Chord) => (ctx.key ? chordSymbolInKey(c, ctx.key) : chordSymbol(c));
     const { list, columns, rows, held, infos, showStrip, playing } = ctx;
     const svg = s('svg', { class: 'pmap-svg' });
     const count = to - from;
@@ -154,12 +156,12 @@ export function createProgressionMap(onSelect: (index: number) => void): {
       svg.append(s('rect', {
         class: 'pm-col', x: x(i) - half, y: 0, width: half * 2, height,
         onclick: () => onSelect(i),
-      }, s('title', {}, chordSymbol(list[i]))));
+      }, s('title', {}, symbol(list[i]))));
     }
 
     if (!L.phone) {
       for (let i = from; i < to; i++) {
-        const sym = chordSymbol(list[i]);
+        const sym = symbol(list[i]);
         const small = sym.length * 6 > L.colWidth - 4;
         svg.append(s('text', { class: `pm-head${small ? ' small' : ''}`, x: x(i), y: 14 }, sym));
       }
@@ -193,11 +195,11 @@ export function createProgressionMap(onSelect: (index: number) => void): {
     let prevX = x(to - 1);
     let prevTones = columns[to - 1];
     ghosts.forEach((g, k) => {
-      faded(ghostXs[k], chordSymbol(g), ghostTones[k], prevX, prevTones, true);
+      faded(ghostXs[k], symbol(g), ghostTones[k], prevX, prevTones, true);
       prevX = ghostXs[k];
       prevTones = ghostTones[k];
     });
-    if (returnX !== null) faded(returnX, chordSymbol(list[0]), columns[0], prevX, prevTones, false);
+    if (returnX !== null) faded(returnX, symbol(list[0]), columns[0], prevX, prevTones, false);
 
     for (let i = from; i < to; i++) {
       for (const t of columns[i]) {
@@ -209,7 +211,7 @@ export function createProgressionMap(onSelect: (index: number) => void): {
             if (clicksSound()) strum([t.midi]);
           },
         },
-          s('title', {}, `${t.name}, ${t.label} of ${chordSymbol(list[i])}${t.bass ? ', bass' : ''}`),
+          s('title', {}, `${t.name}, ${t.label} of ${symbol(list[i])}${t.bass ? ', bass' : ''}`),
           s('circle', { cx: x(i), cy, r: 8 }),
           // The lowest note the shape sounds gets a ring.
           t.bass ? s('circle', { class: 'pm-bass-ring', cx: x(i), cy, r: 10.5 }) : null,

@@ -111,5 +111,7 @@ export function chordReason(chord: Chord, key?: Key): string {
     const role = /^i$/i.test(numeral) ? `home base in ${tonicName(key)} ${key.mode}` : `often the ${numeral} of ${tonic}`;
     return line.replace(/; (often the .+|home base in .+)\.$/, `; ${role}.`);
   }
+  // Outside the key its generic role would contradict the key's numeral (Bb in C is bVII, not home).
+  if (key) return line.replace(/; (often the .+|home base in .+)\.$/, '.');
   return line;
 }

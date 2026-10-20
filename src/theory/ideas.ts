@@ -139,7 +139,8 @@ export function ideaWhy(idea: AfterIdea, ctx: ReasonContext): string {
   return parts.filter((p, i) => {
     if (i > 0 && p === `As in ${idea.tag}`) return false;
     if (/^Keeps /.test(p)) return false;
-    if (p === `Common after ${ctx.after}`) return false;
+    // The engine writes the chord as a triad (III); the heading may show III7.
+    if (p.startsWith('Common after ') && degreeOf(p.slice('Common after '.length)) === degreeOf(ctx.after)) return false;
     if (p === `As in ${ctx.progression}`) return false;
     const lead = /^Leads to ([A-G][#b]?)/.exec(p);
     if (lead && ctx.thenRoot !== null && parseNote(lead[1]) === ctx.thenRoot) return false;

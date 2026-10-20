@@ -7,7 +7,7 @@ import { currentPlayback, onNote, onPlayback } from '../player';
 import { PROGRESSION_ID, cardShape } from '../playback';
 import { state, subscribe, update } from '../state';
 import { Chord, chordSymbol } from '../theory/chords';
-import { chordFitInKey, romanNumeral } from '../theory/keys';
+import { chordFitInKey, chordSymbolInKey, numeralLabel, romanNumeral } from '../theory/keys';
 import { bestVoicing, fingeringToneLabels } from '../theory/voicings';
 import { addCardLabel } from '../interaction';
 import { cardIndex, moveIndex } from '../yourChords';
@@ -87,7 +87,7 @@ export function createSidebar(play: HTMLElement, hide: () => void): { header: HT
     // A phrase picked on Relationships adds all its chords: their names stacked under the +.
     const phrase = selectedPhrase();
     if (phrase) {
-      const names = phrase.map((c) => chordSymbol(c));
+      const names = phrase.map((c) => chordSymbolInKey(c, currentKey().key));
       const title = `Add ${names.join(' ')} (A)`;
       return h('button', { class: 'add-card phrase', title, 'aria-label': title, onclick: addSelection },
         h('span', { class: 'add-plus' }, '+'), names.map((nm) => h('span', { class: 'add-sym' }, nm)));
@@ -101,6 +101,7 @@ export function createSidebar(play: HTMLElement, hide: () => void): { header: HT
 
   const render = () => {
     const { key } = currentKey();
+    const name = (c: Chord) => chordSymbolInKey(c, key);
     const n = state.progression.length;
     const selected = cardIndex(n, state.selectedCard);
     clearItem.disabled = !n;
@@ -113,7 +114,7 @@ export function createSidebar(play: HTMLElement, hide: () => void): { header: HT
       return h('div', {
         class: `chart-card${i === selected ? ' selected' : ''}`, role: 'button', tabindex: 0,
         title: 'Click to select, drag to move, double-click to duplicate',
-        'aria-label': chordSymbol(chord),
+        'aria-label': name(chord),
         onclick: (e: Event) => {
           const clicks = (e as MouseEvent).detail;
           if (clicks === 2) duplicateCard(i);
@@ -125,13 +126,13 @@ export function createSidebar(play: HTMLElement, hide: () => void): { header: HT
       },
         h('div', { class: 'card-top' },
           // Long names (Abmaj7) shrink to fit the card.
-          h('span', { class: `sym${chordSymbol(chord).length > 4 ? ' long' : ''}` }, chordSymbol(chord)),
-          // Chords from outside the key get their numeral in the extension colour.
-          h('span', { class: `numeral${outside ? ' out' : ''}` }, romanNumeral(chord, key)),
+          h('span', { class: `sym${name(chord).length > 4 ? ' long' : ''}` }, name(chord)),
+          // Chords from outside the key get their numeral underlined, dashed.
+          h('span', { class: `numeral${outside ? ' out' : ''}` }, numeralLabel(romanNumeral(chord, key))),
         ),
         fingering ? labelledBox(chord, fingering) : null,
         h('button', {
-          class: 'remove-btn', title: 'Remove (Delete)', 'aria-label': `Remove ${chordSymbol(chord)}`,
+          class: 'remove-btn', title: 'Remove (Delete)', 'aria-label': `Remove ${name(chord)}`,
           onclick: (e: Event) => { e.stopPropagation(); removeFromProgression(i); },
         }, '×'),
       );
@@ -143,7 +144,7 @@ export function createSidebar(play: HTMLElement, hide: () => void): { header: HT
         setFull(true);
         selectCard(i);
       },
-    }, chordSymbol(chord))));
+    }, name(chord))));
     renderMap();
     // A newly selected card (arrow keys, or a column of the map) is scrolled into view.
     if (selected !== shownSelected && cards[selected]) cards[selected].scrollIntoView({ block: 'nearest', inline: 'nearest' });

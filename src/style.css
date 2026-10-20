@@ -274,7 +274,7 @@ main {
 }
 
 .pm-row-label.chromatic {
-  fill: var(--tone-ext);
+  text-decoration: underline dashed;
 }
 
 .pm-head {
@@ -304,7 +304,7 @@ main {
 }
 
 .pm-dot text {
-  fill: #fff;
+  fill: var(--on-tone);
   font-size: 8px;
   font-weight: 700;
   text-anchor: middle;
@@ -547,9 +547,13 @@ main {
   font-size: 12px;
 }
 
-/* Out-of-key chords show their numeral in the extension colour. */
-.numeral.out {
-  color: var(--tone-ext);
+/* Out-of-key chords: the numeral underlined, dashed (amber is for extension tones only). */
+.numeral.out,
+.rchip .num.out {
+  color: var(--text-muted);
+  text-decoration: underline dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .chart-card .chord-box {
@@ -1031,7 +1035,7 @@ main {
 }
 
 .fretboard .dot text {
-  fill: #fff;
+  fill: var(--on-tone);
   font-size: 11px;
   font-weight: 700;
   text-anchor: middle;
@@ -1102,6 +1106,31 @@ main {
 .tone-ext { --tone: var(--tone-ext); }
 .tone-other { --tone: var(--tone-other); }
 
+/* Dot labels: white on the darker tones, dark on the lighter ones (all of them in dark mode). */
+:root,
+.tone-root,
+.tone-third,
+.tone-seventh,
+.tone-other {
+  --on-tone: #fff;
+}
+
+.tone-fifth,
+.tone-ext {
+  --on-tone: #22201c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tone-root,
+  .tone-third,
+  .tone-fifth,
+  .tone-seventh,
+  .tone-ext,
+  .tone-other {
+    --on-tone: #17150f;
+  }
+}
+
 /* ---------- Cards ---------- */
 
 .results {
@@ -1170,7 +1199,14 @@ main {
   flex: none;
 }
 
-.chord-play .play-btn {
+/* Every per-item Play: a round 32px outline (the panel's Play is the filled one). */
+.round-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border-radius: 50%;
 }
 
@@ -1374,7 +1410,6 @@ main {
 
 .tone-chip.omitted {
   opacity: 0.4;
-  border-top-style: dashed;
 }
 
 /* Hovering a tone dims every other dot on the fretboard or diagram. */
@@ -1427,7 +1462,7 @@ main {
 }
 
 .box-dot text {
-  fill: #fff;
+  fill: var(--on-tone);
   font-size: 7.5px;
   font-weight: 700;
   text-anchor: middle;
@@ -1904,10 +1939,6 @@ main {
   color: var(--text-muted);
 }
 
-.rchip .num.out {
-  color: var(--tone-ext);
-}
-
 /* Key: the pickers, then the key's chords on one line (yours tinted). */
 .key-line {
   display: flex;
@@ -2057,7 +2088,7 @@ main {
 }
 
 .change-strip g text {
-  fill: #fff;
+  fill: var(--on-tone);
   font-size: 7.5px;
   font-weight: 700;
   text-anchor: middle;
@@ -2197,11 +2228,34 @@ main {
   gap: 6px;
 }
 
-.idea-adds button {
+.idea-adds button,
+.start-add {
   padding: 4px 10px;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
+}
+
+/* Small controls keep their look but take a 32px tap. */
+.idea-adds button,
+.start-add,
+.view-btn,
+.pill {
+  position: relative;
+}
+
+.idea-adds button::after,
+.start-add::after,
+.view-btn::after,
+.pill::after,
+.chart-card .remove-btn::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 32px);
+  height: max(100%, 32px);
+  transform: translate(-50%, -50%);
 }
 
 /* Start with: one family at a time, an entry per row. */
@@ -2405,6 +2459,10 @@ main {
   .idea-adds button {
     flex: 0 0 calc(50% - 3px);
     min-width: 0;
+  }
+  /* The label is cut short, not the button (its tap area reaches past its edge). */
+  .idea-adds button span {
+    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
   }

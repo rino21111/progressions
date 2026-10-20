@@ -82,7 +82,7 @@ export function createDetector(): HTMLElement {
   const applyInput = () => {
     const found = parseSearch(input.value);
     if (!found) {
-      inputHint.textContent = `Type a chord like Dm7 or F#m7b5, or six frets low E first like x02210 (frets up to ${MAX_FRET}).`;
+      inputHint.textContent = 'Try Dm7 or x02210';
       input.classList.add('invalid');
       return;
     }
@@ -122,7 +122,7 @@ export function createDetector(): HTMLElement {
 
   // Play for the chord on the fretboard, separate from the progression's. The shape is read as it
   // plays, so editing it is heard straight away.
-  const playButton = h('button', { class: 'player-btn play-btn', onclick: toggleChordPlay });
+  const playButton = h('button', { class: 'player-btn play-btn round-play', onclick: toggleChordPlay });
   const chordControls = h('div', { class: 'chord-play' }, playButton);
   const refreshControls = () => {
     const playing = currentPlayback()?.id === INSPECTOR_ID;
@@ -206,17 +206,14 @@ function renderName(card: HTMLElement, analysis: FingeringAnalysis, shown: Finge
   }
   if (!chord) {
     if (analysis.pitchClasses.length === 1) {
-      add(card, h('h2', { class: 'chord-name' }, sharpName(analysis.pitchClasses[0])), h('p', {}, 'A single note (octaves count as the same note). Add another to make an interval or a chord.'));
+      add(card, h('h2', { class: 'chord-name' }, sharpName(analysis.pitchClasses[0])));
     } else if (analysis.interval) {
       add(card,
         h('h2', { class: 'chord-name' }, analysis.interval.name),
-        h('p', {}, `Two notes: ${sharpName(analysis.bass!.pc)} up to ${sharpName(analysis.pitchClasses.find((pc) => pc !== analysis.bass!.pc)!)}. Add a third note to make a chord.`),
+        h('p', { class: 'chord-long' }, `${sharpName(analysis.bass!.pc)}–${sharpName(analysis.pitchClasses.find((pc) => pc !== analysis.bass!.pc)!)}`),
       );
     } else {
-      add(card,
-        h('h2', { class: 'chord-name muted' }, '?'),
-        h('p', {}, 'These notes don\'t form a standard chord. The labels show each note\'s distance from the bass note, so you can see what you\'ve built.'),
-      );
+      add(card, h('h2', { class: 'chord-name muted' }, '?'));
     }
     return;
   }
@@ -226,7 +223,7 @@ function renderName(card: HTMLElement, analysis: FingeringAnalysis, shown: Finge
     h('div', { class: 'name-row' },
       h('h2', { class: 'chord-name' },
         h('button', {
-          class: 'chord-name-btn', title: 'Click to hear, double-click to add',
+          class: 'chord-name-btn', title: 'Click to play, double-click to add',
           onclick: onShapeClick(chord, shown, () => playFingering(shown)),
         }, chordSymbol(chord)),
         // While the progression panel is hidden its add card can't be seen, so the chord offers its own +.
